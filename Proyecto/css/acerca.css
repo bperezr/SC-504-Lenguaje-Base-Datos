@@ -1,0 +1,250 @@
+
+.image-opacity{
+    opacity: 0.8;  
+}
+
+.section-padding{
+    padding:100px 0;
+}
+
+.carousel-item{
+    height:100vh;
+    min-height: 300px;
+}
+.carousel-caption{
+    bottom:220px;
+    z-index:2;
+}
+.carousel-caption h5{
+    font-size:45px;
+    text-transform:uppercase;
+    letter-spacing: 2px;
+    margin-top:25px;
+    color: black;
+}
+
+.carousel-caption p{
+
+    color: black;
+}
+
+.carousel-margin-bot {
+    margin-bottom: 10vh;
+   
+}
+.carousel-inner::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0, 7);
+    z-index: 1;  
+}
+
+.w-100{
+    height: 100vh;
+} 
+
+.service .card-body i{
+    font-size: 50px;
+}
+
+@media only screen and(min-width: 768px) and (max-width: 991px){
+    .carousel-caption{
+        bottom: 365px;
+    }
+    .carousel-caption p{
+        width: 100%;
+    }
+
+
+    @media only screen and (max-width:767px){
+        .navbar-nav{
+            text-align: center;
+        }
+        .carousel-caption{
+            bottom:125px;
+        }
+        .carousel-caption h5{
+            padding:10px 15px;
+            font-size: 17px;
+        }
+        .carousel-caption a{
+            padding:10px 15px;
+        }
+        .carousel-caption p{
+            width: 100px;
+            line-height: 1.6;
+            font-size: 12px;
+        }
+    }
+}
+
+.button-color {
+    background-color: #FFA266; /* Color palo rosa */
+    /* Otros estilos de botón */
+  }
+  
+
+  .color .carousel-indicators button {
+    background-color: black;
+  }
+  
+  .color .carousel-control-prev-icon,
+  .color .carousel-control-next-icon {
+    filter: invert(100%);
+  }
+
+  .color .carousel-control-prev {
+    margin-left: -20px;
+  }
+  
+  .color .carousel-control-next {
+    margin-right: 0;
+  }
+  
+  #luis {
+    max-height: 300px !important;
+
+  }
+  
+
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+
+    font-family: 'Belanosima', sans-serif;
+}
+
+:root {
+    --color1: #70C5D7;
+    --color2: #E6BC64;
+    --color3: #EAD199;
+    --color4: #DD883E;
+    --color5: #DE8871;
+    --color6: #FFFFFF;
+    --color7: #A3A2A3;
+    --color8: #2C2524;
+    --color9: #000000;
+}
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+    /* 1rem = 10 px*/
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/*----------------------- Body -----------------------*/
+body {
+    background-color: var(--color6);
+    font-size: 1.5rem;
+    line-height: 1.5;
+}
+
+a {
+    color: var(--color8);
+    text-decoration: none;
+    font-family: var(--funtePrincipal);
+}
+
+img {
+    width: 100%;
+}
+
+p {
+    font-size: 1.8rem;
+    color: var(--blanco);
+}
+
+h1,
+h2,
+h3 {
+    text-align: center;
+    color: var(var(--color8));
+    font-family: var(--funtePrincipal);
+}
+
+h1 {
+    font-size: 4rem;
+    color: var(--color8);
+}
+
+h2 {
+    font-size: 3.2rem;
+}
+
+h3 {
+    font-size: 2.4rem;
+}
+
+
+/*---------------------- Footer -----------------------*/
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--color1);
+    justify-content: flex-start;
+
+}
+
+footer .container {
+    width: 100%;
+    display: flex;
+    grid-gap: 20px;
+    padding: 5%;
+    justify-content: center;
+    text-align: center;
+}
+
+footer .container .sec {
+    position: relative;
+    margin: auto;
+}
+
+.sec ul li {
+    list-style-type: none;
+}
+
+.footer_logo {
+    display: block;
+    width: 80px;
+}
+
+a ion-icon {
+    width: 50px;
+}
+
+.copyright {
+    color: var(--color6);
+    text-align: center;
+    background: var(--color8);
+}
+
+/*---------------------- media -----------------------*/
+
+@media (max-width: 882px) {
+    footer .container {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        column-gap: 1;
+        justify-content: center;
+    }
+
+    footer .container .sec ul li img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

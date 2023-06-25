@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/contacto.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+   <!--CSS-->
+   <link rel="stylesheet" href="css/normalize.css" />
+   <link rel="preload" href="css/contacto.css" as="style" />
+   <link rel="stylesheet" href="css/contacto.css" />
+   <!--Fonts-->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&display=swap" rel="stylesheet">
+   <!--Icons-->
+   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <title>Contacto</title>
+</head>
+
+<body>
+
+  
+  <div class="titulo">
+    <h1>Contacto </h1>
+    <p>Aquí encontrarás las diferentes formas de contactarnos. <br>¡Estamos para servirte!</p>
+
+  </div>
+  
+  <div class="container">
+    <div class="imagenes">
+      <div class="imagen-con-texto">
+        <img src="img/llamada.png" alt="Teléfono">
+        <p class="texto">2372-9012</p>
+      </div>
+      <div class="imagen-con-texto">
+        <img src="img/correos.png" alt="Correo">
+        <p class="texto">happy.paws@vet.com</p>
+      </div>
+      <div class="imagen-con-texto">
+        <img src="img/mapa.png" alt="Ubicación">
+        <p class="texto">San José, Avenida 12</p>
+      </div>
+      <img id="mascotas" src="img/grupomascotas.avif" alt="mascotas">
+    </div>
+
+    <div class="formulario">
+      <form>
+        <div class="row">
+          <div class="col">
+            <div class="form-label">Nombre</div>
+            <input type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" id="nombre" name="nombre">
+          </div>
+          <div class="col">
+            <div class="form-label">Apellidos</div>
+            <input type="text" class="form-control" placeholder="Apellidos" aria-label="Apellidos" id="apellidos"
+              name="apellidos">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-label">Teléfono</div>
+            <input type="text" class="form-control" placeholder="Teléfono" aria-label="Teléfono" id="telefono"
+              name="telefono">
+          </div>
+          <div class="col">
+            <div class="form-label">Correo</div>
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend">@</span>
+              <input type="email" class="form-control" placeholder="Correo" aria-label="Correo" id="correo"
+                name="email">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-label">Mensaje</div>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-lg">Contactanos</button>
+      </form>
+    </div>
+
+  </div>
+
+
+  <!-- footer -->
+  <footer>
+    <!-- Grid container -->
+    <div class="container">
+      <!--col1-->
+      <div class="sec grid ">
+        <ul>
+          <li>
+            <img class="footer_logo" src="/img/logo_color.svg" alt="Happy-Paws">
+          </li>
+          <li>
+            <p>Dedicados a la salud y bienestar de tus mejores amigos.</p>
+          </li>
+        </ul>
+      </div>
+      <!--col2-->
+      <div class="sec grid">
+        <ul>
+          <li>
+            <h6>Redes Sociales</h6>
+          </li>
+          <li>
+            <a href="#!" class="text-white"><ion-icon name="logo-instagram"></ion-icon>Happy-Paws</a>
+          </li>
+          <li>
+            <a href="#!" class="text-white"><ion-icon name="logo-facebook"></ion-icon>Happy-Paws</a>
+          </li>
+          <li>
+            <a href="#!" class="text-white"><ion-icon name="logo-whatsapp"></ion-icon>+506 8888-8888</a>
+          </li>
+        </ul>
+      </div>
+      <!--col3-->
+      <div class="sec grid ">
+        <ul>
+          <li>
+            <h6>Contáctenos</h6>
+          </li>
+          <li>
+            <a href="#!" class="text-white"><ion-icon name="call-sharp"></ion-icon>+506 2532-3577</a>
+          </li>
+          <li>
+            <a href="#!" class="text-white"><ion-icon name="navigate-circle-sharp"></ion-icon>San José,
+              Costa
+              Rica.</a>
+          </li>
+          <li>
+            <a href="mailto:happyPaws@email.com"><ion-icon name="mail-sharp"></ion-icon>happyPaws@email.com</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Copyright -->
+    <div class="copyright">
+      <h7>Happy Paws — Todos los derechos Reservados 2023.</h7>
+    </div>
+  </footer>
+
+
+
+</body>
+
+</html>
