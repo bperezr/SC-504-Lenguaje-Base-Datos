@@ -1,122 +1,8 @@
-
-.image-opacity{
-    opacity: 0.8;  
-}
-
-.section-padding{
-    padding:100px 0;
-}
-
-.carousel-item{
-    height:100vh;
-    min-height: 300px;
-}
-.carousel-caption{
-    bottom:220px;
-    z-index:2;
-}
-.carousel-caption h5{
-    font-size:45px;
-    text-transform:uppercase;
-    letter-spacing: 2px;
-    margin-top:25px;
-    color: black;
-}
-
-.carousel-caption p{
-
-    color: black;
-}
-
-.carousel-margin-bot {
-    margin-bottom: 10vh;
-   
-}
-.carousel-inner::before{
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0, 7);
-    z-index: 1;  
-}
-
-.w-100{
-    height: 100vh;
-} 
-
-.service .card-body i{
-    font-size: 50px;
-}
-
-@media only screen and(min-width: 768px) and (max-width: 991px){
-    .carousel-caption{
-        bottom: 365px;
-    }
-    .carousel-caption p{
-        width: 100%;
-    }
-
-
-    @media only screen and (max-width:767px){
-        .navbar-nav{
-            text-align: center;
-        }
-        .carousel-caption{
-            bottom:125px;
-        }
-        .carousel-caption h5{
-            padding:10px 15px;
-            font-size: 17px;
-        }
-        .carousel-caption a{
-            padding:10px 15px;
-        }
-        .carousel-caption p{
-            width: 100px;
-            line-height: 1.6;
-            font-size: 12px;
-        }
-    }
-}
-
-.button-color {
-    background-color: #FFA266; /* Color palo rosa */
-    /* Otros estilos de botón */
-  }
-  
-
-  .color .carousel-indicators button {
-    background-color: black;
-  }
-  
-  .color .carousel-control-prev-icon,
-  .color .carousel-control-next-icon {
-    filter: invert(100%);
-  }
-
-  .color .carousel-control-prev {
-    margin-left: -20px;
-  }
-  
-  .color .carousel-control-next {
-    margin-right: 0;
-  }
-  
-  #luis {
-    max-height: 300px !important;
-
-  }
-  
-
-  * {
+* {
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
-
     font-family: 'Belanosima', sans-serif;
 }
 
@@ -150,12 +36,15 @@ body {
     background-color: var(--color6);
     font-size: 1.5rem;
     line-height: 1.5;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 100px;
 }
 
 a {
     color: var(--color8);
     text-decoration: none;
-    font-family: var(--funtePrincipal);
 }
 
 img {
@@ -188,15 +77,142 @@ h3 {
     font-size: 2.4rem;
 }
 
+/*---------------------- Nav -----------------------*/
+nav {
+    background-color: var(--color6);
+    height: 80px;
+    width: 100%;
+}
+
+.enlace {
+    position: absolute;
+    padding: 20px 50px;
+}
+
+.nav_logo {
+    height: 40px;
+}
+
+nav ul {
+    float: right;
+    margin-right: 20px;
+}
+
+nav ul li {
+    display: inline-block;
+    line-height: 80px;
+    margin: 0 5px;
+}
+
+nav ul li a {
+    color: var(--color8);
+    font-size: 2.4rem;
+    padding: 7px 13px;
+    border-radius: 3px;
+}
+
+nav ul li a:hover {
+    color: var(--color4);
+    transition: .2s;
+}
+
+nav ul li a ion-icon {
+    color: var(--color8);
+    font-size: 24px;
+    /* Cambiar la posición del icono */
+    position: relative;
+    top: 5px;
+    left: 10px;
+}
+
+.checkbtn {
+    font-size: 30px;
+    color: var(--color8);
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+
+.active {
+    color: var(--color5);
+}
+
+#check {
+    display: none;
+}
+
+
+@media (max-width: 952px) {
+
+    /*-----------NAV------------*/
+    .enlace {
+        padding-left: 20px;
+    }
+
+    nav ul li a {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 710px) {
+    .checkbtn {
+        display: block;
+    }
+
+    nav ul {
+        position: fixed;
+        width: 100%;
+        height: 10vh;
+        background: var(--color1);
+        top: 80px;
+        left: 100%;
+        text-align: center;
+        transition: all .5s;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 50px;
+        line-height: 30px;
+    }
+
+    nav ul li a {
+        font-size: 20px;
+    }
+
+    nav ul li a:hover {
+        background: none;
+        color: var(--color4);
+    }
+
+    #check:checked~ul {
+        left: 0;
+    }
+
+}
+
+/*---------------------- Contenedor -----------------------*/
+
+.contenedor {
+    background-image: linear-gradient(rgba(7, 0, 0, 0.5), var(--color6)), url(/img/fondo.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    padding: 30px 30px;
+    margin: 0;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+}
+
 
 /*---------------------- Footer -----------------------*/
 footer {
-    position: fixed;
+    position: relative;
     bottom: 0;
     width: 100%;
-    background-color: var(--color1);
-    justify-content: flex-start;
-
+    height: 40px;
 }
 
 footer .container {
@@ -206,6 +222,8 @@ footer .container {
     padding: 5%;
     justify-content: center;
     text-align: center;
+    background-color: var(--color1);
+    margin: 0%;
 }
 
 footer .container .sec {
@@ -232,9 +250,8 @@ a ion-icon {
     background: var(--color8);
 }
 
-/*---------------------- media -----------------------*/
-
 @media (max-width: 882px) {
+
     footer .container {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
@@ -246,5 +263,130 @@ a ion-icon {
         display: block;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    footer .container .sec ul li p {
+        font-size: 16px;
+    }
+}
+
+/*---------------------- Nosotros -----------------------*/
+.carousel-inner .carousel-item img {
+    height: 600px;
+    object-fit: cover;
+}
+
+#about {
+    background-color: var(--color6);
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+#about .text {
+    margin-bottom: 40px;
+}
+
+#about h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--color8);
+    margin-bottom: 20px;
+}
+
+#about p {
+    font-size: 18px;
+    color: var(--color8);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+#about .btn-secondary {
+    background-color: var(--color2);
+    color: var(--color8);
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+#about .btn-secondary:hover {
+    background-color: var(--color1);
+}
+
+/* Estilos para la sección Medicos veterinarios */
+#medicos {
+    background-color: var(--color6);
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+#medicos h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--color8);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+#medicos .row.justify-content-center {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#medicos .col-lg-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 0 15px;
+    margin-bottom: 30px;
+}
+
+#medicos .card-body {
+    background-color: var(--color6);
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#medicos .card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color8);
+    margin-bottom: 10px;
+}
+
+#medicos .lead {
+    font-size: 18px;
+    color: var(--color8);
+    margin-bottom: 20px;
+}
+
+#medicos .btn {
+    background-color: var(--color2);
+    color: var(--color8);
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+}
+
+#medicos .btn:hover {
+    background-color: var(--color1);
+}
+
+@media (max-width: 420px) {
+    #medicos .row.justify-content-center {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #medicos .col-lg-4 {
+        flex: 0 0 auto;
+        max-width: none;
+        padding: 0 5px;
+        margin-bottom: 30px;
+        white-space: nowrap;
     }
 }
