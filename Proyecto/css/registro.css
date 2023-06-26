@@ -268,3 +268,49 @@ a ion-icon {
         font-size: 16px;
     }
 }
+
+/*---------------------- Registro -----------------------*/
+.boxRegistro {
+    padding: 10px 10px;
+    margin: 0 auto;
+    background-color: var(--color6);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    text-align: center;
+}
+
+.boxRegistro form a {
+    background-color: var(--color2);
+    color: var(--color6);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.boxRegistro form a:hover {
+    background-color: var(--color1);
+    color: var(--color6);
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.botones {
+    display:block;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

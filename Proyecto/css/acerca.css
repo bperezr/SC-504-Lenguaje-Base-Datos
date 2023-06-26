@@ -223,6 +223,7 @@ footer .container {
     justify-content: center;
     text-align: center;
     background-color: var(--color1);
+    margin: 0%;
 }
 
 footer .container .sec {
@@ -266,5 +267,126 @@ a ion-icon {
 
     footer .container .sec ul li p {
         font-size: 16px;
+    }
+}
+
+/*---------------------- Nosotros -----------------------*/
+.carousel-inner .carousel-item img {
+    height: 600px;
+    object-fit: cover;
+}
+
+#about {
+    background-color: var(--color6);
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+#about .text {
+    margin-bottom: 40px;
+}
+
+#about h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--color8);
+    margin-bottom: 20px;
+}
+
+#about p {
+    font-size: 18px;
+    color: var(--color8);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+#about .btn-secondary {
+    background-color: var(--color2);
+    color: var(--color8);
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+#about .btn-secondary:hover {
+    background-color: var(--color1);
+}
+
+/* Estilos para la sección Medicos veterinarios */
+#medicos {
+    background-color: var(--color6);
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+#medicos h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--color8);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+#medicos .row.justify-content-center {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#medicos .col-lg-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 0 15px;
+    margin-bottom: 30px;
+}
+
+#medicos .card-body {
+    background-color: var(--color6);
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#medicos .card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color8);
+    margin-bottom: 10px;
+}
+
+#medicos .lead {
+    font-size: 18px;
+    color: var(--color8);
+    margin-bottom: 20px;
+}
+
+#medicos .btn {
+    background-color: var(--color2);
+    color: var(--color8);
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+}
+
+#medicos .btn:hover {
+    background-color: var(--color1);
+}
+
+@media (max-width: 420px) {
+    #medicos .row.justify-content-center {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #medicos .col-lg-4 {
+        flex: 0 0 auto;
+        max-width: none;
+        padding: 0 5px;
+        margin-bottom: 30px;
+        white-space: nowrap;
     }
 }
