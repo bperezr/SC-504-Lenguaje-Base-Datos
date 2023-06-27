@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="preload" href="css/index.css" as="style" />
     <link rel="stylesheet" href="css/index.css" />
-    <link rel="stylesheet" href="css/eventos.css" />
-  
+    <link rel="stylesheet" href="css/eventos.css" /> 
    
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
     crossorigin="anonymous"></script>
@@ -30,23 +30,29 @@
 
 <body>
     <div class="wrapper">
-        <nav>
-            <input type="checkbox" id="check">
-            <label for="check" class="checkbtn">
-                <ion-icon name="menu-outline"></ion-icon>
-            </label>
-            <a href="index.html" class="enlace">
-                <img src="img/logo2_color.svg" alt="Happy-Paws" class="nav_logo">
-            </a>
-            <ul>
-                <li><a href="servicios.html">Servicios</a></li>
-                <li><a href="eventos.html">Eventos</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="acerca.html">Nosotros</a></li>
-                <li><a href="login.html"><ion-icon name="person-circle-outline"></ion-icon></a></li>
-            </ul>
-        </nav>
-
+        <header>
+            <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws"></a>
+    
+            <input type="checkbox" id="menu-bar">
+            <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
+    
+            <nav class="navbar">
+                <ul>
+                    <li><a href="">Servicios</a>
+                        <ul>
+                            <li><a href="Servicio_Cirugia.html">Cirugia</a></li>
+                            <li><a href="Servicio_Desparacitacion.html">Desparacitacion</a></li>
+                            <li><a href="Servicio_Grooming.html">Grooming</a></li>
+                            <li><a href="Servicio_Vacunacion.html">Vacunacion</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="eventos.html">Eventos</a></li>
+                    <li><a class="active" href="contacto.html">Contacto</a></li>
+                    <li><a href="acerca.html">Nosotros</a></li>
+                    <li><a href="login.html"><ion-icon name="person-circle-outline"></ion-icon></a></li>
+                </ul>
+            </nav>
+        </header>
         <div class="card-group2">
             <div class="card">
                 <div class="vacunacion">
@@ -58,7 +64,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="card-group">
             <div class="card">
