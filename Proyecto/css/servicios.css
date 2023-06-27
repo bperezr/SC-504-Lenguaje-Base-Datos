@@ -131,6 +131,10 @@ h3 {
     text-justify: distribute-all-lines;
 }
 
+.espaciadoAgendar { 
+    padding-top: 2%;
+}
+
 .botonAgendar {
     background-color: var(--color5);
     padding: 10px;
