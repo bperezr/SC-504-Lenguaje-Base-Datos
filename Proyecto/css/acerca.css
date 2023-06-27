@@ -209,21 +209,22 @@ nav ul li a ion-icon {
 
 
 
-
-
 /*---------------------- Nosotros -----------------------*/
-
 
 .carousel-caption p{
    
     color: var(--color9);
 }
 
-.carousel-inner .carousel-item img {
-    width: 100%;
-    height: 80%;
+.carousel-caption h5{
+   
+  font-size: 15px;
 }
 
+.carousel-inner .carousel-item img {
+    width: 90%;
+    height: 80%;
+}
 
 .carousel-inner {
     position: relative;
@@ -272,14 +273,6 @@ nav ul li a ion-icon {
     right: 40px;
 }
 
-
-
-
-
-
-
-
-
 #about {
     background-color: var(--color6);
     padding-top: 80px;
@@ -292,6 +285,8 @@ nav ul li a ion-icon {
 #about .text {
     margin-bottom: 40px;
      text-align: center; 
+     text-justify: distribute-all-lines;
+     
 }
 
 
@@ -325,9 +320,14 @@ nav ul li a ion-icon {
 }
 
 /* Estilos para la sección Medicos veterinarios */
+
+.imagen {
+    width:50%;
+    border-radius: 15px;
+}
 #medicos {
     background-color: var(--color6);
-    padding-top: 80px;
+    padding-top: 50px;
     padding-bottom: 80px;
 }
 
@@ -401,28 +401,6 @@ nav ul li a ion-icon {
         white-space: nowrap;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
