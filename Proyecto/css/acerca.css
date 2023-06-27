@@ -208,6 +208,7 @@ nav ul li a ion-icon {
 
 
 /*---------------------- Footer -----------------------*/
+/*
 footer {
     position: relative;
     bottom: 0;
@@ -269,28 +270,44 @@ a ion-icon {
         font-size: 16px;
     }
 }
+*/
+
 
 /*---------------------- Nosotros -----------------------*/
 .carousel-inner .carousel-item img {
     height: 600px;
     object-fit: cover;
+    
 }
+
+.carousel-caption p{
+   
+    color: var(--color9);
+}
+
+
 
 #about {
     background-color: var(--color6);
     padding-top: 80px;
     padding-bottom: 80px;
+    text-align: center; 
+    display:flex;
+    align-items: center;
 }
 
 #about .text {
     margin-bottom: 40px;
+     text-align: center; 
 }
+
 
 #about h2 {
     font-size: 36px;
     font-weight: bold;
     color: var(--color8);
     margin-bottom: 20px;
+    text-align: center; 
 }
 
 #about p {
@@ -298,6 +315,7 @@ a ion-icon {
     color: var(--color8);
     line-height: 1.6;
     margin-bottom: 20px;
+    text-align: center; 
 }
 
 #about .btn-secondary {
@@ -390,3 +408,5 @@ a ion-icon {
         white-space: nowrap;
     }
 }
+
+
