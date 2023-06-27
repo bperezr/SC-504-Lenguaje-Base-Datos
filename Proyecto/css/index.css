@@ -230,6 +230,88 @@ header label {
     text-align: center;
 }
 
+.cajaBlanca {
+    background-color: #FFFFFF;
+    border-radius: 30px;
+}
+
+.cajaSecundaria {
+    padding: 2%;
+}
+
+.caja1 {
+    background-color: var(--color1);
+    border-radius: 90px;
+    padding: 2%;
+    margin: 1%;
+}
+
+.caja2 {
+    background-color: var(--color3);
+    border-radius: 90px;
+    padding: 2%;
+    margin: 1%;
+}
+
+.contenedorCaja3 {
+    display: flex;
+    justify-content: center;
+}
+
+.caja3 {
+    background-color: var(--color5);
+    border-radius: 150px;
+    padding: 2%;
+    margin: 1%;
+    width: 30%;
+
+}
+
+.textoCaja {
+    text-align: justify;
+    text-justify: distribute-all-lines;
+    padding: 1%;
+    margin: 1%;
+}
+
+.botonCaja {
+    background-color: var(--color4);
+    padding: 10px;
+    border-radius: 100px;
+}
+
+.botonCaja:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.botonCaja2 {
+    background-color: var(--color1);
+    padding: 10px;
+    border-radius: 100px;
+}
+
+.botonCaja2:hover {
+    background-color: #DE8871;
+    color: white;
+}
+
+.botonCaja3 {
+    background-color: var(--color1);
+    padding: 10px;
+    border-radius: 100px;
+    margin-top: 5%;
+}
+
+.botonCaja3:hover {
+    background-color: #E6BC64;
+    color: white;
+}
+
+.imagenPom {
+    width: 30%;
+}
+
 
 /*---------------------- Footer -----------------------*/
 footer {
