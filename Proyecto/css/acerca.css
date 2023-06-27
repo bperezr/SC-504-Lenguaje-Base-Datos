@@ -229,93 +229,98 @@ header label {
     justify-content: center;
     justify-items: center;
     text-align: center;
+    margin-bottom: -120px;
 }
 
 
-/*---------------------- Footer -----------------------*/
-footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-}
-
-footer .container {
-    width: 100%;
-    display: flex;
-    grid-gap: 20px;
-    padding: 5%;
-    justify-content: center;
-    text-align: center;
-    background-color: var(--color1);
-    margin: 0%;
-}
-
-footer .container .sec {
-    position: relative;
-    margin: auto;
-}
-
-.sec ul li {
-    list-style-type: none;
-}
-
-.footer_logo {
-    display: block;
-    width: 80px;
-}
-
-a ion-icon {
-    width: 50px;
-}
-
-.copyright {
-    color: var(--color6);
-    text-align: center;
-    background: var(--color8);
-}
-
-@media (max-width: 882px) {
-
-    footer .container {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        column-gap: 1;
-        justify-content: center;
-    }
-
-    footer .container .sec ul li img {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    footer .container .sec ul li p {
-        font-size: 16px;
-    }
-}
 
 /*---------------------- Nosotros -----------------------*/
+
+.carousel-caption p{
+   
+    color: var(--color9);
+}
+
+.carousel-caption h5{
+   
+  font-size: 15px;
+}
+
 .carousel-inner .carousel-item img {
-    height: 600px;
-    object-fit: cover;
+    width: 90%;
+    height: 80%;
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    border: none;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+
+.carousel-control-prev {
+    left: 40px;
+}
+
+.carousel-control-next {
+    right: 40px;
 }
 
 #about {
     background-color: var(--color6);
     padding-top: 80px;
     padding-bottom: 80px;
+    text-align: center; 
+    display:flex;
+    align-items: center;
 }
 
 #about .text {
     margin-bottom: 40px;
+     text-align: center; 
+     text-justify: distribute-all-lines;
+     
 }
+
 
 #about h2 {
     font-size: 36px;
     font-weight: bold;
     color: var(--color8);
     margin-bottom: 20px;
+    text-align: center; 
 }
 
 #about p {
@@ -323,6 +328,7 @@ a ion-icon {
     color: var(--color8);
     line-height: 1.6;
     margin-bottom: 20px;
+    text-align: center; 
 }
 
 #about .btn-secondary {
@@ -339,9 +345,14 @@ a ion-icon {
 }
 
 /* Estilos para la sección Medicos veterinarios */
+
+.imagen {
+    width:50%;
+    border-radius: 15px;
+}
 #medicos {
     background-color: var(--color6);
-    padding-top: 80px;
+    padding-top: 50px;
     padding-bottom: 80px;
 }
 
@@ -415,3 +426,86 @@ a ion-icon {
         white-space: nowrap;
     }
 }
+
+
+
+/*---------------------- Footer -----------------------*/
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+}
+
+footer .container {
+    width: 100%;
+    display: flex;
+    grid-gap: 20px;
+    padding: 5%;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--color1);
+}
+
+footer .container .sec {
+    position: relative;
+    margin: auto;
+}
+
+.sec ul li {
+    list-style-type: none;
+}
+
+.footer_logo {
+    display: block;
+    width: 80px;
+}
+
+a ion-icon {
+    width: 50px;
+}
+
+.copyright {
+    color: var(--color6);
+    text-align: center;
+    background: var(--color8);
+}
+
+@media (max-width: 882px) {
+
+    footer .container {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        column-gap: 1;
+        justify-content: center;
+    }
+
+    footer .container .sec ul li img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    footer .container .sec ul li p {
+        font-size: 16px;
+    }
+}
+
+
+
+
+  
+   
+
+
+
+
+
+
+
+
+
+
+
+
