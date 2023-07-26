@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Paw</title>
+    <meta name="description" content="Página web Happy Paws">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- normalize -->
+    <link rel="preload" href="css/normalize.css" as="style">
+    <link rel="stylesheet" href="css/normalize.css">
+
+    <!-- Fonts -->
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
+        crossorigin="crossorigin" as="font">
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
+        rel="stylesheet">
+
+    <!-- styles -->
+    <link rel="preload" href="css/services_info.css" as="style">
+    <link rel="stylesheet" href="css/services_info.css">
+
+    <!--Icons-->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Logo -->
+        <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws" /></a>
+        <!-- Menu 2 -->
+        <input type="checkbox" id="menu-bar" />
+        <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
+        <!-- Navegacion -->
+        <nav class="navbar">
+            <ul>
+                <li>
+                    <a class="active" href="services.html">Servicios</a>
+                    <ul>
+                        <li><a class="active" href="service_medical_check.html">Medicia</a></li>
+                        <li><a href="service_surgery.html">Cirugía</a></li>
+                        <li><a href="service_neutering.html">Castración</a></li>
+                        <li><a href="service_grooming.html">Aceo</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">Nosotros</a></li>
+                <li><a href="events.html">Eventos</a></li>
+                <li><a href="contact.html">Contacto</a></li>
+                <li><a class="login" href="login.html"><ion-icon name="person-circle-outline"></ion-icon></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="contenedor">
+
+        <main class="informacion ">
+            <article class="entrada">
+                <h1 class="centrar-texto no-margin">Medicina General</h1>
+                <img class="service_icon" src="/img/s1.svg" alt="icono">
+                <p class="justificar-texto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor
+                    incididunt ut labore et dolore magna aliqua.</p>
+            </article><!-- Texto 1 -->
+            <article class="entrada">
+                <h2 class="centrar-texto">Sobre el servicio</h2>
+                <p class="justificar-texto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor
+                    incididunt ut labore et dolore magna aliqua.</p>
+                <img class="imagen" src="/img/img_5.jpg" alt="">
+            </article><!-- Texto 2 -->
+
+            <div class="enlace contenedor">
+                <a class="boton centrar-texto" href="/services.html">Mas servicios</a>
+            </div>
+
+        </main>
+
+        <aside class="sidebar contenido-principal">
+            <form class="formulario" id="formulario">
+                <fieldset>
+                    <h3 class="centrar-texto">Programar una cita</h3>
+                    <form action="/submit" method="post">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" placeholder="Nombre completo" id="nombre" name="nombre" required>
+
+                        <label for="correo">Correo:</label>
+                        <input type="email" placeholder="Correo electrónico" id="correo" name="correo" required>
+
+                        <label for="fecha">Fecha:</label>
+                        <input type="date" id="fecha" name="fecha" required>
+
+                        <label for="horario">Horario:</label>
+                        <select id="horario" name="horario" required>
+                            <option value="" disabled selected>Seleccione un horario</option>
+                            <option value="8:00 AM">8:00 AM</option>
+                            <option value="10:00 AM">9:00 AM</option>
+                            <option value="2:00 PM">10:00 AM</option>
+                            <option value="4:00 PM">11:00 AM</option>
+                            <option value="8:00 AM">1:00 PM</option>
+                            <option value="10:00 AM">2:00 PM</option>
+                            <option value="2:00 PM">3:00 PM</option>
+                            <option value="4:00 PM">4:00 PM</option>
+                        </select>
+
+                        <label for="servicio">Servicio:</label>
+                        <select id="servicio" name="servicio" required>
+                            <option value="" disabled selected>Seleccione un servicio</option>
+                            <option value="Limpieza">Medicia general</option>
+                            <option value="Reparación">Cirugía</option>
+                            <option value="Mantenimiento">Castración</option>
+                            <option value="Asesoría">Aseo de mascotas</option>
+                        </select>
+
+                        <label for="horario">Mascota:</label>
+                        <select id="horario" name="horario" required>
+                            <option value="" disabled selected>Seleccione la mascota</option>
+                            <option value="gato">Gato</option>
+                            <option value="perro">Perro</option>
+                        </select>
+
+                        <input type="submit" value="Enviar">
+                    </form>
+
+                    <div class="contenedor-mensaje">
+                </fieldset>
+            </form>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="fcontenedor">
+            <!-- Seccion 1-->
+            <div class="fcontenedor__seccion">
+                <img class="fcontenedor__imagen" src="/img/logo_color.svg" alt="Happy-Paws" />
+                <p>Dedicados a la salud y bienestar de tus mejores amigos.</p>
+            </div>
+            <!-- Seccion 2-->
+            <div class="fcontenedor__seccion">
+                <h4 class="ftitulo">Redes Sociales</h4>
+                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-instagram"></ion-icon> Happy-Paws</a>
+                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-facebook"></ion-icon> Happy-Paws</a>
+                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-whatsapp"></ion-icon> +506 8888-8888</a>
+            </div>
+            <!-- Seccion 3-->
+            <div class="fcontenedor__seccion">
+                <h4 class="ftitulo">Contáctenos</h4>
+                <a href="#!" class="fcontenedor__info"><ion-icon name="call-sharp"></ion-icon> +506 2532-3577</a>
+                <a href="#!" class="fcontenedor__info"><ion-icon name="navigate-circle-sharp"></ion-icon> San José,
+                    Costa Rica.</a>
+                <a href="mailto:happyPaws@email.com" class="fcontenedor__info"><ion-icon name="mail-sharp"></ion-icon>
+                    happyPaws@email.com</a>
+            </div>
+        </div>
+        <!-- Copyright -->
+        <div class="copyright">
+            <p>&copy; Happy Paws — Todos los derechos Reservados 2023.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>`

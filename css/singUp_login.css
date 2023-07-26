@@ -1,0 +1,218 @@
+:root {
+    --color1: #70C5D7;
+    --color2: #ffca0f;
+    --color3: #41766C;
+    --color4: #DD883E;
+    --color5: #f97561;
+    --color8: #2C2524;
+
+    --negro: #000000;
+    --blanco: #FFFFFF;
+
+    --grisClaro: #f2f2f2;
+    --gris: #afafaf;
+    --grisOscuro: #454545;
+
+    --fuentePrincipal: 'Staatliches', sans-serif;
+    --fuenteParrafos: 'Open Sans', sans-serif;
+}
+
+html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+/** Globales **/
+.contenedor {
+    width: min(90%, 120rem);
+    margin: 5rem auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--fuentePrincipal);
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 4.9rem;
+}
+
+h2 {
+    font-size: 3.8rem;
+}
+
+h3 {
+    font-size: 2.6rem;
+}
+
+h4 {
+    font-size: 2.2rem;
+}
+
+h5,
+label {
+    font-size: 1.8rem;
+}
+
+h6 {
+    font-size: 1.6rem;
+}
+
+p {
+    font-size: 1.6rem;
+}
+
+img {
+    max-width: 100%;
+}
+
+ul {
+    text-decoration: none;
+}
+
+/** Utilidades **/
+.no-margin {
+    margin: 0;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.centrar-texto {
+    text-align: center;
+}
+
+.justificar-texto {
+    text-align: justify;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: var(--fuenteParrafos);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(/img/fondo.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.main {
+    width: 35rem;
+    height: 80rem;
+    background: linear-gradient(to bottom, var(--color1), var(--color1));
+    overflow: hidden;
+    border-radius: 1rem;
+
+}
+
+#chk {
+    display: none;
+}
+
+.logo {
+    max-width: 100%;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.logo:hover {
+    transform: scale(0.9);
+}
+
+.signup {
+    position: relative;
+}
+
+label {
+    color: var(--negro);
+    justify-content: center;
+    display: flex;
+    margin: 3rem;
+    font-weight: bold;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+input {
+    width: 80%;
+    height: 4rem;
+    background: var(--grisClaro);
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    margin: 2rem auto;
+    padding: 1rem;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    border-radius: .5rem;
+}
+
+button {
+    width: 80%;
+    height: 4rem;
+    margin: 1rem auto;
+    justify-content: center;
+    display: block;
+    color: var(--blanco);
+    background: var(--color4);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    outline: none;
+    border: none;
+    border-radius: .5rem;
+    transition: .2s ease-in;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--color5);
+    color: var(--negro);
+}
+
+.login {
+    height: 60rem;
+    background: var(--blanco);
+    border-radius: 100% / 10%;
+    transform: translateY(-33rem);
+    transition: .8s ease-in-out;
+}
+
+.login label {
+    padding-top: 3rem;
+    color: var(--color8);
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#chk:checked~.login {
+    transform: translateY(.20rem);
+}
+
+#chk:checked~.login label {
+    transform: scale(.8);
+}
+
+#chk:checked~.signup label {
+    transform: scale(.8);
+}
