@@ -111,6 +111,10 @@ ul {
     padding: 2rem;
 }
 
+.fuenteNormal {
+    font-family: var(--fuenteParrafos);
+}
+
 /* Botones*/
 
 .boton {
@@ -358,6 +362,85 @@ footer {
     margin-bottom: 20px;
 }
 
+/* Estilos para la vista móvil de la sección del banner */
+@media (max-width: 767px) {
+    .seccion2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        text-align: justify;
+    }
+
+    .contenedor__sec {
+        margin-bottom: 2rem;
+        text-align: justify;
+    }
+
+    .contenedor__sec img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .contenedor__sec h1 {
+        font-size: 3rem;
+        text-align: justify;
+    }
+
+    .contenedor__sec p {
+        text-align: justify;
+        font-size: 1.6rem;
+    }
+
+
+}
+
+
+/* Estilos para la vista móvil de la sección de contacto, horario y ubicación */
+@media (max-width: 767px) {
+    .seccion3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .contenedor__sec3 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .sec3__item {
+        margin-right: 1rem;
+    }
+
+    .sec3__item svg {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .sec3__item h3 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .sec3__item p {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .sec3__item ion-icon {
+        margin-right: 0.5rem;
+        font-size: 2rem;
+    }
+}
+
+
 /*---------------------- Contenido -----------------------*/
 
 .contenedor .seccion4 {
@@ -368,7 +451,7 @@ footer {
 }
 
 
-.seccion4 a{
+.seccion4 a {
     margin-bottom: 20rem;
     text-align: center;
     display: grid;
@@ -378,23 +461,131 @@ footer {
     color: var(--color8);
 }
 
-.service__card, .service__card p {
+.service__card,
+.service__card p {
     color: var(--color8);
 }
 
 .service_icon img {
-    width: 100px;
-    height: 100px;
+    width: 10rem;
+    height: 10rem;
     display: block;
-    margin: 0 auto 10px;
+    margin: 0 auto 1rem;
 }
 
 .service_text h3 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
 }
 
 .service_text p {
     font-size: 16px;
     line-height: 1.5;
+}
+
+/* Estilos para la vista móvil de la sección de servicios */
+@media (max-width: 767px) {
+    .seccion4 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .seccion4 h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .contenedor__sec4 {
+        flex-basis: calc(50% - 2rem);
+        margin: 1rem;
+        max-width: 300px;
+    }
+
+    .service__card {
+        padding: 1rem;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .service_icon img {
+        width: 5rem;
+        margin-bottom: 1rem;
+    }
+
+    .service_text h3 {
+        font-size: 1.8rem;
+    }
+}
+
+
+
+/*---------------------- Contenido -----------------------*/
+.contenedor__sec5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.sec5__item h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+ul ion-icon {
+    margin-right: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.imgamen {
+    width: 100%;
+    height: 100%;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .contenedor__sec5 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sec5__item {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .sec5__item h2 {
+        font-size: 2rem;
+    }
+
+    .justificar-texto {
+        font-size: 1.4rem;
+        line-height: 1.5;
+    }
+
+    ul ion-icon {
+        font-size: 1.4rem;
+    }
+
+    .imgamen {
+        width: 100%;
+    }
 }
