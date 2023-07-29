@@ -404,6 +404,19 @@ justify-content: center;
     background-color: var(--color5);
 }
 
+/* Mensaje formulario*/
+.contenedor-mensaje {
+    color: var(--blanco);
+    background-color: var(--color4);
+    margin-top: 1rem;
+    display: block;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;
+    font-size: 1rem
+}
+
 
 @media (max-width: 768px) {
 
