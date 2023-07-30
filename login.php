@@ -40,7 +40,7 @@
         <input type="checkbox" id="chk" aria-hidden="true">
 
         <div class="contenedor logo">
-            <a href="index.html"><img src="/img/logo_color.svg" alt="logo"></a>
+            <a href="index.html"><img src="img/logo_color.svg" alt="logo"></a>
         </div>
 
         <div class="signup">

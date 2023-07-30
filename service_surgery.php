@@ -39,7 +39,7 @@
     <!-- Header -->
     <header>
         <!-- Logo -->
-        <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws" /></a>
+        <a class="logo" href="index.html"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Menu 2 -->
         <input type="checkbox" id="menu-bar" />
         <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
@@ -68,7 +68,7 @@
         <main class="informacion ">
             <article class="entrada">
                 <h1 class="centrar-texto no-margin">Cirugía</h1>
-                <img class="service_icon" src="/img/s2.svg" alt="icono">
+                <img class="service_icon" src="img/s2.svg" alt="icono">
                 <p class="justificar-texto">En Happy Paws, entendemos que hay momentos en la vida de nuestras mascotas
                     en los que pueden requerir intervenciones quirúrgicas para mejorar su salud y calidad de vida.
                     Nuestro servicio de Cirugía está respaldado por un equipo de cirujanos veterinarios altamente
@@ -88,11 +88,11 @@
                 <li>Cirugías dentales y extracción de dientes problemáticos.</li>
                 <li>Asistencia y apoyo durante el proceso preoperatorio y postoperatorio.</li>
                 <li>Uso de anestesia segura y monitoreo constante durante los procedimientos.</li>
-                <img class="imagen" src="/img/img_4.jpeg" alt="">
+                <img class="imagen" src="img/img_4.jpeg" alt="">
             </article><!-- Texto 2 -->
 
             <div class="enlace contenedor">
-                <a class="boton centrar-texto" href="/services.html">Mas servicios</a>
+                <a class="boton centrar-texto" href="services.html">Mas servicios</a>
             </div>
 
         </main>
@@ -169,7 +169,7 @@
         <div class="fcontenedor">
             <!-- Seccion 1-->
             <div class="fcontenedor__seccion">
-                <img class="fcontenedor__imagen" src="/img/logo_color.svg" alt="Happy-Paws" />
+                <img class="fcontenedor__imagen" src="img/logo_color.svg" alt="Happy-Paws" />
                 <p>Dedicados a la salud y bienestar de tus mejores amigos.</p>
             </div>
             <!-- Seccion 2-->

@@ -39,7 +39,7 @@
     <!-- Header -->
     <header>
         <!-- Logo -->
-        <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws" /></a>
+        <a class="logo" href="index.html"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Menu 2 -->
         <input type="checkbox" id="menu-bar" />
         <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
@@ -68,7 +68,7 @@
         <main class="informacion ">
             <article class="entrada">
                 <h1 class="centrar-texto no-margin">Castración</h1>
-                <img class="service_icon" src="/img/s3.svg" alt="icono">
+                <img class="service_icon" src="img/s3.svg" alt="icono">
                 <p class="justificar-texto">
                     En Happy Paws, reconocemos la importancia de la castración como una medida
                     responsable y beneficiosa para el bienestar de nuestros amigos peludos. Nuestro servicio de
@@ -88,7 +88,7 @@
                 <li>Procedimiento quirúrgico seguro y eficiente con técnicas modernas y anestesia adecuada.</li>
                 <li>Apoyo y cuidado postoperatorio para asegurar una recuperación rápida y sin complicaciones.</li>
                 <li>Asesoramiento sobre el manejo y cuidado de la mascota después de la castración.</li>
-                <img class="imagen" src="/img/img_2.jpg" alt="">
+                <img class="imagen" src="img/img_2.jpg" alt="">
             </article><!-- Texto 2 -->
 
             <div class="enlace contenedor">
@@ -169,7 +169,7 @@
         <div class="fcontenedor">
             <!-- Seccion 1-->
             <div class="fcontenedor__seccion">
-                <img class="fcontenedor__imagen" src="/img/logo_color.svg" alt="Happy-Paws" />
+                <img class="fcontenedor__imagen" src="img/logo_color.svg" alt="Happy-Paws" />
                 <p>Dedicados a la salud y bienestar de tus mejores amigos.</p>
             </div>
             <!-- Seccion 2-->

@@ -2,66 +2,18 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Happy Paw</title>
-    <link rel="icon" type="image/svg+xml" href="/img/favicon.png">
-    <link rel="icon" type="image/png" href="/img/favicon.svg">
-    <meta name="description" content="Página web Happy Paws">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- normalize -->
-    <link rel="preload" href="css/normalize.css" as="style">
-    <link rel="stylesheet" href="css/normalize.css">
-
-    <!-- Fonts -->
-    <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
-        crossorigin="crossorigin" as="font">
-
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
-        rel="stylesheet">
+    <!-- Header template-->
+    <?php include 'include/template/header.php'; ?>
 
     <!-- styles -->
     <link rel="preload" href="css/styles.css" as="style">
     <link rel="stylesheet" href="css/styles.css">
-
-    <!--Icons-->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
-        <!-- Logo -->
-        <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws" /></a>
-        <!-- Menu 2 -->
-        <input type="checkbox" id="menu-bar" />
-        <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
-        <!-- Navegacion -->
-        <nav class="navbar">
-            <ul>
-                <li>
-                    <a href>Servicios</a>
-                    <ul>
-                        <li><a href="service_medical_check.html">Medicia</a></li>
-                        <li><a href="service_surgery.html">Cirugía</a></li>
-                        <li><a href="service_neutering.html">Castración</a></li>
-                        <li><a href="service_grooming.html">Aceo</a></li>
-                    </ul>
-                </li>
-                <li><a href="about.html">Nosotros</a></li>
-                <li><a href="events.html">Eventos</a></li>
-                <li><a href="contact.html">Contacto</a></li>
-                <li><a class="login" href="login.html"><ion-icon name="person-circle-outline"></ion-icon></a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- Nav template -->
+    <?php $enlaceActivo = ''; include 'include/template/nav.php';?>
+
     <main class="contenedor">
 
         <!-- Banner -->
@@ -77,11 +29,11 @@
                     ¡Juntos, crearemos una vida llena de alegría y
                     salud para tus adorables compañeros en Happy Paws!</p>
                 <div class="enlace contenedor">
-                    <a class="boton centrar-texto" href="/services.html">Contáctenos</a>
+                    <a class="boton centrar-texto" href="contact.php">Contáctenos</a>
                 </div>
             </div>
             <div class="contenedor__sec">
-                <img src="/img/home5.png" alt>
+                <img src="img/home5.png" alt>
             </div>
         </div>
 
@@ -154,11 +106,11 @@
         <!-- Servicios -->
         <div class="contenedor seccion4">
             <h1 class="centrar-texto padding2">Nuestros servicios</h1>
-            <a href="/services.html">
+            <a href="services.php">
                 <div class="contenedor__sec4">
                     <div class="service__card">
                         <div class="service_icon">
-                            <img src="/img/s1.svg" alt>
+                            <img src="img/s1.svg" alt>
                         </div>
 
                         <div class="service_text">
@@ -170,7 +122,7 @@
                 <div class="contenedor__sec4">
                     <div class="service__card">
                         <div class="service_icon">
-                            <img src="/img/s2.svg" alt>
+                            <img src="img/s2.svg" alt>
                         </div>
 
                         <div class="service_text">
@@ -183,7 +135,7 @@
 
                     <div class="service__card">
                         <div class="service_icon">
-                            <img src="/img/s3.svg" alt>
+                            <img src="img/s3.svg" alt>
                         </div>
 
                         <div class="service_text">
@@ -196,7 +148,7 @@
                 <div class="contenedor__sec4">
                     <div class="service__card">
                         <div class="service_icon">
-                            <img src="/img/s4.svg" alt>
+                            <img src="img/s4.svg" alt>
                         </div>
 
                         <div class="service_text">
@@ -224,48 +176,20 @@
                     <ul><ion-icon name="checkmark-done-circle-outline"></ion-icon> Servicios de castración y cuidados
                         estéticos.</ul>
                     <div class="enlace contenedor">
-                        <a class="boton centrar-texto" href="/about.html">Más acerca de nosotros</a>
+                        <a class="boton centrar-texto" href="about.php">Más acerca de nosotros</a>
                     </div>
                 </div>
                 <div class="sec5__item">
-                    <img src="/img/home1.png" alt="imagen" class="imgamen">
+                    <img src="img/home1.png" alt="imagen" class="imgamen">
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="fcontenedor">
-            <!-- Seccion 1-->
-            <div class="fcontenedor__seccion">
-                <img class="fcontenedor__imagen" src="/img/logo_color.svg" alt="Happy-Paws" />
-                <p>Dedicados a la salud y bienestar de tus mejores amigos.</p>
-            </div>
-            <!-- Seccion 2-->
-            <div class="fcontenedor__seccion">
-                <h4 class="ftitulo">Redes Sociales</h4>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-instagram"></ion-icon> Happy-Paws</a>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-facebook"></ion-icon> Happy-Paws</a>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-whatsapp"></ion-icon> +506 8888-8888</a>
-            </div>
-            <!-- Seccion 3-->
-            <div class="fcontenedor__seccion">
-                <h4 class="ftitulo">Contáctenos</h4>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="call-sharp"></ion-icon> +506 2532-3577</a>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="navigate-circle-sharp"></ion-icon> San José,
-                    Costa Rica.</a>
-                <a href="mailto:happyPaws@email.com" class="fcontenedor__info"><ion-icon name="mail-sharp"></ion-icon>
-                    happyPaws@email.com</a>
-            </div>
-        </div>
-        <!-- Copyright -->
-        <div class="copyright">
-            <p>&copy; Happy Paws — Todos los derechos Reservados 2023.</p>
-        </div>
-    </footer>
-
+    <!-- Footer template-->
+    <?php include 'include/template/footer.php'; ?>
+    <!-- JS -->
     <script src="js/modernizr.js"></script>
 </body>
 
-</html>`
+</html>

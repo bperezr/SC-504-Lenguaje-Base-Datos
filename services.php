@@ -39,7 +39,7 @@
     <!-- Header -->
     <header>
         <!-- Logo -->
-        <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws" /></a>
+        <a class="logo" href="index.html"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Menu 2 -->
         <input type="checkbox" id="menu-bar" />
         <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
@@ -96,7 +96,7 @@
             <a href="service_medical_check.html">
                 <div class="service__card">
                     <div class="service_icon">
-                        <img src="/img/s1.svg" alt="">
+                        <img src="img/s1.svg" alt="">
                     </div>
 
                     <div class="service_text">
@@ -113,7 +113,7 @@
             <a href="service_surgery.html">
                 <div class="service__card">
                     <div class="service_icon">
-                        <img src="/img/s2.svg" alt="">
+                        <img src="img/s2.svg" alt="">
                     </div>
 
                     <div class="service_text">
@@ -130,7 +130,7 @@
             <a href="service_neutering.html">
                 <div class="service__card">
                     <div class="service_icon">
-                        <img src="/img/s3.svg" alt="">
+                        <img src="img/s3.svg" alt="">
                     </div>
 
                     <div class="service_text">
@@ -147,7 +147,7 @@
             <a href="service_grooming.html">
                 <div class="service__card">
                     <div class="service_icon">
-                        <img src="/img/s4.svg" alt="">
+                        <img src="img/s4.svg" alt="">
                     </div>
 
                     <div class="service_text">
