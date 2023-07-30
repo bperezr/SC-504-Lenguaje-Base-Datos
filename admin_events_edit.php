@@ -15,7 +15,7 @@
     <main class="contenedor">
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Crear nuevo evento</h2>
+                <h2 class="centrar-texto">Editar evento</h2>
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data">
                     <div class="campo">
                         <label for="titulo">Título del evento:</label>
@@ -58,7 +58,7 @@
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src="js/evento.js"></script>
+    <script src=""></script>
 </body>
 
 </html>

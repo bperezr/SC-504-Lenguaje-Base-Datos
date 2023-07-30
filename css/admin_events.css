@@ -657,3 +657,114 @@ footer {
     background-color: var(--color8);
     color: var(--blanco);
 }
+
+/* ----------------Formulario nuevo evento---------------- */
+
+
+.evento__detalle {
+    background-color: var(--grisClaro);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 .4rem .8rem rgba(0, 0, 0, 0.5);
+}
+
+.centrar-texto {
+    text-align: center;
+}
+
+.formulario-evento {
+    display: block;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin-top: 1rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-imagen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.campo-imagen img {
+    max-width: 100%;
+    height: auto;
+}
+
+.campo-imagen img {
+    max-height: 30rem;
+    object-fit: contain;
+}
+
+#preview {
+    max-width: 60%;
+    height: auto;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+textarea {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 0.2rem solid var(--gris);
+    border-radius: 0.5rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.enviar {
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: var(--color3);
+    color: var(--blanco);
+    display: inline-block;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    height: 5rem;
+    margin-right: 2rem;
+}
+
+.cancelar {
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: var(--color5);
+    color: var(--blanco);
+    display: inline-block;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    height: 5rem;
+}
+
+.enviar:hover,
+.cancelar:hover {
+    background-color: var(--color8);
+    color: var(--blanco);
+}
+
+.botones_evento {
+    margin-top: 5rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}

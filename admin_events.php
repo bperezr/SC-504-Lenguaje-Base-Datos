@@ -34,13 +34,13 @@
                     </div>
                 </div>
                 <div class="buscador buscador_agregar">
-                        <!---Agregar-->
-                        <div class="agregar">
-                            <a href="admin_events_post.php" class="btn_agregar"><ion-icon
-                                    name="add-circle-outline"></ion-icon>
-                                Agregar</a>
-                        </div>
+                    <!---Agregar-->
+                    <div class="agregar">
+                        <a href="admin_events_new.php" class="btn_agregar"><ion-icon
+                                name="add-circle-outline"></ion-icon>
+                            Agregar</a>
                     </div>
+                </div>
             </div>
         </form>
 
@@ -59,7 +59,7 @@
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
@@ -135,7 +135,7 @@
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
