@@ -39,6 +39,7 @@ body {
 .contenedor {
     width: min(90%, 120rem);
     margin: 5rem auto;
+    display: flex;
 }
 
 a {
@@ -192,10 +193,10 @@ header .navbar ul li ul {
     position: absolute;
     margin: 0;
     padding: 0;
-    width: 15rem;
+    width: 20rem;
     background: var(--grisClaro);
     display: none;
-    z-index: 100 !important;
+    z-index: 100
 }
 
 header .navbar ul li ul li {
@@ -240,7 +241,6 @@ header label {
         background: var(--blanco);
         border-top: .1rem solid rgba(0, 0, 0, .1);
         display: none;
-        z-index: 100;
     }
 
     header .navbar ul li {
@@ -253,7 +253,7 @@ header label {
     }
 
     header .navbar ul li ul li {
-        background: #f0f0f0;
+        background: var(--blanco);
     }
 
     header .navbar ul li ul li ul {
@@ -333,7 +333,7 @@ footer {
     margin: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    box-shadow: 1px -7px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px -7px 5px 0px rgba(0, 0, 0, 0.5);
     background-color: var(--color1);
 }
 
