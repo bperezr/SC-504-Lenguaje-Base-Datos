@@ -2,66 +2,15 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Happy Paw</title>
-    <link rel="icon" type="image/svg+xml" href="/img/favicon.png">
-    <link rel="icon" type="image/png" href="/img/favicon.svg">
-    <meta name="description" content="Página web Happy Paws">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- normalize -->
-    <link rel="preload" href="css/normalize.css" as="style">
-    <link rel="stylesheet" href="css/normalize.css">
-
-    <!-- Fonts -->
-    <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
-        crossorigin="crossorigin" as="font">
-
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Staatliches&display=swap"
-        rel="stylesheet">
-
     <!-- styles -->
-    <link rel="preload" href="css/about.css" as="style">
-    <link rel="stylesheet" href="css/about.css">
-
-    <!--Icons-->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
+    <?php $rutaCSS = 'css/about.css';
+    include 'include/template/header.php'; ?>
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
-        <!-- Logo -->
-        <a class="logo" href="index.html"><img src="/img/logo2_color.svg" alt="Happy-Paws" /></a>
-        <!-- Menu 2 -->
-        <input type="checkbox" id="menu-bar" />
-        <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
-        <!-- Navegacion -->
-        <nav class="navbar">
-            <ul>
-                <li>
-                    <a href="">Servicios</a>
-                    <ul>
-                        <li><a href="service_medical_check.html">Medicia</a></li>
-                        <li><a href="service_surgery.html">Cirugía</a></li>
-                        <li><a href="service_neutering.html">Castración</a></li>
-                        <li><a href="service_grooming.html">Aceo</a></li>
-                    </ul>
-                </li>
-                <li><a class="active" href="about.html">Nosotros</a></li>
-                <li><a href="events.html">Eventos</a></li>
-                <li><a href="contact.html">Contacto</a></li>
-                <li><a class="login" href="login.html"><ion-icon name="person-circle-outline"></ion-icon></a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- Nav template -->
+    <?php $enlaceActivo = 'about';
+    include 'include/template/nav.php'; ?>
 
     <!-- Contenido -->
     <main class="contenedor about">
@@ -75,14 +24,14 @@
                     conveniente y amigable.</p>
             </div>
             <div class="hero__imagen">
-                <img src="/img/about1.jpg" alt="">
+                <img src="img/about1.jpg" alt="">
             </div>
         </section>
         <!-- hero -->
         <div class="about__info">
             <section class="hero2">
                 <div class="hero__imagen">
-                    <img src="/img/about2.jpg" alt="">
+                    <img src="img/about2.jpg" alt="">
                 </div>
                 <div class="hero__info">
                     <h2 class="centrar-texto">Nuestra misión</h2>
@@ -105,7 +54,7 @@
                         saludable y feliz para nuestros fieles compañeros.</p>
                 </div>
                 <div class="hero__imagen">
-                    <img src="/img/about4.jpg" alt="">
+                    <img src="img/about4.jpg" alt="">
                 </div>
             </section>
         </div>
@@ -114,7 +63,7 @@
             <h2 class="centrar-texto">Nuestros valores</h2>
             <div class="valores">
                 <div class="valores__item">
-                    <img src="/img/icon1_confianza.svg" alt="">
+                    <img src="img/icon1_confianza.svg" alt="">
                     <h3>Confianza</h3>
                     <p class="justificar-texto">En Happy Paws, la confianza es el pilar fundamental de nuestra relación
                         con los propietarios de mascotas. Nos esforzamos por ganarnos su confianza a través de un trato
@@ -125,7 +74,7 @@
                 </div>
 
                 <div class="valores__item">
-                    <img src="/img/icon2_calidad.svg" alt="">
+                    <img src="img/icon2_calidad.svg" alt="">
                     <h3>Calidad</h3>
                     <p class="justificar-texto">En Happy Paws, la calidad es el sello distintivo de nuestro trabajo. Nos
                         comprometemos a ofrecer
@@ -136,7 +85,7 @@
                 </div>
 
                 <div class="valores__item">
-                    <img src="/img/icon3_integridad.svg" alt="">
+                    <img src="img/icon3_integridad.svg" alt="">
                     <h3>Integridad</h3>
                     <p class="justificar-texto">En Happy Paws, la integridad es el cimiento de nuestras acciones y
                         decisiones. Nos enorgullecemos de actuar con honestidad, ética y transparencia en todo lo que
@@ -146,7 +95,7 @@
                 </div>
 
                 <div class="valores__item">
-                    <img src="/img/icon4_amor.svg" alt="">
+                    <img src="img/icon4_amor.svg" alt="">
                     <h3>Amor</h3>
                     <p class="justificar-texto">En Happy Paws, el amor es el alma de nuestra clínica veterinaria. Cada uno de nosotros, desde los
                         médicos hasta el personal de apoyo, tiene un profundo amor y cariño por los animales. Nuestro
@@ -170,8 +119,8 @@
 
 
                 <div class="team_card">
-                    <a href="about_team_dr1.html">
-                        <img src="/img/dr1_luis.png" alt="">
+                    <a href="about_team_dr1.php">
+                        <img src="img/dr1_luis.png" alt="">
                         <h3 class="centrar-texto">Dr. Juan Carlos Morales</h3>
                         <p class="justificar-texto">El Dr. Juan Carlos Morales es un experto en medicina interna con una
                             pasión por resolver los casos más complejos. Su enfoque analítico y su amplio conocimiento
@@ -182,8 +131,8 @@
                 </div>
 
                 <div class="team_card">
-                    <a href="about_team_dr2.html">
-                        <img src="/img/dr2_ana.gif" alt="">
+                    <a href="about_team_dr2.php">
+                        <img src="img/dr2_ana.gif" alt="">
                         <h3 class="centrar-texto">Dra. Valentina Rodríguez</h3>
                         <p class="justificar-texto">La Dra. Valentina Rodríguez es una apasionada defensora del
                             bienestar animal. Su enfoque amable y compasivo la convierte en una profesional cercana a
@@ -193,8 +142,8 @@
                 </div>
 
                 <div class="team_card">
-                    <a href="about_team_dr3.html">
-                        <img src="/img/dr3_elizabeth.webp" alt="">
+                    <a href="about_team_dr3.php">
+                        <img src="img/dr3_elizabeth.webp" alt="">
                         <h3 class="centrar-texto">Dra. Martina Gómez</h3>
                         <p class="justificar-texto">La Dra. Martina Gómez es una cirujana veterinaria altamente
                             capacitada y dedicada. Su destreza quirúrgica y atención meticulosa garantizan que cada
@@ -208,36 +157,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="fcontenedor">
-            <!-- Seccion 1-->
-            <div class="fcontenedor__seccion">
-                <img class="fcontenedor__imagen" src="/img/logo_color.svg" alt="Happy-Paws" />
-                <p>Dedicados a la salud y bienestar de tus mejores amigos.</p>
-            </div>
-            <!-- Seccion 2-->
-            <div class="fcontenedor__seccion">
-                <h4 class="ftitulo">Redes Sociales</h4>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-instagram"></ion-icon> Happy-Paws</a>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-facebook"></ion-icon> Happy-Paws</a>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="logo-whatsapp"></ion-icon> +506 8888-8888</a>
-            </div>
-            <!-- Seccion 3-->
-            <div class="fcontenedor__seccion">
-                <h4 class="ftitulo">Contáctenos</h4>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="call-sharp"></ion-icon> +506 2532-3577</a>
-                <a href="#!" class="fcontenedor__info"><ion-icon name="navigate-circle-sharp"></ion-icon> San José,
-                    Costa Rica.</a>
-                <a href="mailto:happyPaws@email.com" class="fcontenedor__info"><ion-icon name="mail-sharp"></ion-icon>
-                    happyPaws@email.com</a>
-            </div>
-        </div>
-        <!-- Copyright -->
-        <div class="copyright">
-            <p>&copy; Happy Paws — Todos los derechos Reservados 2023.</p>
-        </div>
-    </footer>
-
+    <?php include 'include/template/footer.php'; ?>
+    <!-- JS -->
     <script src="js/modernizr.js"></script>
 </body>
 

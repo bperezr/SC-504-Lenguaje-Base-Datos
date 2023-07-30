@@ -2,16 +2,15 @@
 <html lang="es">
 
 <head>
-    <!-- Header template -->
-    <?php include 'include/template/header.php'; ?>
     <!-- styles -->
-    <link rel="preload" href="css/contact.css" as="style">
-    <link rel="stylesheet" href="css/contact.css">
+    <?php $rutaCSS = 'css/contact.css';
+    include 'include/template/header.php'; ?>
 </head>
 
 <body>
-    <!-- Header template-->
-    <?php $enlaceActivo = 'contact'; include 'include/template/nav.php';?>
+    <!-- Nav template -->
+    <?php $enlaceActivo = 'contact';
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
         <section class="hero">

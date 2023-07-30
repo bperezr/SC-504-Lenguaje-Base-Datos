@@ -8,7 +8,7 @@
     <nav class="navbar">
         <ul>
             <li>
-                <a href>Servicios</a>
+                <a href="services.php"<?php if ($enlaceActivo == 'services') echo 'class="active"'; ?>>Servicios</a>
                 <ul>
                     <li><a href="service_medical_check.php" <?php if ($enlaceActivo == 'medical_check') echo 'class="active"'; ?>>Medicia</a></li>
                     <li><a href="service_surgery.php" <?php if ($enlaceActivo == 'surgery') echo 'class="active"'; ?>>Cirugía</a></li>

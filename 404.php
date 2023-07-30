@@ -2,16 +2,16 @@
 <html lang="es">
 
 <head>
-    <!-- Header template -->
-    <?php include 'include/template/header.php'; ?>
     <!-- styles -->
-    <link rel="preload" href="css/404.css" as="style">
-    <link rel="stylesheet" href="css/404.css">
+    <?php $rutaCSS = 'css/404.css';
+    include 'include/template/header.php'; ?>
 </head>
 
 <body>
-    <!-- Header temmplate-->
-    <?php include 'include/template/nav.php'; ?>
+    <!-- Nav template -->
+    <?php $enlaceActivo = '';
+    include 'include/template/nav.php'; ?>
+
 
     <main class="contenedor">
         <section class="hero">
