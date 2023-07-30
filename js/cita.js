@@ -49,7 +49,7 @@ function validarFormulario(event) {
     var horaSeleccionada = parseInt(horario.substring(0, 2));
 
     if (diaSemana >= 1 && diaSemana <= 5 && (horaSeleccionada < 8 || horaSeleccionada > horarioLimite)) {
-        mostrarMensajeError('horario', 'Seleccione un horario válido (de lunes a viernes de 8 AM a 5 PM, y sábados de 8 AM a 12 PM)');
+        mostrarMensajeError('horario', 'Seleccione un horario válido (lunes a viernes de 8 AM a 5 PM)');
         return;
     }
 
