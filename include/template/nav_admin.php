@@ -9,7 +9,7 @@
     <nav class="navbar">
         <ul>
             <li><a href="" <?php if ($enlaceActivo == 'medicos') echo 'class="active"'; ?>>Medicos</a></li>
-            <li><a href="" <?php if ($enlaceActivo == 'eventos') echo 'class="active"'; ?>>Eventos</a></li>
+            <li><a href="admin_eventos.php" <?php if ($enlaceActivo == 'eventos') echo 'class="active"'; ?>>Eventos</a></li>
             <li class="login">
                 <p><ion-icon name="person-circle-outline"></ion-icon></p>
                 <ul>
