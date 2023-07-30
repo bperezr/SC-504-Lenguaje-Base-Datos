@@ -33,6 +33,10 @@ body {
     font-family: var(--fuenteParrafos);
     font-size: 1.6rem;
     line-height: 2;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../img/fondo3.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 /** Globales **/
@@ -379,9 +383,17 @@ footer {
 /*---------------------- Contenido -----------------------*/
 
 .bg {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../img/fondo.jpg');
-    background-attachment: fixed;
-    background-size: cover;
+    color: var(--color8);
     height: 100%;
-    padding: 30px;
+    padding: 3rem;
+}
+
+.bg_img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor .bg .bg_img img{
+    max-width: 50%;
 }

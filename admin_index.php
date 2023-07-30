@@ -15,7 +15,7 @@
     <main class="contenedor">
         <div class="bg">
             <h1 class="centrar-texto">Panel Administrativo</h1>
-            <div style="display: flex; justify-content: center; align-items: center;">
+            <div class="bg_img">
                 <img src="img/logo_color.svg" alt="Happy Paws">
             </div>
         </div>

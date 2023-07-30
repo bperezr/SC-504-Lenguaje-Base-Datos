@@ -108,7 +108,7 @@ body {
     align-items: center;
     min-height: 100vh;
     font-family: var(--fuenteParrafos);
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../img/fondo.jpg');
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../img/fondo.webp');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
