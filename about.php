@@ -116,8 +116,6 @@
                 visita.</p>
 
             <div class="team">
-
-
                 <div class="team_card">
                     <a href="about_team_dr1.php">
                         <img src="img/dr1_luis.png" alt="">

@@ -377,3 +377,11 @@ footer {
 }
 
 /*---------------------- Contenido -----------------------*/
+
+.bg {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../img/fondo.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100%;
+    padding: 30px;
+}

@@ -13,9 +13,12 @@
     include 'include/template/nav_medical.php'; ?>
 
     <main class="contenedor">
-
-        <h1 class="centrar-texto">Home Panel Medico</h1>
-
+        <div class="bg">
+            <h1 class="centrar-texto">Panel Médico</h1>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <img src="img/logo_color.svg" alt="Happy Paws">
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->

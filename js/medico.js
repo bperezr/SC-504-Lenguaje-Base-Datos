@@ -1,11 +1,3 @@
-
-// Obtener el formulario y agregar el evento de envío
-var formularioEvento = document.getElementById('formularioEvento');
-formularioEvento.addEventListener('submit', function (event) {
-    event.preventDefault();
-});
-
-
 function previewImage() {
     var preview = document.getElementById("preview");
     var file = document.querySelector("input[type=file]").files[0];
@@ -23,4 +15,3 @@ function previewImage() {
 }
 
 document.getElementById("imagen").addEventListener("change", previewImage);
-

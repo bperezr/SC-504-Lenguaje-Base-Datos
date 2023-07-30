@@ -3,39 +3,27 @@
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_events.css';
+    <?php $rutaCSS = 'css/admin_medicals.css';
     include 'include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_events';
+    <?php $enlaceActivo = 'admin_medicals';
     include 'include/template/nav_admin.php'; ?>
 
     <main class="contenedor">
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Editar evento</h2>
+                <h2 class="centrar-texto">Agregar nuevo Médico</h2>
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data">
                     <div class="campo">
-                        <label for="titulo">Título del evento:</label>
-                        <input type="text" id="titulo" name="titulo" required>
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" required>
                     </div>
                     <div class="campo">
-                        <label for="fecha">Fecha:</label>
-                        <input type="date" id="fecha" name="fecha" required>
-                    </div>
-                    <div class="campo">
-                        <label for="hora_inicio">Hora de inicio:</label>
-                        <input type="time" id="hora_inicio" name="hora_inicio" required>
-                    </div>
-                    <div class="campo">
-                        <label for="hora_fin">Hora de fin:</label>
-                        <input type="time" id="hora_fin" name="hora_fin" required>
-                    </div>
-                    <div class="campo">
-                        <label for="lugar">Lugar:</label>
-                        <input type="text" id="lugar" name="lugar" required>
+                        <label for="especialidad">Especialidad:</label>
+                        <input type="text" id="especialidad" name="especialidad" required>
                     </div>
                     <div class="campo">
                         <label for="descripcion">Descripción:</label>
@@ -47,7 +35,7 @@
                         <input type="file" id="imagen" name="imagen" accept="image/*" required>
                     </div>
                     <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Crear evento</button>
+                        <button class="enviar" type="submit">Agregar Médico</button>
                         <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
                 </form>
@@ -58,7 +46,7 @@
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src="js/evento.js"></script>
+    <script src="js/medico.js"></script>
 </body>
 
 </html>
