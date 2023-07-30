@@ -1,4 +1,3 @@
-
 :root {
     --color1: #70C5D7;
     --color2: #ffca0f;
@@ -107,6 +106,26 @@ ul {
     text-align: justify;
 }
 
+/* Botones*/
+
+.boton {
+    background-color: var(--color1);
+    color: var(--negro);
+    padding: 1rem 3rem;
+    margin-top: 1rem;
+    font-size: 2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: .5rem;
+    border: none;
+}
+
+.boton:hover {
+    background-color: var(--color2);
+    cursor: pointer;
+}
+
 @media (max-width: 480px) {
     .boton {
         width: auto;
@@ -173,10 +192,10 @@ header .navbar ul li ul {
     position: absolute;
     margin: 0;
     padding: 0;
-    width: 20rem;
+    width: 15rem;
     background: var(--grisClaro);
     display: none;
-    z-index: 100
+    z-index: 100 !important;
 }
 
 header .navbar ul li ul li {
@@ -221,6 +240,7 @@ header label {
         background: var(--blanco);
         border-top: .1rem solid rgba(0, 0, 0, .1);
         display: none;
+        z-index: 100;
     }
 
     header .navbar ul li {
@@ -244,6 +264,59 @@ header label {
     #menu-bar:checked~.navbar {
         display: initial;
         left: 0;
+    }
+}
+
+.login {
+    color: var(--color8);
+    display: flex;
+    padding: 0rem 5rem;
+    margin: 1rem;
+    color: var(--color8);
+    z-index: 100;
+}
+
+.login:hover {
+    color: var(--color4);
+    background-color: var(--blanco);
+}
+
+.login p {
+    font-size: 3rem;
+    margin: 0rem ;
+}
+
+.login li:hover {
+    background: var(--color4);
+    color: var(--blanco)
+}
+
+.login ul {
+    position: absolute;
+    top: 100%;
+    left: -2rem;
+    background: var(--grisClaro);
+    display: none;
+    z-index: 100;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.login ul li a {
+    padding: 1rem 2rem;
+    color: var(--color8);
+    display: block;
+}
+
+.login ul li a:hover {
+    background: var(--color4);
+    color: var(--blanco);
+}
+
+@media (max-width: 882px)  {
+    .login {
+        display: block;
+        padding: 0rem 0rem;
     }
 }
 

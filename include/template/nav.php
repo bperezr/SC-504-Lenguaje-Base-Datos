@@ -19,7 +19,16 @@
             <li><a href="about.php" <?php if ($enlaceActivo == 'about') echo 'class="active"'; ?>>Nosotros</a></li>
             <li><a href="events.php" <?php if ($enlaceActivo == 'events') echo 'class="active"'; ?>>Eventos</a></li>
             <li><a href="contact.php" <?php if ($enlaceActivo == 'contact') echo 'class="active"'; ?>>Contacto</a></li>
-            <li><a class="login" href="login.php"><ion-icon name="person-circle-outline"></ion-icon></a></li>
+            <li class="login">
+                <p><ion-icon name="person-circle-outline"></ion-icon></p>
+                <ul>
+                    <li><a href="login.php" <?php if ($enlaceActivo == 'iniciar') echo 'class="active"'; ?>>Iniciar</a></li>
+                    <li><a href="login.php" <?php if ($enlaceActivo == 'salir') echo 'class="active"'; ?>>Salir</a></li>
+                    <li><a href="profile.php" <?php if ($enlaceActivo == 'perfil') echo 'class="active"'; ?>>Perfil</a></li>
+                    <li><a href="admin_index.php" <?php if ($enlaceActivo == 'administrar') echo 'class="active"'; ?>>Admin</a></li>
+                    <li><a href="medical_index.php" <?php if ($enlaceActivo == 'medico') echo 'class="active"'; ?>>Médico</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 </header>

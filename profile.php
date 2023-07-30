@@ -9,12 +9,12 @@
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'medico';
-    include 'include/template/nav_medical.php'; ?>
+    <?php $enlaceActivo = 'perfil';
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 
-        <h1 class="centrar-texto">Home Panel Medico</h1>
+        <h1 class="centrar-texto">Perfil de Usuario</h1>
 
     </main>
 
