@@ -27,8 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $distrito = $_POST['idDistrito'];
     $imagen = $_FILES['imagen'];
 
-    var_dump($imagen);
-
     if (!$nombreEvento) {
         $requeridos[] = "El nombre del evento es requerido";
     }
@@ -68,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        $carpetaImagenes = 'imagenes/';
+        $carpetaImagenes = 'img/images';
 
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
@@ -122,66 +120,86 @@ $db->close();
         <?php endforeach ?>
 
         <form class="formulario" method="POST" action="admin_events_new.php" enctype="multipart/form-data">
-            <fieldset>
-                <legend>Evento</legend>
-
-                <label for="nombreEvento">Nombre Evento:</label>
-                <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>"><br><br>
-
-                <label for="lugar">Lugar</label>
-                <input type="text" id="lugar" name="lugar" value="<?php echo $lugar; ?>"><br><br>
-
-                <label for="fecha">Fecha</label>
-                <input type="date" id="fecha" name="fecha" value="<?php echo $fecha; ?>"><br><br>
-
-                <label for="hora_inicio">Hora Inicio</label>
-                <input type="time" id="hora_inicio" name="hora_inicio" value="<?php echo $horaInicio; ?>"><br><br>
-
-                <label for="hora_fin">Hora Fin</label>
-                <input type="time" id="hora_fin" name="hora_fin" value="<?php echo $horaFin; ?>"><br><br>
-
-                <label for="descripcion">Descripcion:</label>
-                <textarea name="descripcion" id="descripcion"><?php echo $descripcion; ?></textarea>
-
-                <label for="imagen">Imagen:</label>
-                <input type="file" id="imagen" name="imagen"><br><br>
-
-                <label for="provincia">Provincia</label>
-                <select type="number" name="idProvincia" id="idProvincia">
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<option  value="' . $row["idProvincia"] . '">' . $row["nombre"] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-
-                <label for="canton">Cantón</label>
-                <select type="number" name="idCanton" id="idCanton">
-                    <?php
-                    if ($resultCanton->num_rows > 0) {
-                        while ($row = $resultCanton->fetch_assoc()) {
-                            echo '<option value="' . $row["idCanton"] . '">' . $row["nombre"] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-
-                <label for="distrito">Distrito</label>
-                <select type="number" name="idDistrito" id="idDistrito">
-                    <?php
-                    if ($resultDistrito->num_rows > 0) {
-                        while ($row = $resultDistrito->fetch_assoc()) {
-                            echo '<option value="' . $row["idDistrito"] . '">' . $row["nombre"] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-
-                <input type="submit" value="Crear Evento">
-
-            </fieldset>
+            <section class="evento">
+                <div class="evento__detalle">
+                    <h2 class="centrar-texto">Editar evento</h2>
+                    <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data">
+                        <div class="campo">
+                            <label for="nombreEvento">Nombre de evento:</label>
+                            <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
+                        </div>
+                        <div class="campo">
+                            <label for="lugar">Lugar:</label>
+                            <input type="text" id="lugar" name="lugar" value="<?php echo $lugar; ?>">
+                        </div>
+                        <div class="campo">
+                            <label for="fecha">Fecha:</label>
+                            <input type="date" id="fecha" name="fecha" value="<?php echo $fecha; ?>">
+                        </div>
+                        <div class="campo">
+                            <label for="hora_inicio">Hora de inicio:</label>
+                            <input type="time" id="hora_inicio" name="hora_inicio" value="<?php echo $horaInicio; ?>">
+                        </div>
+                        <div class="campo">
+                            <label for="hora_fin">Hora de fin:</label>
+                            <input type="time" id="hora_fin" name="hora_fin" value="<?php echo $horaFin; ?>">
+                        </div>
+                        <div class="campo">
+                            <label for="lugar">Lugar:</label>
+                            <input type="text" id="lugar" name="lugar" required>
+                        </div>
+                        <div class="campo">
+                            <label for="descripcion">Descripción:</label>
+                            <textarea id="descripcion" name="descripcion" rows="4" required><?php echo $descripcion; ?></textarea>
+                        </div>
+                        <div class="campo">
+                            <label for="provincia">Provincia</label>
+                            <select type="number" name="idProvincia" id="idProvincia">
+                                <?php
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option  value="' . $row["idProvincia"] . '">' . $row["nombre"] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label for="canton">Cantón</label>
+                            <select type="number" name="idCanton" id="idCanton">
+                                <?php
+                                if ($resultCanton->num_rows > 0) {
+                                    while ($row = $resultCanton->fetch_assoc()) {
+                                        echo '<option value="' . $row["idCanton"] . '">' . $row["nombre"] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label for="distrito">Distrito</label>
+                            <select type="number" name="idDistrito" id="idDistrito">
+                                <?php
+                                if ($resultDistrito->num_rows > 0) {
+                                    while ($row = $resultDistrito->fetch_assoc()) {
+                                        echo '<option value="' . $row["idDistrito"] . '">' . $row["nombre"] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="campo campo-imagen">
+                            <label for="imagen">Imagen:</label>
+                            <img id="preview" src="img/no_disponible.webp" alt="no_image">
+                            <input type="file" id="imagen" name="imagen" accept="image/*" required>
+                        </div>
+                        <div class="campo centrar-texto botones_evento">
+                            <button class="enviar" type="submit">Crear evento</button>
+                            <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </form>
     </main>
 
