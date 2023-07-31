@@ -16,7 +16,7 @@
 
         <main class="informacion ">
             <article class="entrada">
-                <h1 class="centrar-texto no-margin">Aceo</h1>
+                <h1 class="centrar-texto no-margin">Aseo</h1>
                 <img class="service_icon" src="img/s4.svg" alt="icono">
                 <p class="justificar-texto">
                     En Happy Paws, sabemos lo importante que es mantener a tus mascotas con una apariencia y sensación

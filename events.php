@@ -1,10 +1,15 @@
+<?php 
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/events.css';
+    <?php 
+    $rutaCSS = 'css/events.css';
     include 'include/template/header.php'; ?>
+
 </head>
 
 <body>

@@ -5,14 +5,12 @@
     --color4: #DD883E;
     --color5: #f97561;
     --color8: #2C2524;
-
     --negro: #000000;
     --blanco: #FFFFFF;
-
     --grisClaro: #f2f2f2;
     --gris: #afafaf;
     --grisOscuro: #454545;
-
+    --rojo: rgb(177, 3, 3);
     --fuentePrincipal: 'Staatliches', sans-serif;
     --fuenteParrafos: 'Open Sans', sans-serif;
 }
@@ -225,6 +223,13 @@ header label {
     color: var(--color8);
     cursor: pointer;
     display: none;
+}
+
+.campos-requeridos{
+  background-color: var(--rojo) ;
+  color: var(--blanco);
+  margin: 1rem 0;
+  text-align: center;  
 }
 
 @media(max-width:882px) {
