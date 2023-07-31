@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        $carpetaImagenes = 'img/images';
+        $carpetaImagenes = 'img/images/';
 
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
@@ -162,7 +162,7 @@ $db->close();
                                     }
                                 }
                                 ?>
-                            </select>
+                            </select> 
                         </div>
                         <div class="campo">
                             <label for="canton">Cantón</label>

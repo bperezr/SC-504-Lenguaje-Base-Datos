@@ -60,7 +60,7 @@ $result = mysqli_query($db, $queryEventos);
             <!-- Evento 1 -->
             <div class="tarjeta">
                 <div class="tarjeta__imagen">
-                    <img src="imagenes/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                    <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
                 </div>
                 <div class="tarjeta__detalle">
                     <h2><?php echo $eventos['nombreEvento']; ?></h2>
@@ -71,7 +71,7 @@ $result = mysqli_query($db, $queryEventos);
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php?id=<?php echo $eventos['idEvento']; ?>" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="admin_events_edit.php?id=<?php echo $eventos['idEvento']; ?>" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
