@@ -6,10 +6,7 @@ function ConectarDB(){
     if(!$db){
         echo "Ocurrió un error al conectarse a la base de datos";
         exit;
-    } else {
-        echo "Conexión exitosa";
-    }
-
+    } 
     return $db;
 }
 ?>

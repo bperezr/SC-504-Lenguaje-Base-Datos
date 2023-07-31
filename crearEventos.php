@@ -1,3 +1,4 @@
+
 <?php
 require 'include/database/database.php';
 $db = ConectarDB();
@@ -7,9 +8,7 @@ echo ($_SERVER['REQUEST_METHOD']);
 $requeridos = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "<pre>";
-    var_dump($_POST);
-    echo "</pre>";
+
     $nombreEvento = $_POST['nombreEvento'];
     $lugar = $_POST['lugar'];
     $fecha = $_POST['fecha'];
@@ -32,9 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if($insertResult){
       echo "Insertado correctamente";
     }
-
     $db->close();
-
 }
 
 $queryProvincia = "SELECT idProvincia, nombre FROM provincia ORDER BY idProvincia";
