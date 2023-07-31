@@ -8,7 +8,6 @@ $result = mysqli_query($db, $queryEventos);
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -71,7 +70,7 @@ $result = mysqli_query($db, $queryEventos);
                 </div>
                 <!-- Botones -->
                 <div class="tarjeta__btn">
-                    <a href="events_post.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                    <a href="events_post.php?id=<?php echo $eventos['idEvento']; ?>" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                     <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
                 </div>
             </div>
