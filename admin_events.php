@@ -77,10 +77,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <section class="event__tarjetas">
             <?php while ($eventos = mysqli_fetch_assoc($result)): ?>
-                <!-- Evento 1 -->
+                <!-- Evento -->
                 <div class="tarjeta">
-                    <div class="tarjeta__imagen">
-                        <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                <div class="tarjeta__imagen">
+                        <?php if (file_exists("img/images/" . $eventos['imagen'])): ?>
+                            <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                        <?php else: ?>
+                            <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                        <?php endif; ?>
                     </div>
                     <div class="tarjeta__detalle">
                         <h2>

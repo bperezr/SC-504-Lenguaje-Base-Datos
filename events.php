@@ -44,7 +44,11 @@ $result = mysqli_query($db, $queryEventos);
                 <!-- Evento 1 -->
                 <div class="tarjeta">
                     <div class="tarjeta__imagen">
-                        <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                        <?php if (file_exists("img/images/" . $eventos['imagen'])): ?>
+                            <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                        <?php else: ?>
+                            <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                        <?php endif; ?>
                     </div>
                     <div class="tarjeta__detalle">
                         <h2>

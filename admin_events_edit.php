@@ -215,11 +215,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ?>
                         </select>
                     </div>
+                    <!-- Imagen -->
                     <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
-                        <img id="preview" src="img/images/<?php echo $imagen; ?>" alt="">
+
+                        <!-- Lógica condicional para mostrar la imagen -->
+                        <?php if (file_exists("img/images/" . $imagen)): ?>
+                            <img id="preview" src="img/images/<?php echo $imagen; ?>" alt="">
+                        <?php else: ?>
+                            <!-- Si la imagen no existe, muestra una imagen alternativa -->
+                            <img id="preview" src="img/no_disponible.webp" alt="Imagen no disponible">
+                        <?php endif; ?>
+
                         <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
+
 
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Actualizar evento</button>

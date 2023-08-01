@@ -14,22 +14,44 @@
     include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
-    <div class="btn_atras">
+        <div class="btn_atras">
             <a href="events.php" class="boton input-text">Atras</a>
         </div>
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto"><span><?php echo $nombreEvento; ?></span></h2>
+                <h2 class="centrar-texto"><span>
+                        <?php echo $nombreEvento; ?>
+                    </span></h2>
                 <ul class="evento__detalle-hora">
-                    <li><strong>Fecha: </strong><span><?php echo $fecha; ?></li>
-                    <li><strong>Hora: </strong><span><?php echo $horaInicio; ?></li>
-                    <li><strong>Lugar: </strong><span><?php echo $lugar; ?></span></li>
-                    <li><strong>Distrito: </strong><span><?php echo $nombreDistrito; ?></span></li>
-                    <li><strong>Provincia: </strong><span><?php echo $nombreProvincia; ?></span></li>
-                    <li><strong>Canton: </strong><span><?php echo $nombreCanton; ?></span></li>
+                    <li><strong>Fecha: </strong><span>
+                            <?php echo $fecha; ?>
+                    </li>
+                    <li><strong>Hora: </strong><span>
+                            <?php echo $horaInicio; ?>
+                    </li>
+                    <li><strong>Lugar: </strong><span>
+                            <?php echo $lugar; ?>
+                        </span></li>
+                    <li><strong>Distrito: </strong><span>
+                            <?php echo $nombreDistrito; ?>
+                        </span></li>
+                    <li><strong>Provincia: </strong><span>
+                            <?php echo $nombreProvincia; ?>
+                        </span></li>
+                    <li><strong>Canton: </strong><span>
+                            <?php echo $nombreCanton; ?>
+                        </span></li>
                 </ul>
-                <p class="justificar-texto"><span><?php echo $descripcion; ?></span></p>
-                <img src="img/images/<?php echo $imagen; ?>" alt="evento">
+                <p class="justificar-texto"><span>
+                        <?php echo $descripcion; ?>
+                    </span></p>
+                <!-- Lógica condicional para mostrar la imagen -->
+                <?php if (file_exists("img/images/" . $imagen)): ?>
+                    <img src="img/images/<?php echo $imagen; ?>" alt="evento">
+                <?php else: ?>
+                    <!-- Si la imagen no existe, muestra una imagen alternativa -->
+                    <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                <?php endif; ?>
             </div>
         </section>
     </main>
