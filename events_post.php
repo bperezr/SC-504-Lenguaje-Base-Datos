@@ -1,3 +1,4 @@
+<?php include 'include/functions/ver_evento.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -13,20 +14,22 @@
     include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
+    <div class="btn_atras">
+            <a href="events.php" class="boton input-text">Atras</a>
+        </div>
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Campaña de Castración Felina y Canina</h2>
+                <h2 class="centrar-texto"><span><?php echo $nombreEvento; ?></span></h2>
                 <ul class="evento__detalle-hora">
-                    <li><strong>Fecha:</strong> 10 de agosto de 2023</li>
-                    <li><strong>Hora:</strong> 9:00 AM - 4:00 PM</li>
-                    <li><strong>Lugar:</strong> San José, Costa Rica.</li>
+                    <li><strong>Fecha: </strong><span><?php echo $fecha; ?></li>
+                    <li><strong>Hora: </strong><span><?php echo $horaInicio; ?></li>
+                    <li><strong>Lugar: </strong><span><?php echo $lugar; ?></span></li>
+                    <li><strong>Distrito: </strong><span><?php echo $nombreDistrito; ?></span></li>
+                    <li><strong>Provincia: </strong><span><?php echo $nombreProvincia; ?></span></li>
+                    <li><strong>Canton: </strong><span><?php echo $nombreCanton; ?></span></li>
                 </ul>
-                <p class="justificar-texto">Únete a nuestra campaña de castración para gatos y perros, donde promovemos
-                    la esterilización como
-                    una medida responsable y beneficiosa para el bienestar de nuestras mascotas. Contaremos con
-                    veterinarios especializados que brindarán una atención cuidadosa y amorosa a cada animal. ¡Ayúdanos
-                    a controlar la población de animales y a proteger su salud!</p>
-                <img src="img/imagen_evento1.jpg" alt="Evento 1">
+                <p class="justificar-texto"><span><?php echo $descripcion; ?></span></p>
+                <img src="img/images/<?php echo $imagen; ?>" alt="evento">
             </div>
         </section>
     </main>
