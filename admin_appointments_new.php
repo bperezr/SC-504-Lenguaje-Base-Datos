@@ -1,5 +1,5 @@
 <?php
-require 'include/database/database.php';
+require 'include/connections/connect.php';
 $db = ConectarDB();
 
 echo ($_SERVER['REQUEST_METHOD']);
