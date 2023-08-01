@@ -16,7 +16,7 @@
         <section class="evento">
             <div class="evento__detalle">
                 <h2 class="centrar-texto">Agregar nuevo Médico</h2>
-                <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data">
+                <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Nombre:</label>
                         <input type="text" id="nombre" name="nombre" required>

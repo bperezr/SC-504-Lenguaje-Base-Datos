@@ -45,7 +45,7 @@
                 <p class="justificar-texto"><span>
                         <?php echo $descripcion; ?>
                     </span></p>
-                <!-- Lógica condicional para mostrar la imagen -->
+                <!--Iimagen -->
                 <?php if (file_exists("img/images/" . $imagen)): ?>
                     <img src="img/images/<?php echo $imagen; ?>" alt="evento">
                 <?php else: ?>

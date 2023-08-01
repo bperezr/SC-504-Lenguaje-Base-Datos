@@ -692,3 +692,53 @@ textarea {
 .btn_atras {
     margin-bottom: 2rem;
 }
+
+/* Resultado busqueda */
+.err_busqueda {
+    text-align: center;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: none;
+    border-radius: 1rem;
+    color: #721c24;
+    max-width: auto;
+}
+
+.err_busqueda h2 {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+}
+
+.err_busqueda img {
+    width: 50rem;
+    height: 30rem;
+    object-fit: cover;
+    border-radius: 0%;
+}
+
+
+.brincar {
+    color: var(--color5);
+    font-size: 10rem;
+    margin: 1rem;
+    animation: brincar-inclinar 2s ease-in-out infinite;
+    transform-origin: bottom; /* Establecemos el punto de origen de la transformación */
+}
+
+@keyframes brincar-inclinar {
+    0% {
+        transform: translateY(0) rotate(0);
+    }
+    25% {
+        transform: translateY(-20px) rotate(-5deg); /* Ajustamos el ángulo para hacerlo más sutil */
+    }
+    50% {
+        transform: translateY(0) rotate(0);
+    }
+    75% {
+        transform: translateY(-10px) rotate(5deg); /* Ajustamos el ángulo para hacerlo más sutil */
+    }
+    100% {
+        transform: translateY(0) rotate(0);
+    }
+}
