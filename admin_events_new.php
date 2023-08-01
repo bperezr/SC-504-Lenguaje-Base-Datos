@@ -121,11 +121,11 @@ $db->close();
             </div>
         <?php endforeach ?>
 
-        <form class="formulario" method="POST" action="admin_events_new.php" enctype="multipart/form-data">
+        <form class="formulario" method="POST" id="formularioEvento" action="admin_events_new.php" enctype="multipart/form-data">
             <section class="evento">
                 <div class="evento__detalle">
                     <h2 class="centrar-texto">Editar evento</h2>
-                    <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data">
+                    
                         <div class="campo">
                             <label for="nombreEvento">Nombre de evento:</label>
                             <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
@@ -145,11 +145,7 @@ $db->close();
                         <div class="campo">
                             <label for="hora_fin">Hora de fin:</label>
                             <input type="time" id="hora_fin" name="hora_fin" value="<?php echo $horaFin; ?>">
-                        </div>
-                        <div class="campo">
-                            <label for="lugar">Lugar:</label>
-                            <input type="text" id="lugar" name="lugar" required>
-                        </div>
+                        </div>                       
                         <div class="campo">
                             <label for="descripcion">Descripción:</label>
                             <textarea id="descripcion" name="descripcion" rows="4" required><?php echo $descripcion; ?></textarea>
@@ -198,8 +194,7 @@ $db->close();
                         <div class="campo centrar-texto botones_evento">
                             <button class="enviar" type="submit">Crear evento</button>
                             <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
-                        </div>
-                    </form>
+                        </div> 
                 </div>
             </section>
         </form>

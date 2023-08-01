@@ -101,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="admin_events_edit.php?id=<?php echo $eventos['idEvento']; ?>" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
 
                         <form method="POST">
-                            <input type="hidden" name="idEvento" value="<?php echo $eventos['idEvento'] ?>">
-                            <input type="submit" class="eliminar" value="Eliminar">
+                            <input type="hidden" class="enviar" name="idEvento" value="<?php echo $eventos['idEvento'] ?>">
+                            <input type="submit" class="cancelar" value="Eliminar">
                         </form>
 
                     </div>

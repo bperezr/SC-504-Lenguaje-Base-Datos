@@ -141,11 +141,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endforeach ?>
 
-        <form class="formulario" method="POST" enctype="multipart/form-data">
+        <form id="formularioEvento" class="formulario" method="POST" enctype="multipart/form-data">
             <section class="evento">
                 <div class="evento__detalle">
-                    <h2 class="centrar-texto">Editar evento</h2>
-                    <form id="formularioEvento" method="POST" class="formulario-evento" enctype="multipart/form-data">
+                    <h2 class="centrar-texto">Editar evento</h2>                    
                         <div class="campo">
                             <label for="nombreEvento">Nombre de evento:</label>
                             <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
@@ -228,7 +227,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <button class="enviar" type="submit">Actualizar evento</button>
                             <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                         </div>
-                    </form>
                 </div>
             </section>
         </form>
