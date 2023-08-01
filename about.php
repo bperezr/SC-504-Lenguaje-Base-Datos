@@ -97,7 +97,8 @@
                 <div class="valores__item">
                     <img src="img/icon4_amor.svg" alt="">
                     <h3>Amor</h3>
-                    <p class="justificar-texto">En Happy Paws, el amor es el alma de nuestra clínica veterinaria. Cada uno de nosotros, desde los
+                    <p class="justificar-texto">En Happy Paws, el amor es el alma de nuestra clínica veterinaria. Cada
+                        uno de nosotros, desde los
                         médicos hasta el personal de apoyo, tiene un profundo amor y cariño por los animales. Nuestro
                         trato amoroso y compasivo hacia cada mascota que nos visita crea un ambiente acogedor y libre de
                         estrés. En Happy Paws, el amor es lo que nos inspira a hacer de cada consulta y tratamiento una
@@ -157,7 +158,6 @@
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src="js/modernizr.js"></script>
 </body>
 
 </html>`

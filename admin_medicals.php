@@ -104,7 +104,6 @@
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src=""></script>
 </body>
 
 </html>
