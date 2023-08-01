@@ -1,10 +1,38 @@
-<?php 
+<?php
+/* 
+echo "<pre>";
+ var_dump($_POST);
+echo "</pre>"; */
+
 require 'include/database/database.php';
 $db = ConectarDB();
 
-$queryEventos = "SELECT * FROM eventos ";
+$queryEventos = "SELECT * FROM eventos";
 
 $result = mysqli_query($db, $queryEventos);
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['idEvento'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+
+    if ($id) {
+        //Eliminar imagen
+        $queryImagen = "SELECT imagen FROM eventos where idEvento = ${id}";
+        $resultImg = mysqli_query($db, $queryImagen);
+        $eventoImagen = mysqli_fetch_assoc($resultImg);
+
+        unlink('img/images/' . $eventoImagen['imagen']);
+
+        //Eliminar evento
+        $queryDelete = "DELETE from eventos where idEvento = ${id}";
+        $result = mysqli_query($db, $queryDelete);
+
+        if ($result) {
+            header('Location: /SC-502-Proyecto/admin_events.php');
+        }
+    }
+}
 
 ?>
 
@@ -44,38 +72,42 @@ $result = mysqli_query($db, $queryEventos);
                     </div>
                 </div>
                 <div class="buscador buscador_agregar">
-                        <!---Agregar-->
-                        <div class="agregar">
-                            <a href="admin_events_new.php" class="btn_agregar"><ion-icon
-                                    name="add-circle-outline"></ion-icon>
-                                Agregar</a>
-                        </div>
+                    <!---Agregar-->
+                    <div class="agregar">
+                        <a href="admin_events_new.php" class="btn_agregar"><ion-icon name="add-circle-outline"></ion-icon>
+                            Agregar</a>
                     </div>
                 </div>
+            </div>
             </div>
         </form>
 
         <section class="event__tarjetas">
-            <?php while($eventos = mysqli_fetch_assoc($result)): ?>
-            <!-- Evento 1 -->
-            <div class="tarjeta">
-                <div class="tarjeta__imagen">
-                    <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+            <?php while ($eventos = mysqli_fetch_assoc($result)) : ?>
+                <!-- Evento 1 -->
+                <div class="tarjeta">
+                    <div class="tarjeta__imagen">
+                        <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                    </div>
+                    <div class="tarjeta__detalle">
+                        <h2><?php echo $eventos['nombreEvento']; ?></h2>
+                        <ul class="detalle-evento">
+                            <li><strong>Fecha:</strong><?php echo $eventos['fecha']; ?></li>
+                            <li><strong>Hora:</strong> <?php echo $eventos['hora_inicio']; ?> - <?php echo $eventos['hora_fin'] ?></li>
+                        </ul>
+                    </div>
+                    <!-- Botones -->
+                    <div class="tarjeta__btn">
+                        <a href="admin_events_edit.php?id=<?php echo $eventos['idEvento']; ?>" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+
+                        <form method="POST">
+                            <input type="hidden" name="idEvento" value="<?php echo $eventos['idEvento'] ?>">
+                            <input type="submit" class="eliminar" value="Eliminar">
+                        </form>
+
+                    </div>
                 </div>
-                <div class="tarjeta__detalle">
-                    <h2><?php echo $eventos['nombreEvento']; ?></h2>
-                    <ul class="detalle-evento">
-                        <li><strong>Fecha:</strong><?php echo $eventos['fecha']; ?></li>
-                        <li><strong>Hora:</strong> <?php echo $eventos['hora_inicio']; ?> - <?php echo $eventos['hora_fin'] ?></li>
-                    </ul>
-                </div>
-                <!-- Botones -->
-                <div class="tarjeta__btn">
-                    <a href="admin_events_edit.php?id=<?php echo $eventos['idEvento']; ?>" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-                    <a href="" class="eliminar"><ion-icon name="trash-sharp"></ion-icon>Eliminar</a>
-                </div>
-            </div>
-            <?php endwhile; ?>   
+            <?php endwhile; ?>
         </section>
     </main>
 
