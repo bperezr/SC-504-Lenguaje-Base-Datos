@@ -1,17 +1,51 @@
 <?php
+
+$id = $_GET['id'];
 require 'include/connections/connect.php';
 $db = ConectarDB();
 
-echo ($_SERVER['REQUEST_METHOD']);
+$queryCitas = "SELECT
+                c.*,
+                hi.horaInicio,
+                hi.horaFin,
+                m.tipo as tipoMascota,
+                s.servicio as nombreServicio,
+                n.nombre as nombreCliente
+                FROM citas as c
+                join horariocitas as hi on c.idHorario = hi.idHorario
+                join tipomascota as m on c.idMascota =  m.idTipoMascota
+                join servicios as s on c.idServicio = s.idServicio
+                join cliente as n on c.idCliente = n.idCliente
+                where idCita = ${id}";
 
+$resultCitas = mysqli_query($db, $queryCitas);
+$cita = mysqli_fetch_assoc($resultCitas);
+
+$queryHorario = "SELECT idHorario, horaInicio, horaFin FROM horariocitas ORDER BY idHorario";
+$resultHorario = mysqli_query($db, $queryHorario);
+
+$queryMascota = "SELECT idTipoMascota, tipo FROM tipomascota ORDER BY idTipoMascota";
+$resultMascota = mysqli_query($db, $queryMascota);
+
+$queryServicio = "SELECT idServicio, servicio FROM servicios ORDER BY idServicio";
+$resultServicio = mysqli_query($db, $queryServicio);
+
+$queryCliente = "SELECT idCliente, nombre, apellido1 FROM cliente ORDER BY idCliente";
+$resultCliente = mysqli_query($db, $queryCliente);
+
+
+
+//Se inicializan las variables de acuerdo a los valores dentro de la base de datos de acuerdo al Id dato en
+//el queryEventos
 $requeridos = [];
-$nombre = '';
-$correo = '';
-$fecha = '';
-$idHorario = '';
-$idMascota = '';
-$idServicio = '';
-$idCliente = '';
+$nombre = $cita['nombre'];
+$correo = $cita['correo'];
+$fecha = $cita['fecha'];
+$idHorario = $cita['idHorario'];
+$idMascota = $cita['idMascota'];
+$idServicio = $cita['idServicio'];
+$idCliente = $cita['idCliente'];
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
@@ -52,10 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        $sqlInsert = "insert into citas (nombre,correo,fecha,idHorario,idMascota,idServicio,idCliente) values
-        ('$nombre','$correo', '$fecha', '$idHorario', '$idMascota','$idServicio','$idCliente')";
+        $sqlUpdate = "UPDATE citas SET nombre='$nombre', correo='$correo', fecha='$fecha', 
+        idHorario='$idHorario', idMascota='$idMascota', idServicio='$idServicio',
+         idCliente='$idCliente' WHERE idCita=$id";
 
-        $insertResult = mysqli_query($db, $sqlInsert);
+        $insertResult = mysqli_query($db, $sqlUpdate);
 
         if ($insertResult) {
             header('Location: /SC-502-Proyecto/admin_appointments.php');
@@ -63,20 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$queryHorario = "SELECT idHorario, horaInicio, horaFin FROM horariocitas ORDER BY idHorario";
-$resultHorario = mysqli_query($db, $queryHorario);
-
-$queryMascota = "SELECT idTipoMascota, tipo FROM tipomascota ORDER BY idTipoMascota";
-$resultMascota = mysqli_query($db, $queryMascota);
-
-$queryServicio = "SELECT idServicio, servicio FROM servicios ORDER BY idServicio";
-$resultServicio = mysqli_query($db, $queryServicio);
-
-$queryCliente = "SELECT idCliente, nombre, apellido1 FROM cliente ORDER BY idCliente";
-$resultCliente = mysqli_query($db, $queryCliente);
-
-$db->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -101,10 +124,10 @@ $db->close();
             </div>
         <?php endforeach ?>
 
-        <form class="formulario" method="POST" action="admin_appointments_new.php" enctype="multipart/form-data">
+        <form class="formulario" method="POST"  enctype="multipart/form-data">
             <section class="evento">
                 <div class="evento__detalle">
-                    <h2 class="centrar-texto">Agendar cita</h2>
+                    <h2 class="centrar-texto">Actualizar cita</h2>
                     <form id="formularioParaCitas" class="formulario-evento" enctype="multipart/form-data">
                         <div class="campo">
                             <label for="nombre">Nombre cliente:</label>
@@ -168,7 +191,7 @@ $db->close();
                         </div>
 
                         <div class="campo centrar-texto botones_evento">
-                            <button class="enviar" type="submit">Agendar Cita</button>
+                            <button class="enviar" type="submit">Actualizar Cita</button>
                             <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                         </div>
                     </form>

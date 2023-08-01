@@ -1,6 +1,6 @@
 <?php
 
-require 'include/database/database.php';
+require 'include/connections/connect.php';
 $db = ConectarDB();
 $queryCitas = "SELECT
                 c.*,
