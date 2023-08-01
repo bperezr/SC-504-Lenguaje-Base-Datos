@@ -143,7 +143,6 @@
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src="js/card.js"></script>
 </body>
 
 </html>

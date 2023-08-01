@@ -27,7 +27,6 @@
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src="js/modernizr.js"></script>
 </body>
 
 </html>`
