@@ -1,5 +1,5 @@
 <?php
-require 'include/database/database.php';
+require 'include/connections/connectDB.php';
 $db = ConectarDB();
 
 echo ($_SERVER['REQUEST_METHOD']);
@@ -115,7 +115,7 @@ $db->close();
     <main class="contenedor">
         <a href="admin_events.php" class="boton input-text">Atras</a>
 
-        <?php foreach ($requeridos as $requerido) : ?>
+        <?php foreach ($requeridos as $requerido): ?>
             <div class="campos-requeridos">
                 <?php echo $requerido; ?>
             </div>
@@ -128,7 +128,8 @@ $db->close();
                     
                         <div class="campo">
                             <label for="nombreEvento">Nombre de evento:</label>
-                            <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
+                            <input type="text" id="nombreEvento" name="nombreEvento"
+                                value="<?php echo $nombreEvento; ?>">
                         </div>
                         <div class="campo">
                             <label for="lugar">Lugar:</label>
@@ -148,7 +149,8 @@ $db->close();
                         </div>                       
                         <div class="campo">
                             <label for="descripcion">Descripción:</label>
-                            <textarea id="descripcion" name="descripcion" rows="4" required><?php echo $descripcion; ?></textarea>
+                            <textarea id="descripcion" name="descripcion" rows="4"
+                                required><?php echo $descripcion; ?></textarea>
                         </div>
                         <div class="campo">
                             <label for="provincia">Provincia</label>
@@ -160,7 +162,7 @@ $db->close();
                                     }
                                 }
                                 ?>
-                            </select> 
+                            </select>
                         </div>
                         <div class="campo">
                             <label for="canton">Cantón</label>

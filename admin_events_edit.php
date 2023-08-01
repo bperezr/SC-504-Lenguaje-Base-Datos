@@ -2,19 +2,19 @@
 
 $id = $_GET['id'];
 
-require 'include/database/database.php';
+require 'include/connections/connectDB.php';
 $db = ConectarDB();
 
-$queryEventos = "SELECT  
-                 e.*,
-                 p.nombre as NombreProvincia , 
-                 c.nombre as NombreCanton, 
-                 d.nombre as NombreDistrito 
-                 FROM eventos as e 
-                 join provincia as p on e.idProvincia = p.idProvincia 
-                 join canton as c on e.idCanton =  c.idCanton 
-                 join distrito as d on e.idDistrito = d.idDistrito 
-                 where idEvento = ${id}";
+$queryEventos = "SELECT
+                e.*,
+                p.nombre as NombreProvincia,
+                c.nombre as NombreCanton,
+                d.nombre as NombreDistrito
+                FROM eventos as e
+                join provincia as p on e.idProvincia = p.idProvincia
+                join canton as c on e.idCanton =  c.idCanton
+                join distrito as d on e.idDistrito = d.idDistrito
+                where idEvento = ${id}";
 $resultEventos = mysqli_query($db, $queryEventos);
 $evento = mysqli_fetch_assoc($resultEventos);
 
@@ -27,7 +27,7 @@ $resultCanton = mysqli_query($db, $queryCanton);
 $queryDistrito = "SELECT idDistrito, nombre FROM distrito ORDER BY idDistrito";
 $resultDistrito = mysqli_query($db, $queryDistrito);
 
-//Se inicializan las variables de acuerdo a los valores dentro de la base de datos de acuerdo al Id dato en 
+//Se inicializan las variables de acuerdo a los valores dentro de la base de datos de acuerdo al Id dato en
 //el queryEventos
 $requeridos = [];
 $nombreEvento = $evento['nombreEvento'];
@@ -99,14 +99,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
         } else {
-            $nombreImagen =  $evento["imagen"];
+            $nombreImagen = $evento["imagen"];
         }
 
 
 
         $sqlUpdate = "Update eventos set nombreEvento = '${nombreEvento}', lugar = '${lugar}',fecha = '${fecha}',hora_inicio = '${horaInicio}'
         ,hora_fin = '${horaFin}',descripcion = '${descripcion}', imagen = '${nombreImagen}',idProvincia = ${provincia}, idCanton = ${canton},idDistrito = ${distrito}
-         where idEvento = ${id}";
+        where idEvento = ${id}";
 
         $insertResult = mysqli_query($db, $sqlUpdate);
 
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main class="contenedor">
 
-        <?php foreach ($requeridos as $requerido) : ?>
+        <?php foreach ($requeridos as $requerido): ?>
             <div class="campos-requeridos">
                 <?php echo $requerido; ?>
             </div>
@@ -147,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h2 class="centrar-texto">Editar evento</h2>                    
                         <div class="campo">
                             <label for="nombreEvento">Nombre de evento:</label>
-                            <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
+                            <input type="text" id="nombreEvento" name="nombreEvento"
+                                value="<?php echo $nombreEvento; ?>">
                         </div>
                         <div class="campo">
                             <label for="lugar">Lugar:</label>
@@ -167,12 +168,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="campo">
                             <label for="descripcion">Descripción:</label>
-                            <textarea id="descripcion" name="descripcion" rows="4"><?php echo $descripcion; ?></textarea>
+                            <textarea id="descripcion" name="descripcion"
+                                rows="4"><?php echo $descripcion; ?></textarea>
                         </div>
                         <div class="campo">
                             <label for="provincia">Provincia</label>
-                             <!-- Se deja por defecto la opcion seleccionada por el usuario cuando se registro el evento en la base de datos,
-                                     si deseea cambiar la provincia se pueden escoger las opciones que estan dentro del while -->
+                            <!-- Se deja por defecto la opcion seleccionada por el usuario cuando se registro el evento en la base de datos,
+                                si deseea cambiar la provincia se pueden escoger las opciones que estan dentro del while -->
                             <select type="number" name="idProvincia" id="provincia">
                                 <option value="<?php echo $evento['idProvincia']; ?>"><?php echo $evento['NombreProvincia']; ?></option>
                                 <?php
@@ -188,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="campo">
                             <label for="canton">Cantón</label>
-                            <select type="number" name="idCanton" id="idCanton">                               
+                            <select type="number" name="idCanton" id="idCanton">
                                 <option value="<?php echo $evento['idCanton']; ?>"><?php echo $evento['NombreCanton']; ?></option>
                                 <?php
                                 if ($resultCanton->num_rows > 0) {

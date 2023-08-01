@@ -1,5 +1,5 @@
 <?php
-require 'include/database/database.php';
+require 'include/connections/connectDB.php';
 $db = ConectarDB();
 
 $queryEventos = "SELECT * FROM eventos ";
@@ -42,34 +42,42 @@ $result = mysqli_query($db, $queryEventos);
         </section>
 
         <section class="event__tarjetas">
-            <?php while ($eventos = mysqli_fetch_assoc($result)) : ?>
+            <?php while ($eventos = mysqli_fetch_assoc($result)): ?>
                 <!-- Evento 1 -->
                 <div class="tarjeta">
                     <div class="tarjeta__imagen">
                         <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
                     </div>
                     <div class="tarjeta__detalle">
-                        <h2><?php echo $eventos['nombreEvento']; ?></h2>
+                        <h2>
+                            <?php echo $eventos['nombreEvento']; ?>
+                        </h2>
                         <ul class="detalle-evento">
-                        <li><strong>Lugar:</strong><?php echo $eventos['Lugar']; ?></li>
-                            <li><strong>Fecha:</strong><?php echo $eventos['fecha']; ?></li>
-                            <li><strong>Hora:</strong> <?php echo $eventos['hora_inicio']; ?> - <?php echo $eventos['hora_fin'] ?></li>
+                            <li><strong>Lugar:</strong>
+                                <?php echo $eventos['Lugar']; ?>
+                            </li>
+                            <li><strong>Fecha:</strong>
+                                <?php echo $eventos['fecha']; ?>
+                            </li>
+                            <li><strong>Hora:</strong>
+                                <?php echo $eventos['hora_inicio']; ?> -
+                                <?php echo $eventos['hora_fin'] ?>
+                            </li>
                         </ul>
                     </div>
                     <!-- Botones -->
                     <div class="tarjeta__btn">
-                    <a href="events_post.php" class="ver-evento">Ver evento</a>
-                </div>
+                        <a href="events_post.php" class="ver-evento">Ver evento</a>
+                    </div>
                 </div>
             <?php endwhile; ?>
         </section>
-      
+
     </main>
 
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script src="js/card.js"></script>
 </body>
 
 </html>
