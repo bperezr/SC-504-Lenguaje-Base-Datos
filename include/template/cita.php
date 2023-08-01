@@ -14,6 +14,26 @@
                 </div>
 
                 <div class="campo">
+                    <label for="mascota">Mascota:</label>
+                    <select id="mascota" name="mascota">
+                        <option value="" disabled selected>Seleccione la mascota</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Perro">Perro</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="servicio">Servicio:</label>
+                    <select id="servicio" name="servicio">
+                        <option value="" disabled selected>Seleccione un servicio</option>
+                        <option value="Medicina General">Medicina general</option>
+                        <option value="Cirugía">Cirugía</option>
+                        <option value="Castración">Castración</option>
+                        <option value="Aseo de mascotas">Aseo de mascotas</option>
+                    </select>
+                </div>
+
+                <div class="campo">
                     <label for="fecha">Fecha:</label>
                     <input type="date" id="fecha" name="fecha">
                 </div>
@@ -30,26 +50,6 @@
                         <option value="10:00 AM">2:00 PM</option>
                         <option value="2:00 PM">3:00 PM</option>
                         <option value="4:00 PM">4:00 PM</option>
-                    </select>
-                </div>
-
-                <div class="campo">
-                    <label for="servicio">Servicio:</label>
-                    <select id="servicio" name="servicio">
-                        <option value="" disabled selected>Seleccione un servicio</option>
-                        <option value="Medicina General">Medicina general</option>
-                        <option value="Cirugía">Cirugía</option>
-                        <option value="Castración">Castración</option>
-                        <option value="Aseo de mascotas">Aseo de mascotas</option>
-                    </select>
-                </div>
-
-                <div class="campo">
-                    <label for="mascota">Mascota:</label>
-                    <select id="mascota" name="mascota">
-                        <option value="" disabled selected>Seleccione la mascota</option>
-                        <option value="Gato">Gato</option>
-                        <option value="Perro">Perro</option>
                     </select>
                 </div>
             </div><!-- contenedor-campos -->
