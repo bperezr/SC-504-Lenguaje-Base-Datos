@@ -68,8 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $carpetaImagenes = 'img/images/';
 
+        //Genera un nombre unico para las imagenes
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
+        //Mueve la imagen hacia el servidor.
         move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
 
 

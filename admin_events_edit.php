@@ -172,6 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="campo">
                             <label for="provincia">Provincia</label>
+                             <!-- Se deja por defecto la opcion seleccionada por el usuario cuando se registro el evento en la base de datos,
+                                     si deseea cambiar la provincia se pueden escoger las opciones que estan dentro del while -->
                             <select type="number" name="idProvincia" id="provincia">
                                 <option value="<?php echo $evento['idProvincia']; ?>"><?php echo $evento['NombreProvincia']; ?></option>
                                 <?php
@@ -187,9 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="campo">
                             <label for="canton">Cantón</label>
-                            <select type="number" name="idCanton" id="idCanton">
-                                <!-- Se deja la opcion seleccionada por el usuario cuando registro el evento en la base de datos,
-                                     si deseea cambiar el canton se pueden escoger las opciones que estan dentro del while -->
+                            <select type="number" name="idCanton" id="idCanton">                               
                                 <option value="<?php echo $evento['idCanton']; ?>"><?php echo $evento['NombreCanton']; ?></option>
                                 <?php
                                 if ($resultCanton->num_rows > 0) {
