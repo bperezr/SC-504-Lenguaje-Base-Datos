@@ -1,9 +1,7 @@
 <?php
 require 'include/connections/connect.php';
 $db = ConectarDB();
-
 $queryEventos = "SELECT * FROM eventos ";
-
 $result = mysqli_query($db, $queryEventos);
 ?>
 
@@ -67,8 +65,9 @@ $result = mysqli_query($db, $queryEventos);
                     </div>
                     <!-- Botones -->
                     <div class="tarjeta__btn">
-                        <a href="events_post.php" class="ver-evento">Ver evento</a>
+                        <a href="events_post.php?id=<?php echo $eventos['idEvento']; ?>" class="ver-evento">Ver evento</a>
                     </div>
+
                 </div>
             <?php endwhile; ?>
         </section>
