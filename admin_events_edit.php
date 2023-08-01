@@ -87,14 +87,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        /* $carpetaImagenes = 'img/images';
+        $carpetaImagenes = 'img/images/';
 
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        $nombreImagen = '';
 
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen); */
+        if ($imagen['name']) {
+            //Eliminar la imagen anterior si se quiere actualizar la imagen del evento
+            unlink($carpetaImagenes . $evento['imagen']);
+
+            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+        } else {
+            $nombreImagen =  $evento["imagen"];
+        }
+
+
 
         $sqlUpdate = "Update eventos set nombreEvento = '${nombreEvento}', lugar = '${lugar}',fecha = '${fecha}',hora_inicio = '${horaInicio}'
-        ,hora_fin = '${horaFin}',descripcion = '${descripcion}',idProvincia = ${provincia}, idCanton = ${canton},idDistrito = ${distrito}
+        ,hora_fin = '${horaFin}',descripcion = '${descripcion}', imagen = '${nombreImagen}',idProvincia = ${provincia}, idCanton = ${canton},idDistrito = ${distrito}
          where idEvento = ${id}";
 
         $insertResult = mysqli_query($db, $sqlUpdate);
@@ -214,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         </div>
                         <div class="campo centrar-texto botones_evento">
-                            <button class="enviar" type="submit">Crear evento</button>
+                            <button class="enviar" type="submit">Actualizar evento</button>
                             <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                         </div>
                     </form>
