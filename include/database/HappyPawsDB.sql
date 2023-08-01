@@ -76,18 +76,27 @@ DROP TABLE IF EXISTS `citas`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `citas` (
   `idCita` int NOT NULL AUTO_INCREMENT,
+   nombre varchar(50),
+   correo varchar(100),
+   fecha date,
   `idHorario` int NOT NULL,
   `idMascota` int NOT NULL,
   `idServicio` int NOT NULL,
+  `idCliente` int NOT NULL,
   PRIMARY KEY (`idCita`),
   KEY `fk_Citas_Horario` (`idHorario`),
   KEY `fk_Citas_Mascota` (`idMascota`),
   KEY `fk_Citas_Servicio` (`idServicio`),
   CONSTRAINT `fk_Citas_Horario` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`),
-  CONSTRAINT `fk_Citas_Mascota` FOREIGN KEY (`idMascota`) REFERENCES `mascota` (`idMascota`),
-  CONSTRAINT `fk_Citas_Servicio` FOREIGN KEY (`idServicio`) REFERENCES `servicios` (`idServicio`)
+  CONSTRAINT `fk_Citas_TipoMascota` FOREIGN KEY (`idMascota`) REFERENCES `tipomascota` (`idTipoMascota`),
+  CONSTRAINT `fk_Citas_Servicio` FOREIGN KEY (`idServicio`) REFERENCES `servicios` (`idServicio`),
+  CONSTRAINT `fk_Citas_Cliente` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO citas (nombre, correo, fecha, idHorario, idServicio, idMascota, idCliente) VALUES
+('John Doe', 'john.doe@example.com', '2023-07-30', 1, 1, 1, 1),
+('Jane Smith', 'jane.smith@example.com', '2023-07-30', 2, 2, 2, 2);
+
 
 --
 -- Dumping data for table `citas`
@@ -124,6 +133,11 @@ CREATE TABLE `cliente` (
   CONSTRAINT `fk_Cliente_Provincia` FOREIGN KEY (`idProvincia`) REFERENCES `provincia` (`idProvincia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO cliente (nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito) VALUES
+('Juan', 'Perez', 'Gomez', '123456789', 'Calle 1, Ciudad', 1, 1, 1),
+('Maria', 'Gonzalez', 'Lopez', '987654321', 'Avenida 2, Pueblo', 2, 2, 4);
+
 
 --
 -- Dumping data for table `cliente`
@@ -275,6 +289,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `eventos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
+
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `eventos` (
   `idEvento` int NOT NULL AUTO_INCREMENT,
@@ -350,12 +365,23 @@ DROP TABLE IF EXISTS `horariocitas`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `horariocitas` (
   `idHorario` int NOT NULL AUTO_INCREMENT,
-  `fecha` date DEFAULT NULL,
   `horaInicio` time DEFAULT NULL,
   `horaFin` time DEFAULT NULL,
   PRIMARY KEY (`idHorario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO horariocitas (horaInicio, horaFin) VALUES
+('08:00:00', '09:00:00'),
+('09:00:00', '10:00:00'),
+('10:00:00', '11:00:00'),
+('11:00:00', '12:00:00'),
+('13:00:00', '14:00:00'),
+('14:00:00', '15:00:00'),
+('15:00:00', '16:00:00');
+
+
+
 
 --
 -- Dumping data for table `horariocitas`
@@ -412,7 +438,10 @@ CREATE TABLE `mascota` (
   CONSTRAINT `fk_Mascota_TipoMascota` FOREIGN KEY (`idTipoMascota`) REFERENCES `tipomascota` (`idTipoMascota`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+INSERT INTO mascota (nombre, edad, idTipoMascota, idCliente) VALUES
+('Buddy', 3, 1, 1),
+('Max', 5, 1, 2),
+('Luna', 2, 2, 1);
 --
 -- Dumping data for table `mascota`
 --
@@ -422,7 +451,14 @@ LOCK TABLES `mascota` WRITE;
 /*!40000 ALTER TABLE `mascota` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
+INSERT INTO mascota (nombre, edad, idTipoMascota, idCliente) VALUES
+('Buddy', 3, 1, 1),
+('Max', 5, 1, 2),
+('Luna', 2, 2, 1);
+
+
+
+
 -- Table structure for table `provincia`
 --
 
@@ -484,15 +520,16 @@ CREATE TABLE `servicios` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
 --
 -- Dumping data for table `servicios`
 --
-
-LOCK TABLES `servicios` WRITE;
-/*!40000 ALTER TABLE `servicios` DISABLE KEYS */;
-INSERT INTO `servicios` VALUES (1,'Grooming','Cuidado del aseo de tu perro'),(2,'Cirugia dental','Servicio para perros y gatos para la correción de problemas dentales');
-/*!40000 ALTER TABLE `servicios` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO servicios (servicio, descripcion) VALUES
+('Medicina General', 'Consulta médica general para mascotas.'),
+('Cirugía', 'Procedimientos quirúrgicos para mascotas.'),
+('Castración', 'Servicios de castración para mascotas.'),
+('Aseo de Mascotas', 'Servicios profesionales de aseo para mascotas.');
 
 --
 -- Table structure for table `tipomascota`
@@ -511,22 +548,12 @@ CREATE TABLE `tipomascota` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `tipomascota`
---
 
-LOCK TABLES `tipomascota` WRITE;
-/*!40000 ALTER TABLE `tipomascota` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipomascota` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO tipomascota (tipo, idRaza) VALUES
+('Perro', 1),
+('Gato', 2);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
 
 -- Dump completed on 2023-07-31 10:22:41

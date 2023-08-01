@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
-    <script scr="js/cita.js"></script>
+    <script src="js/cita.js"></script>
 </body>
 
 </html>
