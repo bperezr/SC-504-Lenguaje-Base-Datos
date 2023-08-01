@@ -10,6 +10,7 @@
         <ul>
             <li><a href="admin_medicals.php" <?php if ($enlaceActivo == 'admin_medicals') echo 'class="active"'; ?>>Médicos</a></li>
             <li><a href="admin_events.php" <?php if ($enlaceActivo == 'admin_events') echo 'class="active"'; ?>>Eventos</a></li>
+            <li><a href="admin_appointments.php" <?php if ($enlaceActivo == 'admin_appointments') echo 'class="active"'; ?>>Citas</a></li>
             <li class="login">
                 <p><ion-icon name="person-circle-outline"></ion-icon></p>
                 <ul>
