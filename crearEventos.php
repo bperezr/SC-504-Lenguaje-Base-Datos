@@ -1,5 +1,5 @@
 <?php
-require 'include/database/database.php';
+require 'include/connections/connectDB.php';
 $db = ConectarDB();
 
 echo ($_SERVER['REQUEST_METHOD']);
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $canton = $_POST['idCanton'];
     $distrito = $_POST['idDistrito'];
     $sqlInsert = "insert into eventos (nombreEvento,lugar,fecha,hora_inicio,hora_fin,descripcion,imagen,idProvincia,idCanton,idDistrito) values
-           ('$nombreEvento','$lugar', '$fecha', '$horaInicio','$horaFin', '$descripcion','','$provincia','$canton','$distrito')";
+        ('$nombreEvento','$lugar', '$fecha', '$horaInicio','$horaFin', '$descripcion','','$provincia','$canton','$distrito')";
 
     if (!$nombreEvento) {
         $requeridos[] = "El nombre del evento es requerido";

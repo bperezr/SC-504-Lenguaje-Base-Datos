@@ -1,5 +1,5 @@
 <?php
-require 'include/database/database.php';
+require 'include/connections/connectDB.php';
 $db = ConectarDB();
 
 $queryEventos = "SELECT * FROM eventos ";

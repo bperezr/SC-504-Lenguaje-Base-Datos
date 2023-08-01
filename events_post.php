@@ -21,11 +21,12 @@
                     <li><strong>Hora:</strong> 9:00 AM - 4:00 PM</li>
                     <li><strong>Lugar:</strong> San José, Costa Rica.</li>
                 </ul>
-                <p class="justificar-texto">Únete a nuestra campaña de castración para gatos y perros, donde promovemos la esterilización como
+                <p class="justificar-texto">Únete a nuestra campaña de castración para gatos y perros, donde promovemos
+                    la esterilización como
                     una medida responsable y beneficiosa para el bienestar de nuestras mascotas. Contaremos con
                     veterinarios especializados que brindarán una atención cuidadosa y amorosa a cada animal. ¡Ayúdanos
                     a controlar la población de animales y a proteger su salud!</p>
-                    <img src="img/imagen_evento1.jpg" alt="Evento 1">
+                <img src="img/imagen_evento1.jpg" alt="Evento 1">
             </div>
         </section>
     </main>
