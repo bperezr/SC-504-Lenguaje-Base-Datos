@@ -1,5 +1,5 @@
 <?php
-require 'include/connections/connectDB.php';
+require 'include/connections/connect.php';
 $db = ConectarDB();
 
 $queryEventos = "SELECT * FROM eventos ";
@@ -78,6 +78,7 @@ $result = mysqli_query($db, $queryEventos);
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
     <!-- JS -->
+    <script src="js/card.js"></script>
 </body>
 
 </html>

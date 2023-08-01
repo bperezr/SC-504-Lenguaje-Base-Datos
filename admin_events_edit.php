@@ -1,8 +1,6 @@
 <?php
-
 $id = $_GET['id'];
-
-require 'include/connections/connectDB.php';
+require 'include/connections/connect.php';
 $db = ConectarDB();
 
 $queryEventos = "SELECT
@@ -102,8 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombreImagen = $evento["imagen"];
         }
 
-
-
         $sqlUpdate = "Update eventos set nombreEvento = '${nombreEvento}', lugar = '${lugar}',fecha = '${fecha}',hora_inicio = '${horaInicio}'
         ,hora_fin = '${horaFin}',descripcion = '${descripcion}', imagen = '${nombreImagen}',idProvincia = ${provincia}, idCanton = ${canton},idDistrito = ${distrito}
         where idEvento = ${id}";
@@ -115,9 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -141,99 +135,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endforeach ?>
 
-        <form id="formularioEvento" class="formulario" method="POST" enctype="multipart/form-data">
+        <div class="btn_atras">
+            <a href="admin_events.php" class="boton input-text">Atras</a>
+        </div>
+
+        <form class="formulario" method="POST" enctype="multipart/form-data">
             <section class="evento">
                 <div class="evento__detalle">
-                    <h2 class="centrar-texto">Editar evento</h2>                    
-                        <div class="campo">
-                            <label for="nombreEvento">Nombre de evento:</label>
-                            <input type="text" id="nombreEvento" name="nombreEvento"
-                                value="<?php echo $nombreEvento; ?>">
-                        </div>
-                        <div class="campo">
-                            <label for="lugar">Lugar:</label>
-                            <input type="text" id="lugar" name="lugar" value="<?php echo $lugar; ?>">
-                        </div>
-                        <div class="campo">
-                            <label for="fecha">Fecha:</label>
-                            <input type="date" id="fecha" name="fecha" value="<?php echo $fecha; ?>">
-                        </div>
-                        <div class="campo">
-                            <label for="hora_inicio">Hora de inicio:</label>
-                            <input type="time" id="hora_inicio" name="hora_inicio" value="<?php echo $horaInicio; ?>">
-                        </div>
-                        <div class="campo">
-                            <label for="hora_fin">Hora de fin:</label>
-                            <input type="time" id="hora_fin" name="hora_fin" value="<?php echo $horaFin; ?>">
-                        </div>
-                        <div class="campo">
-                            <label for="descripcion">Descripción:</label>
-                            <textarea id="descripcion" name="descripcion"
-                                rows="4"><?php echo $descripcion; ?></textarea>
-                        </div>
-                        <div class="campo">
-                            <label for="provincia">Provincia</label>
-                            <!-- Se deja por defecto la opcion seleccionada por el usuario cuando se registro el evento en la base de datos,
-                                si deseea cambiar la provincia se pueden escoger las opciones que estan dentro del while -->
-                            <select type="number" name="idProvincia" id="provincia">
-                                <option value="<?php echo $evento['idProvincia']; ?>"><?php echo $evento['NombreProvincia']; ?></option>
-                                <?php
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        if ($row["idProvincia"] != $evento['idProvincia']) {
-                                            echo '<option  value="' . $row["idProvincia"] . '">' . $row["nombre"] . '</option>';
-                                        }
+                    <h2 class="centrar-texto">Editar evento</h2>
+                    <div class="campo">
+                        <label for="nombreEvento">Nombre de evento:</label>
+                        <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
+                    </div>
+                    <div class="campo">
+                        <label for="lugar">Lugar:</label>
+                        <input type="text" id="lugar" name="lugar" value="<?php echo $lugar; ?>">
+                    </div>
+                    <div class="campo">
+                        <label for="fecha">Fecha:</label>
+                        <input type="date" id="fecha" name="fecha" value="<?php echo $fecha; ?>">
+                    </div>
+                    <div class="campo">
+                        <label for="hora_inicio">Hora de inicio:</label>
+                        <input type="time" id="hora_inicio" name="hora_inicio" value="<?php echo $horaInicio; ?>">
+                    </div>
+                    <div class="campo">
+                        <label for="hora_fin">Hora de fin:</label>
+                        <input type="time" id="hora_fin" name="hora_fin" value="<?php echo $horaFin; ?>">
+                    </div>
+                    <div class="campo">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea id="descripcion" name="descripcion" rows="4"><?php echo $descripcion; ?></textarea>
+                    </div>
+                    <div class="campo">
+                        <label for="provincia">Provincia</label>
+                        <!-- Se deja por defecto la opcion seleccionada por el usuario cuando se registro el evento en la base de datos,
+                                    si deseea cambiar la provincia se pueden escoger las opciones que estan dentro del while -->
+                        <select type="number" name="idProvincia" id="provincia">
+                            <option value="<?php echo $evento['idProvincia']; ?>"><?php echo $evento['NombreProvincia']; ?></option>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    if ($row["idProvincia"] != $evento['idProvincia']) {
+                                        echo '<option  value="' . $row["idProvincia"] . '">' . $row["nombre"] . '</option>';
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="campo">
-                            <label for="canton">Cantón</label>
-                            <select type="number" name="idCanton" id="idCanton">
-                                <option value="<?php echo $evento['idCanton']; ?>"><?php echo $evento['NombreCanton']; ?></option>
-                                <?php
-                                if ($resultCanton->num_rows > 0) {
-                                    while ($row = $resultCanton->fetch_assoc()) {
-                                        if ($row["idCanton"] != $evento['idCanton']) {
-                                            echo '<option value="' . $row["idCanton"] . '">' . $row["nombre"] . '</option>';
-                                        }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label for="canton">Cantón</label>
+                        <select type="number" name="idCanton" id="idCanton">
+                            <option value="<?php echo $evento['idCanton']; ?>"><?php echo $evento['NombreCanton']; ?>
+                            </option>
+                            <?php
+                            if ($resultCanton->num_rows > 0) {
+                                while ($row = $resultCanton->fetch_assoc()) {
+                                    if ($row["idCanton"] != $evento['idCanton']) {
+                                        echo '<option value="' . $row["idCanton"] . '">' . $row["nombre"] . '</option>';
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="campo">
-                            <label for="distrito">Distrito</label>
-                            <select type="number" name="idDistrito" id="idDistrito">
-                                <option value="<?php echo $evento['idDistrito']; ?>"><?php echo $evento['NombreDistrito']; ?></option>
-                                <?php
-                                if ($resultDistrito->num_rows > 0) {
-                                    while ($row = $resultDistrito->fetch_assoc()) {
-                                        if ($row["idDistrito"] != $evento['idDistrito']) {
-                                            echo '<option value="' . $row["idDistrito"] . '">' . $row["nombre"] . '</option>';
-                                        }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label for="distrito">Distrito</label>
+                        <select type="number" name="idDistrito" id="idDistrito">
+                            <option value="<?php echo $evento['idDistrito']; ?>"><?php echo $evento['NombreDistrito']; ?></option>
+                            <?php
+                            if ($resultDistrito->num_rows > 0) {
+                                while ($row = $resultDistrito->fetch_assoc()) {
+                                    if ($row["idDistrito"] != $evento['idDistrito']) {
+                                        echo '<option value="' . $row["idDistrito"] . '">' . $row["nombre"] . '</option>';
                                     }
                                 }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="campo campo-imagen">
-                            <label for="imagen">Imagen:</label>
-                            <input type="file" id="imagen" name="imagen" accept="image/*">
-                            <img src="img/images/<?php echo $imagen; ?>" alt="">
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div id="formularioEvento" class="campo campo-imagen">
+                        <label for="imagen">Imagen:</label>
+                        <img id="preview" src="img/images/<?php echo $imagen; ?>" alt="">
+                        <input type="file" id="imagen" name="imagen" accept="image/*">
+                    </div>
 
-
-                        </div>
-                        <div class="campo centrar-texto botones_evento">
-                            <button class="enviar" type="submit">Actualizar evento</button>
-                            <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
-                        </div>
+                    <div class="campo centrar-texto botones_evento">
+                        <button class="enviar" type="submit">Actualizar evento</button>
+                        <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
+                    </div>
                 </div>
             </section>
-        </form>
-        </div>
-        </section>
         </form>
     </main>
     <!-- Footer -->
