@@ -1,17 +1,67 @@
 <header>
     <!-- Logo -->
     <a class="logo" href="admin_index.php"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
-    <p>Panel Administrativo</p>
+
     <!-- Menu 2 -->
     <input type="checkbox" id="menu-bar" />
     <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>
     <!-- Navegacion -->
     <nav class="navbar">
         <ul>
-
-            <li><a href="admin_medicals.php" <?php if ($enlaceActivo == 'admin_medicals') echo 'class="active"'; ?>>Médicos</a></li>
-            <li><a href="admin_events.php" <?php if ($enlaceActivo == 'admin_events') echo 'class="active"'; ?>>Eventos</a></li>
-            <li><a href="admin_appointments.php" <?php if ($enlaceActivo == 'admin_appointments') echo 'class="active"'; ?>>Citas</a></li>
+            <!-- Mascotas -->
+            <li>
+                <a href="" <?php if ($enlaceActivo == 'admin_mascotas')
+                    echo 'class="active"'; ?>>Mascotas</a>
+                <ul>
+                    <li><a href="admin_tipos.php" <?php if ($enlaceActivo == 'admin_tipos')
+                        echo 'class="active"'; ?>>Tipo</a></li>
+                    <li><a href="admin_razas.php" <?php if ($enlaceActivo == 'admin_razas')
+                        echo 'class="active"'; ?>>Raza</a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Clientes -->
+            <li>
+                <a href="admin_clientes.php" <?php if ($enlaceActivo == 'admin_clientes')
+                    echo 'class="active"'; ?>>Clientes</a>
+                <ul>
+                    <li><a href="admin_historial.php" <?php if ($enlaceActivo == 'admin_historial')
+                        echo 'class="active"'; ?>>Historial</a></li>
+                </ul>
+            </li>
+            <!-- Personal -->
+            <li>
+                <a href="admin_workers.php" <?php if ($enlaceActivo == 'admin_workers')
+                    echo 'class="active"'; ?>>Personal
+                </a>
+                <ul>
+                    <li><a href="admin_cargos.php" <?php if ($enlaceActivo == 'admin_cargos')
+                        echo 'class="active"'; ?>>Cargos</a></li>
+                    <li><a href="admin_especialidad.php" <?php if ($enlaceActivo == 'admin_especialidad')
+                        echo 'class="active"'; ?>>Especialidad</a></li>
+                </ul>
+            </li>
+            <!-- Citas -->
+            <li><a href="admin_appointments.php" <?php if ($enlaceActivo == 'admin_appointments')
+                echo 'class="active"'; ?>>Citas</a>
+                <ul>
+                    <!-- Servicios -->
+                    <li><a href="admin_servicios.php" <?php if ($enlaceActivo == 'admin_servicios')
+                        echo 'class="active"'; ?>>Servicios</a></li>
+                </ul>
+            </li>
+            <!-- Otros -->
+            <li><a href="" <?php if ($enlaceActivo == 'admin_otros')
+                echo 'class="active"'; ?>>Otros</a>
+                <ul>
+                    <!-- Eventos -->
+                    <li><a href="admin_events.php" <?php if ($enlaceActivo == 'admin_events')
+                        echo 'class="active"'; ?>>Eventos</a></li>
+                    <!-- Contacto -->
+                    <li><a href="admin_contactos.php" <?php if ($enlaceActivo == 'admin_contactos')
+                        echo 'class="active"'; ?>>Contacto</a></li>
+                </ul>
+            </li>
 
             <li class="login">
                 <p><ion-icon name="person-circle-outline"></ion-icon></p>
