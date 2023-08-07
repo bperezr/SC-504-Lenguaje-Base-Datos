@@ -20,15 +20,6 @@
                     </li>
                 </ul>
             </li>
-            <!-- Clientes -->
-            <li>
-                <a href="admin_clientes.php" <?php if ($enlaceActivo == 'admin_clientes')
-                    echo 'class="active"'; ?>>Clientes</a>
-                <ul>
-                    <li><a href="admin_historial.php" <?php if ($enlaceActivo == 'admin_historial')
-                        echo 'class="active"'; ?>>Historial</a></li>
-                </ul>
-            </li>
             <!-- Personal -->
             <li>
                 <a href="admin_workers.php" <?php if ($enlaceActivo == 'admin_workers')
