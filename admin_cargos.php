@@ -1,13 +1,13 @@
 <?php
-require_once 'include/database/db_cargo.php'; 
-$cargo = new Cargo(); 
+require_once 'include/database/db_cargo.php';
+$cargo = new Cargo();
 
 $cargos = $cargo->getCargos();
 $hayResultados = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idCargo = $_POST['id'];
-    $cargo->deleteCargo($idCargo); 
+    $cargo->deleteCargo($idCargo);
     header('Location: admin_cargos.php');
     exit;
 }
@@ -75,9 +75,6 @@ if (isset($_GET['search'])) {
                     <!-- Tarjeta de cada cargo -->
                     <div class="tarjeta">
                         <div class="tarjeta__detalle">
-                            <h2>
-                                <?php echo $cargo['idCargo']; ?>
-                            </h2>
                             <ul class="detalle-evento">
                                 <li><strong>Cargo:</strong>
                                     <?php echo $cargo['cargo']; ?>
@@ -86,8 +83,8 @@ if (isset($_GET['search'])) {
                         </div>
                         <!-- Botones -->
                         <div class="tarjeta__btn">
-                            <a href="admin_cargos_edit.php?id=<?php echo $cargo['idCargo']; ?>"
-                                class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                            <a href="admin_cargos_edit.php?id=<?php echo $cargo['idCargo']; ?>" class="editar"><ion-icon
+                                    name="create-sharp"></ion-icon>Editar</a>
                             <form action="" method="post" style="display: inline;">
                                 <input type="hidden" name="id" value="<?php echo $cargo['idCargo']; ?>">
                                 <button type="submit" class="eliminar"

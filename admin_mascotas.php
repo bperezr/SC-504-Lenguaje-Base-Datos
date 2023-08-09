@@ -55,7 +55,7 @@ if (isset($_GET['search'])) {
                     </div>
                     <!-- Recargar -->
                     <div class="recargar">
-                        <a href="admin_workers.php"><ion-icon name="refresh-circle"></ion-icon></a>
+                        <a href="admin_mascotas.php"><ion-icon name="refresh-circle"></ion-icon></a>
                     </div>
                 </div>
                 <div class="buscador buscador_agregar">
@@ -75,9 +75,6 @@ if (isset($_GET['search'])) {
                     <!-- Tarjeta de cada colaborador -->
                     <div class="tarjeta">
                         <div class="tarjeta__detalle">
-                            <h2>
-                                <?php echo $tipomascota['idTipoMascota']; ?>
-                            </h2>
                             <ul class="detalle-evento">
                                 <li><strong>Tipo de mascota:</strong>
                                     <?php echo $tipomascota['tipo']; ?>

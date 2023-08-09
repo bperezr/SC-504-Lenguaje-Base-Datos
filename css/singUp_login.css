@@ -159,7 +159,7 @@ input {
     justify-content: center;
     text-align: center;
     display: flex;
-    margin: 2rem auto;
+    margin: 1rem auto;
     padding: 1rem;
     border: none;
     outline: none;
@@ -194,7 +194,7 @@ button:hover {
     height: 60rem;
     background: var(--blanco);
     border-radius: 100% / 10%;
-    transform: translateY(-33rem);
+    transform: translateY(-25rem);
     transition: .8s ease-in-out;
 }
 
@@ -206,7 +206,7 @@ button:hover {
 }
 
 #chk:checked~.login {
-    transform: translateY(.20rem);
+    transform: translateY(-1rem);
 }
 
 #chk:checked~.login label {

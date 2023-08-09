@@ -44,6 +44,9 @@
                     <!-- Contacto -->
                     <li><a href="admin_contactos.php" <?php if ($enlaceActivo == 'admin_contactos')
                         echo 'class="active"'; ?>>Contacto</a></li>
+                    <!-- Clientes -->
+                    <li><a href="admin_clientes.php" <?php if ($enlaceActivo == 'admin_clientes')
+                        echo 'class="active"'; ?>>Clientes</a></li>
                 </ul>
             </li>
 

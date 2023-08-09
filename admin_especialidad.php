@@ -1,13 +1,13 @@
 <?php
-require_once 'include/database/db_especialidad.php'; 
-$especialidad = new Especialidad(); 
+require_once 'include/database/db_especialidad.php';
+$especialidad = new Especialidad();
 
 $especialidades = $especialidad->getEspecialidades();
 $hayResultados = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idEspecialidad = $_POST['id'];
-    $especialidad->deleteEspecialidad($idEspecialidad); 
+    $especialidad->deleteEspecialidad($idEspecialidad);
     header('Location: admin_especialidad.php');
     exit;
 }
@@ -75,14 +75,11 @@ if (isset($_GET['search'])) {
                     <!-- Tarjeta de cada especialidad -->
                     <div class="tarjeta">
                         <div class="tarjeta__detalle">
-                            <h2>
-                                <?php echo $especialidad['idEspecialidad']; ?>
-                            </h2>
                             <ul class="detalle-evento">
                                 <li><strong>Especialidad:</strong>
                                     <?php echo $especialidad['especialidad']; ?>
                                 </li>
-                                <li><strong>Descripción:</strong>
+                                <li class="justificar-texto"><strong>Descripción:</strong>
                                     <?php echo $especialidad['descripcion']; ?>
                                 </li>
                             </ul>

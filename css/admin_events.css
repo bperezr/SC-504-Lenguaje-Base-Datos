@@ -387,7 +387,7 @@ footer {
 }
 
 .tarjeta {
-    background-color: var(--blanco);
+    background-color: var(--gris);
     border-radius: 1rem;
     box-shadow: 0 .2rem 1rem rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -409,6 +409,9 @@ footer {
 .tarjeta__detalle {
     padding: 2rem;
     flex-grow: 1;
+    background-color: var(--blanco);
+    border: .2rem solid var(--gris);
+    border-radius: 1rem;
 }
 
 .tarjeta__detalle h2 {

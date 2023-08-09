@@ -1,3 +1,4 @@
+
 function previewImage() {
     var preview = document.getElementById("preview");
     var file = document.querySelector("input[type=file]").files[0];

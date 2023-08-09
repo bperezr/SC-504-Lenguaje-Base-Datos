@@ -42,12 +42,29 @@ class Colaborador
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Función para insertar un nuevo colaborador
-    public function insertColaborador($nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $imagen)
+    public function getRoles()
     {
-        // Resto del código para insertar en la base de datos
-        $query = "INSERT INTO colaborador (nombre, apellido1, apellido2, edad, idCargo, idEspecialidad, imagen)
-        VALUES (:nombre, :apellido1, :apellido2, :edad, :idCargo, :idEspecialidad, :imagen)";
+        $query = "SELECT idRol, nombreRol FROM rol";
+        $stmt = $this->db->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function verificarCorreoExistente($correo)
+    {
+        $query = "SELECT idColaborador FROM colaborador WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_COLUMN) !== false;
+    }
+
+
+    // Función para insertar un nuevo colaborador
+    public function insertColaborador($nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
+    {
+        $query = "INSERT INTO colaborador (nombre, apellido1, apellido2, edad, idCargo, idEspecialidad, imagen, correo, contrasena, idRol)
+        VALUES (:nombre, :apellido1, :apellido2, :edad, :idCargo, :idEspecialidad, :imagen, :correo, :contrasena, :idRol)";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':nombre', $nombre);
         $stmt->bindParam(':apellido1', $apellido1);
@@ -56,15 +73,18 @@ class Colaborador
         $stmt->bindParam(':idCargo', $idCargo);
         $stmt->bindParam(':idEspecialidad', $idEspecialidad);
         $stmt->bindParam(':imagen', $imagen);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':idRol', $idRol);
 
         return $stmt->execute();
     }
 
 
     // Función para actualizar un colaborador
-    public function updateColaborador($id, $nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $imagen)
+    public function updateColaborador($id, $nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
     {
-        $query = "UPDATE colaborador SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, edad = :edad, idCargo = :idCargo, idEspecialidad = :idEspecialidad, imagen = :imagen WHERE idColaborador = :id";
+        $query = "UPDATE colaborador SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, edad = :edad, idCargo = :idCargo, idEspecialidad = :idEspecialidad, imagen = :imagen, correo = :correo, contrasena = :contrasena, idRol = :idRol WHERE idColaborador = :id";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
@@ -74,6 +94,9 @@ class Colaborador
         $stmt->bindParam(':idCargo', $idCargo, PDO::PARAM_INT);
         $stmt->bindParam(':idEspecialidad', $idEspecialidad, PDO::PARAM_INT);
         $stmt->bindParam(':imagen', $imagen);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':idRol', $idRol);
 
         return $stmt->execute();
     }

@@ -10,7 +10,10 @@ $especialidad = new Especialidad();
 $cargos = $cargo->getCargos();
 $especialidades = $especialidad->getEspecialidades();
 
+$mensajeError = "";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $nombre = $_POST['nombre'];
     $apellido1 = $_POST['apellido1'];
     $apellido2 = $_POST['apellido2'];
@@ -18,15 +21,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idCargo = $_POST['cargo'];
     $idEspecialidad = $_POST['especialidad'];
     $imagen = $_FILES['imagen'];
+    $correo = $_POST['correo'];
+    $contrasena = $_POST['contrasena'];
+    $idRol = $_POST['rol'];
 
-    $nombreImagen = $colaborador->uploadImagen($imagen);
-    $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $nombreImagen);
+    $correoExistente = $colaborador->verificarCorreoExistente($correo);
 
-    header('Location: admin_workers.php');
-    exit;
+    if ($correoExistente) {
+        $mensajeError = "El correo electrónico ya está registrado. Por favor, use otro correo.";
+    } else {
+        $nombreImagen = $colaborador->uploadImagen($imagen);
+        $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
+
+        header('Location: admin_workers.php');
+        exit;
+    }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -50,7 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <section class="evento">
             <div class="evento__detalle">
+
                 <h2 class="centrar-texto">Agregar Personal</h2>
+
+                <div class="mensaje-error">
+                    <?php echo $mensajeError; ?>
+                </div>
+
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Nombre:</label>
@@ -84,11 +101,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
+
+                    <div class="campo">
+                        <label for="rol">Rol:</label>
+                        <select id="rol" name="rol" required>
+                            <?php foreach ($colaborador->getRoles() as $rol): ?>
+                                <option value="<?php echo $rol['idRol']; ?>"><?php echo $rol['nombreRol']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="correo">Correo:</label>
+                        <input type="text" id="correo" name="correo" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="contrasena">Contraseña:</label>
+                        <input type="password" id="contrasena" name="contrasena" required>
+                    </div>
                     <div class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
                         <img id="preview" src="img/no_disponible.webp" alt="no_image">
-                        <input type="file" id="imagen" name="imagen" accept="image/*" required>
+                        <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
+
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Agregar Médico</button>
                         <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
@@ -97,7 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </section>
     </main>
-
 
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>

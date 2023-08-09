@@ -9,7 +9,7 @@
 
 <body>
 
-    <div class="main">
+<div class="main">
         <input type="checkbox" id="chk" aria-hidden="true">
 
         <div class="contenedor logo">
@@ -17,26 +17,27 @@
         </div>
 
         <div class="signup">
-            <form>
+            <form id="signupForm">
                 <label for="chk" aria-hidden="true">Registrarse</label>
-                <input type="text" name="name" placeholder="Nombre Completo" required="">
-                <input type="email" name="email" placeholder="Correo" required="">
-                <input type="password" name="pswd" placeholder="Contraseña" required="">
-                <input type="password" name="pswd" placeholder="Repita la contraseña" required="">
-                <button>Registrarse</button>
+                <input type="email" id="signupEmail" name="email" placeholder="Correo" required>
+                <input type="password" id="signupPassword" name="pswd" placeholder="Contraseña" required>
+                <input type="password" id="signupConfirmPassword" name="confirmPswd" placeholder="Repita la contraseña" required>
+                <div id="StrengthDisp"></div>
+                <button type="submit">Registrarse</button>
             </form>
         </div>
 
         <div class="login">
-            <form>
+            <form id="loginForm">
                 <label for="chk" aria-hidden="true">Iniciar</label>
-                <input type="email" name="email" placeholder="Correo" required="">
-                <input type="password" name="pswd" placeholder="Contraseña" required="">
-                <button>Iniciar</button>
+                <input type="email" id="loginEmail" name="email" placeholder="Correo" required>
+                <input type="password" id="loginPassword" name="pswd" placeholder="Contraseña" required>
+                <button type="submit">Iniciar</button>
             </form>
         </div>
     </div>
 
+    <script src="js/singUp_login.js"></script>
 </body>
 
-</html>`
+</html>
