@@ -70,6 +70,18 @@ class Especialidad
         $stmt->bindParam(':idEspecialidad', $id);
         return $stmt->execute();
     }
+
+    public function buscarEspecialidades($searchTerm)
+    {
+        $query = "SELECT e.*     
+                FROM especialidad e        
+                WHERE e.especialidad LIKE :searchTerm";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>

@@ -68,6 +68,20 @@ class Cargo
         $stmt->bindParam(':idCargo', $id);
         return $stmt->execute();
     }
+
+    public function buscarCargos($searchTerm)
+    {
+        $query = "SELECT c.*
+                FROM cargo c            
+                WHERE c.cargo LIKE :searchTerm";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
 }
 
 ?>
