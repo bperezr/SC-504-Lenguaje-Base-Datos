@@ -1,27 +1,28 @@
 <?php
-require_once 'include/database/db_colaborador.php';
+require_once 'include/database/db_cargo.php'; 
+$cargo = new Cargo(); 
 
-$c = new Colaborador();
-$resultados = $c->getColaboradores();
+$cargos = $cargo->getCargos();
 $hayResultados = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idColaborador = $_POST['id'];
-    $c->deleteColaborador($idColaborador);
-    header('Location: admin_workers.php');
+    $idCargo = $_POST['id'];
+    $cargo->deleteCargo($idCargo); 
+    header('Location: admin_cargos.php');
     exit;
 }
 
 if (isset($_GET['search'])) {
     $searchTerm = $_GET['search'];
-    $resultados = $c->buscarColaboradores($searchTerm);
-    if (count($resultados) === 0) {
+    $cargos = $cargo->buscarCargos($searchTerm);
+    if (count($cargos) === 0) {
         $hayResultados = false;
     } else {
         $hayResultados = true;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -38,8 +39,72 @@ if (isset($_GET['search'])) {
     include 'include/template/nav_admin.php'; ?>
 
     <main class="contenedor">
-
         <h1 class="centrar-texto">Administrar Cargos</h1>
+
+        <!-- Buscador -->
+        <form action="" method="get">
+            <div class="contenedor_buscar">
+                <div class="buscador buscador_buscar">
+                    <!-- Texto buscar -->
+                    <div class="textBuscar">
+                        <input type="text" placeholder="Buscar..." name="search">
+                    </div>
+                    <!-- Buscar -->
+                    <div class="buscar">
+                        <button class="btn_buscar" type="submit">Buscar</button>
+                    </div>
+                    <!-- Recargar -->
+                    <div class="recargar">
+                        <a href="admin_cargos.php"><ion-icon name="refresh-circle"></ion-icon></a>
+                    </div>
+                </div>
+                <div class="buscador buscador_agregar">
+                    <!---Agregar-->
+                    <div class="agregar">
+                        <a href="admin_cargos_new.php" class="btn_agregar"><ion-icon
+                                name="add-circle-outline"></ion-icon>
+                            Agregar</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <?php if ($hayResultados): ?>
+            <section class="event__tarjetas">
+                <?php foreach ($cargos as $cargo): ?>
+                    <!-- Tarjeta de cada cargo -->
+                    <div class="tarjeta">
+                        <div class="tarjeta__detalle">
+                            <h2>
+                                <?php echo $cargo['idCargo']; ?>
+                            </h2>
+                            <ul class="detalle-evento">
+                                <li><strong>Cargo:</strong>
+                                    <?php echo $cargo['cargo']; ?>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Botones -->
+                        <div class="tarjeta__btn">
+                            <a href="admin_cargos_edit.php?id=<?php echo $cargo['idCargo']; ?>"
+                                class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                            <form action="" method="post" style="display: inline;">
+                                <input type="hidden" name="id" value="<?php echo $cargo['idCargo']; ?>">
+                                <button type="submit" class="eliminar"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este cargo?')">
+                                    <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+        <?php else: ?>
+            <div class="err_busqueda">
+                <h2 class="brincar">No se encontraron cargos que coincidan con la búsqueda.</h2>
+                <img class="" src="img/dog1.webp" alt="">
+            </div>
+        <?php endif; ?>
 
     </main>
 
