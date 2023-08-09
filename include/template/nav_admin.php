@@ -10,15 +10,8 @@
         <ul>
             <!-- Mascotas -->
             <li>
-                <a href="" <?php if ($enlaceActivo == 'admin_mascotas')
+                <a href="admin_mascotas.php" <?php if ($enlaceActivo == 'admin_mascotas')
                     echo 'class="active"'; ?>>Mascotas</a>
-                <ul>
-                    <li><a href="admin_tipos.php" <?php if ($enlaceActivo == 'admin_tipos')
-                        echo 'class="active"'; ?>>Tipo</a></li>
-                    <li><a href="admin_razas.php" <?php if ($enlaceActivo == 'admin_razas')
-                        echo 'class="active"'; ?>>Raza</a>
-                    </li>
-                </ul>
             </li>
             <!-- Personal -->
             <li>
