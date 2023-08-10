@@ -86,9 +86,6 @@ if (isset($_GET['search'])) {
                                 <?php echo $colaborador['nombre'] . ' ' . $colaborador['apellido1'] . ' ' . $colaborador['apellido2']; ?>
                             </h2>
                             <ul class="detalle-evento">
-                                <li><strong>Edad:</strong>
-                                    <?php echo $colaborador['edad']; ?>
-                                </li>
                                 <li><strong>Cargo:</strong>
                                     <?php echo $colaborador['cargo']; ?>
                                 </li>

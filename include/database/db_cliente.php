@@ -50,6 +50,27 @@ class Cliente
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function verificarCorreoExistente($correo)
+    {
+        $query = "SELECT * FROM cliente WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function insertClienteNuevo($correo, $contrasena)
+    {
+        $hashedContrasena = password_hash($contrasena, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO cliente (correo, contrasena) VALUES (:correo, :contrasena)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $hashedContrasena);
+
+        return $stmt->execute();
+    }
+
 
     public function insertCliente($nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo, $contrasena)
     {
@@ -86,16 +107,6 @@ class Cliente
         $stmt->bindParam(':idDistrito', $idDistrito);
         $stmt->bindParam(':idRol', $idRol);
         $stmt->bindParam(':correo', $correo);
-
-        return $stmt->execute();
-    }
-
-    public function updateClienteContrasena($idCliente, $contrasena)
-    {
-        $query = "UPDATE cliente SET contrasena = :contrasena WHERE idCliente = :idCliente";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT);
-        $stmt->bindParam(':contrasena', $contrasena);
 
         return $stmt->execute();
     }

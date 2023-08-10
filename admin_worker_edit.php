@@ -15,9 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $apellido1 = $_POST['apellido1'];
     $apellido2 = $_POST['apellido2'];
-    $edad = $_POST['edad'];
     $idCargo = $_POST['cargo'];
     $idEspecialidad = $_POST['especialidad'];
+    $correo = $_POST['correo'];
+    $contrasena = $_POST['contrasena'];
+    $idRol = $_POST['rol'];
 
     if ($_FILES['imagen']['tmp_name']) {
         $imagen = $_FILES['imagen'];
@@ -32,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombreImagen = $colaboradorData['imagen'];
     }
 
-    $colaborador->updateColaborador($id, $nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $nombreImagen);
+    $colaborador->updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
 
     header('Location: admin_workers.php');
     exit;
@@ -93,11 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             value="<?php echo $colaboradorData['apellido2']; ?>" required>
                     </div>
                     <div class="campo">
-                        <label for="edad">Edad:</label>
-                        <input type="number" id="edad" name="edad" value="<?php echo $colaboradorData['edad']; ?>"
-                            required>
-                    </div>
-                    <div class="campo">
                         <label for="cargo">Cargo:</label>
                         <select id="cargo" name="cargo" required>
                             <?php foreach ($cargos as $cargo): ?>
@@ -107,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
+
                     <div class="campo">
                         <label for="especialidad">Especialidad:</label>
                         <select id="especialidad" name="especialidad" required>
@@ -117,12 +115,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="campo campo-imagen">
+
+                    <div class="campo">
+                        <label for="correo">Correo:</label>
+                        <input type="text" id="correo" name="correo" value="<?php echo $colaboradorData['correo']; ?>"
+                            required readonly>
+                    </div>
+
+
+                    <div class="campo">
+                        <label for="apellido1">Contraseña:</label>
+                        <input type="password" id="contrasena" name="contrasena"
+                            value="<?php echo $colaboradorData['contrasena']; ?>" required>
+                    </div>
+
+                    <!-- Imagen -->
+                    <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
-                        <img id="preview" src="img/images_workers/<?php echo $colaboradorData['imagen']; ?>"
-                            alt="Imagen actual">
+                        <?php if (file_exists("img/images_workers/" . $colaboradorData['imagen'])): ?>
+                            <img id="preview" src="img/images_workers/<?php echo $colaboradorData['imagen']; ?>"
+                                alt="Imagen actual">
+                        <?php else: ?>
+                            <img id="preview" src="img/no_disponible.webp" alt="Imagen no disponible">
+                        <?php endif; ?>
                         <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
+
+                    <div class="campo">
+                        <label for="rol">Rol:</label>
+                        <select id="rol" name="rol" required>
+                            <?php foreach ($colaborador->getRoles() as $rol): ?>
+                                <option value="<?php echo $rol['idRol']; ?>" <?php echo ($colaboradorData['idRol'] == $rol['idRol']) ? 'selected' : ''; ?>>
+                                    <?php echo $rol['nombreRol']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Guardar Cambios</button>
                         <a class="cancelar" href="admin_workers.php">Cancelar</a>

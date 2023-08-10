@@ -59,22 +59,32 @@ class Colaborador
         return $stmt->fetch(PDO::FETCH_COLUMN) !== false;
     }
 
+    public function getColaboradorPorCorreo($correo)
+    {
+        $query = "SELECT * FROM colaborador WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     // Función para insertar un nuevo colaborador
-    public function insertColaborador($nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
+    public function insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
     {
-        $query = "INSERT INTO colaborador (nombre, apellido1, apellido2, edad, idCargo, idEspecialidad, imagen, correo, contrasena, idRol)
-        VALUES (:nombre, :apellido1, :apellido2, :edad, :idCargo, :idEspecialidad, :imagen, :correo, :contrasena, :idRol)";
+        // Genera el hash
+        $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO colaborador (nombre, apellido1, apellido2, idCargo, idEspecialidad, imagen, correo, contrasena, idRol)
+        VALUES (:nombre, :apellido1, :apellido2, :idCargo, :idEspecialidad, :imagen, :correo, :contrasena, :idRol)";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':nombre', $nombre);
         $stmt->bindParam(':apellido1', $apellido1);
         $stmt->bindParam(':apellido2', $apellido2);
-        $stmt->bindParam(':edad', $edad);
         $stmt->bindParam(':idCargo', $idCargo);
         $stmt->bindParam(':idEspecialidad', $idEspecialidad);
         $stmt->bindParam(':imagen', $imagen);
         $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':contrasena', $contrasenaHash); // Almacenamos el hash
         $stmt->bindParam(':idRol', $idRol);
 
         return $stmt->execute();
@@ -82,24 +92,42 @@ class Colaborador
 
 
     // Función para actualizar un colaborador
-    public function updateColaborador($id, $nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
+    public function updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
     {
-        $query = "UPDATE colaborador SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, edad = :edad, idCargo = :idCargo, idEspecialidad = :idEspecialidad, imagen = :imagen, correo = :correo, contrasena = :contrasena, idRol = :idRol WHERE idColaborador = :id";
+        // Si se proporciona una nueva contraseña, genera el hash de la misma
+        if (!empty($contrasena)) {
+            $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
+        }
+
+        $query = "UPDATE colaborador SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, idCargo = :idCargo, idEspecialidad = :idEspecialidad, imagen = :imagen, correo = :correo";
+
+        // Agrega el campo de la contraseña solo si se proporciona una nueva contraseña
+        if (!empty($contrasena)) {
+            $query .= ", contrasena = :contrasena";
+        }
+
+        $query .= ", idRol = :idRol WHERE idColaborador = :id";
+
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
         $stmt->bindParam(':apellido1', $apellido1, PDO::PARAM_STR);
         $stmt->bindParam(':apellido2', $apellido2, PDO::PARAM_STR);
-        $stmt->bindParam(':edad', $edad, PDO::PARAM_INT);
         $stmt->bindParam(':idCargo', $idCargo, PDO::PARAM_INT);
         $stmt->bindParam(':idEspecialidad', $idEspecialidad, PDO::PARAM_INT);
         $stmt->bindParam(':imagen', $imagen);
         $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasena);
+
+        // Asigna el valor del hash solo si se proporciona una nueva contraseña
+        if (!empty($contrasena)) {
+            $stmt->bindParam(':contrasena', $contrasenaHash);
+        }
+
         $stmt->bindParam(':idRol', $idRol);
 
         return $stmt->execute();
     }
+
 
 
     public function deleteColaborador($id)

@@ -216,3 +216,16 @@ button:hover {
 #chk:checked~.signup label {
     transform: scale(.8);
 }
+
+/* Estilos del error */
+.error {
+    background-color: var(--color1);
+    color: #721c24; /* Color del texto del mensaje de error */
+    padding: 1rem; /* Espaciado interno para el contenido del mensaje */
+}
+
+/* Estilos específicos para el texto del mensaje de error */
+.error-message {
+    margin: 0; /* Eliminar el margen predeterminado del párrafo */
+    text-align: center;
+}

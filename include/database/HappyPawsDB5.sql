@@ -115,15 +115,15 @@ DROP TABLE IF EXISTS `cliente`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cliente` (
   `idCliente` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(30) NOT NULL,
-  `apellido1` varchar(30) NOT NULL,
-  `apellido2` varchar(30) NOT NULL,
+  `nombre` varchar(30) DEFAULT NULL,
+  `apellido1` varchar(30) DEFAULT NULL,
+  `apellido2` varchar(30) DEFAULT NULL,
   `telefono` varchar(15) DEFAULT NULL,
   `domicilio` varchar(250) DEFAULT NULL,
-  `idProvincia` int NOT NULL,
-  `idCanton` int NOT NULL,
-  `idDistrito` int NOT NULL,
-  `idRol` int NOT NULL DEFAULT '1',
+  `idProvincia` int DEFAULT NULL,
+  `idCanton` int DEFAULT NULL,
+  `idDistrito` int DEFAULT NULL,
+  `idRol` int NOT NULL DEFAULT '3',
   `correo` varchar(100) NOT NULL,
   `contrasena` varchar(200) NOT NULL,
   PRIMARY KEY (`idCliente`),
@@ -135,7 +135,7 @@ CREATE TABLE `cliente` (
   CONSTRAINT `fk_Cliente_Distrito` FOREIGN KEY (`idDistrito`) REFERENCES `distrito` (`idDistrito`),
   CONSTRAINT `fk_Cliente_Provincia` FOREIGN KEY (`idProvincia`) REFERENCES `provincia` (`idProvincia`),
   CONSTRAINT `fk_Cliente_Rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,6 @@ CREATE TABLE `colaborador` (
   `nombre` varchar(30) DEFAULT NULL,
   `apellido1` varchar(30) DEFAULT NULL,
   `apellido2` varchar(30) DEFAULT NULL,
-  `edad` int DEFAULT NULL,
   `idCargo` int NOT NULL,
   `idEspecialidad` int NOT NULL,
   `imagen` varchar(400) DEFAULT 'no_disponible.webp',
@@ -174,7 +173,7 @@ CREATE TABLE `colaborador` (
   CONSTRAINT `fk_Colaborador_Cargo` FOREIGN KEY (`idCargo`) REFERENCES `cargo` (`idCargo`),
   CONSTRAINT `fk_Colaborador_Especialidad` FOREIGN KEY (`idEspecialidad`) REFERENCES `especialidad` (`idEspecialidad`),
   CONSTRAINT `fk_Colaborador_Rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,7 +182,7 @@ CREATE TABLE `colaborador` (
 
 LOCK TABLES `colaborador` WRITE;
 /*!40000 ALTER TABLE `colaborador` DISABLE KEYS */;
-INSERT INTO `colaborador` VALUES (28,'Jorge','Hernández','Hernandez',30,3,1,'3ddc7d8b94d61ef33e39e1b84b06bac5.jpg',2,'jorge.h@happypaws.test','admin01'),(29,'Ana','Lima','Perez',25,3,2,'eaeb66b9ceddd99b9f28626dcb0a1140.jpg',2,'ana.l@happypaws.test','admin01');
+INSERT INTO `colaborador` VALUES (28,'Jorge','Hernández','Hernandez',3,1,'3ddc7d8b94d61ef33e39e1b84b06bac5.jpg',2,'jorge.h@happypaws.test','admin01'),(29,'Ana','Lima','Perez',3,2,'eaeb66b9ceddd99b9f28626dcb0a1140.jpg',2,'ana.l@happypaws.test','admin01'),(30,'Andres','Lopez','Rios',2,1,'9eff7369e81bd1676ebf2cd373609702.jpg',1,'andresl@happypaws.com','$2y$10$szkvnnS39qxATAramczxLuFBpjuHqtVk0flakyl6AWouaHs5FKRDS'),(31,'Andres','Lopez','Rios',3,2,'bf4b493efb6b70152fa1b3afeca34ab8.jpg',1,'andresl2@happypaws.com','admin');
 /*!40000 ALTER TABLE `colaborador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +287,7 @@ CREATE TABLE `especialidad` (
 
 LOCK TABLES `especialidad` WRITE;
 /*!40000 ALTER TABLE `especialidad` DISABLE KEYS */;
-INSERT INTO `especialidad` VALUES (1,'Medicina General','Atención y cuidado general de la salud de los animales, incluyendo diagnóstico y tratamiento de enfermedades comunes.'),(2,'Cirugía','Realización de procedimientos quirúrgicos en animales para tratar diversas condiciones médicas.'),(3,'Castración','Procedimiento quirúrgico para esterilizar animales, evitando su reproducción y controlando la población.'),(4,'Aseo','Servicios de limpieza y cuidado de higiene para mantener a los animales limpios y saludables.'),(5,'Odontología','Cuidado y tratamiento de la salud dental de los animales.'),(6,'Dermatología','Diagnóstico y tratamiento de enfermedades de la piel de los animales.'),(7,'Ortopedia ','Tratamiento de lesiones y enfermedades musculoesqueléticas de los animales.');
+INSERT INTO `especialidad` VALUES (1,'Medicina General','Atención y cuidado general de la salud de los animales, incluyendo diagnóstico y tratamiento de enfermedades comunes.'),(2,'Cirugía','Realización de procedimientos quirúrgicos en animales para tratar diversas condiciones médicas.'),(3,'Castración','Procedimiento quirúrgico para esterilizar animales, evitando su reproducción y controlando la población.'),(4,'Aseo','Servicios de limpieza y cuidado de higiene para mantener a los animales limpios y saludables.');
 /*!40000 ALTER TABLE `especialidad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +551,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-09 13:40:31
+-- Dump completed on 2023-08-10  6:00:12

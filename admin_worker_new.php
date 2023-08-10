@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $apellido1 = $_POST['apellido1'];
     $apellido2 = $_POST['apellido2'];
-    $edad = $_POST['edad'];
     $idCargo = $_POST['cargo'];
     $idEspecialidad = $_POST['especialidad'];
     $imagen = $_FILES['imagen'];
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mensajeError = "El correo electrónico ya está registrado. Por favor, use otro correo.";
     } else {
         $nombreImagen = $colaborador->uploadImagen($imagen);
-        $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $edad, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
+        $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
 
         header('Location: admin_workers.php');
         exit;
@@ -82,10 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" id="apellido2" name="apellido2" required>
                     </div>
                     <div class="campo">
-                        <label for="edad">Edad:</label>
-                        <input type="number" id="edad" name="edad" required>
-                    </div>
-                    <div class="campo">
                         <label for="cargo">Cargo:</label>
                         <select id="cargo" name="cargo" required>
                             <?php foreach ($cargos as $cargo): ?>
@@ -103,15 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="campo">
-                        <label for="rol">Rol:</label>
-                        <select id="rol" name="rol" required>
-                            <?php foreach ($colaborador->getRoles() as $rol): ?>
-                                <option value="<?php echo $rol['idRol']; ?>"><?php echo $rol['nombreRol']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="campo">
                         <label for="correo">Correo:</label>
                         <input type="text" id="correo" name="correo" required>
                     </div>
@@ -124,6 +110,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="imagen">Imagen:</label>
                         <img id="preview" src="img/no_disponible.webp" alt="no_image">
                         <input type="file" id="imagen" name="imagen" accept="image/*">
+                    </div>
+
+                    <div class="campo">
+                        <label for="rol">Rol:</label>
+                        <select id="rol" name="rol" required>
+                            <?php foreach ($colaborador->getRoles() as $rol): ?>
+                                <option value="<?php echo $rol['idRol']; ?>"><?php echo $rol['nombreRol']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="campo centrar-texto botones_evento">
