@@ -50,28 +50,6 @@ class Cliente
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function verificarCorreoExistente($correo)
-    {
-        $query = "SELECT * FROM cliente WHERE correo = :correo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function insertClienteNuevo($correo, $contrasena)
-    {
-        $hashedContrasena = password_hash($contrasena, PASSWORD_DEFAULT);
-
-        $query = "INSERT INTO cliente (correo, contrasena) VALUES (:correo, :contrasena)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $hashedContrasena);
-
-        return $stmt->execute();
-    }
-
-
     public function insertCliente($nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo, $contrasena)
     {
         $query = "INSERT INTO cliente (nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito, idRol, correo, contrasena)
@@ -131,6 +109,70 @@ class Cliente
         $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /* -----------------Login Cliente ----------------- */
+    public function verificarCorreoExistente($correo)
+    {
+        $query = "SELECT idCliente FROM cliente WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function validarCredenciales($correo, $contrasena)
+    {
+        $query = "SELECT idCliente, contrasena FROM cliente WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result && password_verify($contrasena, $result['contrasena'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function insertClienteNuevo($correo, $contrasena)
+    {
+        $hashedContrasena = password_hash($contrasena, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO cliente (correo, contrasena) VALUES (:correo, :contrasena)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $hashedContrasena);
+
+        return $stmt->execute();
+    }
+
+    public function camposNull($correo)
+    {
+        $query = "SELECT nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito FROM cliente WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result === false) {
+            return false;
+        }
+        $camposObligatorios = array('nombre', 'apellido1', 'apellido2', 'telefono', 'domicilio', 'idProvincia', 'idCanton', 'idDistrito');
+        foreach ($camposObligatorios as $campo) {
+            if ($result[$campo] === null) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
