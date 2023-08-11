@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -10,7 +22,7 @@
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'administrar';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
         <div class="bg">

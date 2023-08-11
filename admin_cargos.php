@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require_once 'include/database/db_cargo.php';
 $cargo = new Cargo();
 
@@ -36,7 +48,7 @@ if (isset($_GET['search'])) {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_cargos';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
         <h1 class="centrar-texto">Administrar Cargos</h1>

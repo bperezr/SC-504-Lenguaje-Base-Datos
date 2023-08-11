@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+}
+?>
 <?php include 'include/functions/ver_evento.php'; ?>
 <!DOCTYPE html>
 <html lang="es">

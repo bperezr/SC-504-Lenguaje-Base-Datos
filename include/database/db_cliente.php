@@ -175,5 +175,19 @@ class Cliente
         return false;
     }
 
+    public function obtenerClientePorCorreo($correo)
+    {
+        $sql = "SELECT idRol, correo FROM cliente WHERE correo = :correo";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $cliente;
+    }
+
 }
 ?>

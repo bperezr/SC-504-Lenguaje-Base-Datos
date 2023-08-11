@@ -37,20 +37,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $correo = $_POST['email'];
         $contrasena = $_POST['pswd'];
 
-        $usuarioAutenticado = $cliente->validarCredenciales($correo, $contrasena);
+        $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena);
+        $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
 
-        if ($usuarioAutenticado) {
+        if ($clienteAutenticado) {
             session_start();
-            $_SESSION['correo'] = $correo;
-            if ($cliente->camposNull($correo)) {
+            $clienteInfo = $cliente->obtenerClientePorCorreo($correo);
 
+            $_SESSION['usuario'] = array(
+                'rol' => 'cliente',
+                'idRol' => $clienteInfo['idRol'],
+                'correo' => $clienteInfo['correo']
+            );
+
+            if ($cliente->camposNull($correo)) {
                 header("Location: profile.php");
                 exit();
-
             } else {
                 header("Location: index.php");
                 exit();
             }
+        } elseif ($colaboradorAutenticado) {
+            session_start();
+            $colaboradorInfo = $colaborador->obtenerColaboradorPorCorreo($correo);
+
+            $_SESSION['usuario'] = array(
+                'rol' => 'colaborador',
+                'idRol' => $colaboradorInfo['idRol'],
+                'correo' => $colaboradorInfo['correo']
+            );
+
+            if ($colaboradorInfo['idRol'] == 1) {
+                header("Location: admin_index.php");
+            } elseif ($colaboradorInfo['idRol'] == 2) {
+                header("Location: medical_index.php");
+            }
+            exit();
         } else {
             $mensajeError = "Usuario o contraseña incorrecta.";
         }
@@ -101,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
-        <!-- JS -->
+    <!-- JS -->
     <script src="js/singUp_login.js"></script>
 </body>
 

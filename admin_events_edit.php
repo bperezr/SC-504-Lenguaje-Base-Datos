@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 $id = $_GET['id'];
 require 'include/connections/connect.php';
 $db = ConectarDB();
@@ -25,8 +37,6 @@ $resultCanton = mysqli_query($db, $queryCanton);
 $queryDistrito = "SELECT idDistrito, nombre FROM distrito ORDER BY idDistrito";
 $resultDistrito = mysqli_query($db, $queryDistrito);
 
-//Se inicializan las variables de acuerdo a los valores dentro de la base de datos de acuerdo al Id dato en
-//el queryEventos
 $requeridos = [];
 $nombreEvento = $evento['nombreEvento'];
 $lugar = $evento['Lugar'];
@@ -90,7 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombreImagen = '';
 
         if ($imagen['name']) {
-            //Eliminar la imagen anterior si se quiere actualizar la imagen del evento
             unlink($carpetaImagenes . $evento['imagen']);
 
             $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
@@ -125,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 

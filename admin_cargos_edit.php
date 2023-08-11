@@ -1,13 +1,25 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require_once 'include/database/db_cargo.php';
 
 $cargo = new Cargo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
-    $nuevoCargo = $_POST['cargo']; 
-    $cargo->updateCargo($id, $nuevoCargo);  // Agregado para actualizar el cargo
-    header('Location: admin_cargos.php');  // Redirigir después de la actualización
+    $nuevoCargo = $_POST['cargo'];
+    $cargo->updateCargo($id, $nuevoCargo); // Agregado para actualizar el cargo
+    header('Location: admin_cargos.php'); // Redirigir después de la actualización
     exit;
 } else {
     if (isset($_GET['id'])) {
@@ -36,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_cargos';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -50,9 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Cargo:</label>
-                        <input type="text" id="cargo" name="cargo" value="<?php echo $cargoData['cargo']; ?>"
-                            required>
-                    </div>                  
+                        <input type="text" id="cargo" name="cargo" value="<?php echo $cargoData['cargo']; ?>" required>
+                    </div>
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Guardar Cambios</button>
                         <a class="cancelar" href="admin_cargos.php">Cancelar</a>

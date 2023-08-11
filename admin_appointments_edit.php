@@ -1,5 +1,16 @@
 <?php
+session_start();
 
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 $id = $_GET['id'];
 require 'include/connections/connect.php';
 $db = ConectarDB();
@@ -86,9 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        $sqlUpdate = "UPDATE citas SET nombre='$nombre', correo='$correo', fecha='$fecha', 
+        $sqlUpdate = "UPDATE citas SET nombre='$nombre', correo='$correo', fecha='$fecha',
         idHorario='$idHorario', idMascota='$idMascota', idServicio='$idServicio',
-         idCliente='$idCliente' WHERE idCita=$id";
+        idCliente='$idCliente' WHERE idCita=$id";
 
         $insertResult = mysqli_query($db, $sqlUpdate);
 
@@ -113,18 +124,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_appointments';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
         <a href="admin_appointments.php" class="boton input-text">Atras</a>
 
-        <?php foreach ($requeridos as $requerido) : ?>
+        <?php foreach ($requeridos as $requerido): ?>
             <div class="campos-requeridos">
                 <?php echo $requerido; ?>
             </div>
         <?php endforeach ?>
 
-        <form class="formulario" method="POST"  enctype="multipart/form-data">
+        <form class="formulario" method="POST" enctype="multipart/form-data">
             <section class="evento">
                 <div class="evento__detalle">
                     <h2 class="centrar-texto">Actualizar cita</h2>
@@ -147,11 +158,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php
                                 if ($resultHorario->num_rows > 0) {
                                     while ($row = $resultHorario->fetch_assoc()) {
-                                        echo '<option  value="' . $row["idHorario"] . '">' . $row["horaInicio"] ." - ". $row["horaFin"] .'</option>';
+                                        echo '<option  value="' . $row["idHorario"] . '">' . $row["horaInicio"] . " - " . $row["horaFin"] . '</option>';
                                     }
                                 }
                                 ?>
-                            </select> 
+                            </select>
                         </div>
                         <div class="campo">
                             <label for="idMascota">Mascota: </label>
@@ -163,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     }
                                 }
                                 ?>
-                            </select> 
+                            </select>
                         </div>
                         <div class="campo">
                             <label for="idServicio">Servicio: </label>
@@ -175,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     }
                                 }
                                 ?>
-                            </select> 
+                            </select>
                         </div>
                         <div class="campo">
                             <label for="idCliente">Credenciales de registro: </label>
@@ -183,11 +194,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php
                                 if ($resultCliente->num_rows > 0) {
                                     while ($row = $resultCliente->fetch_assoc()) {
-                                        echo '<option  value="' . $row["idCliente"] . '">' . $row["idCliente"] . " - " . $row["nombre"] . " " .$row["apellido1"] .'</option>';
+                                        echo '<option  value="' . $row["idCliente"] . '">' . $row["idCliente"] . " - " . $row["nombre"] . " " . $row["apellido1"] . '</option>';
                                     }
                                 }
                                 ?>
-                            </select> 
+                            </select>
                         </div>
 
                         <div class="campo centrar-texto botones_evento">

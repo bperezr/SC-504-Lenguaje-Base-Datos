@@ -1,4 +1,17 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+?>
+
+<?php
 require 'include/connections/connectDB.php';
 $db = ConectarDB();
 
@@ -43,6 +56,7 @@ $queryDistrito = "SELECT idDistrito, nombre FROM distrito ORDER BY idDistrito";
 $resultDistrito = mysqli_query($db, $queryDistrito);
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

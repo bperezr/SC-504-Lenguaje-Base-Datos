@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require_once 'include/database/db_especialidad.php';
 
 $especialidad = new Especialidad();
@@ -40,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_especialidad';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 

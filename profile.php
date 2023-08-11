@@ -1,8 +1,10 @@
 <?php
 session_start();
 
-if (isset($_SESSION['correo'])) {
-    $correoUsuario = $_SESSION['correo'];
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
 } else {
     header("Location: login.php");
     exit();
@@ -20,8 +22,12 @@ if (isset($_SESSION['correo'])) {
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'perfil';
-    include 'include/template/nav.php'; ?>
+    <?php
+    $enlaceActivo = 'perfil';
+    $nombreUsuario = $correoUsuario;
+    $rol = $rolUsuario;
+    include 'include/template/nav.php';
+    ?>
 
     <main class="contenedor">
 
@@ -63,7 +69,7 @@ if (isset($_SESSION['correo'])) {
                     </div>
 
                     <div class="campo">
-<!--                         <label for="contrasena">Dirección:</label>
+                        <!--                         <label for="contrasena">Dirección:</label>
                         <textarea id="mensaje" name="mensaje" class="input-text" placeholder="Ingrese su mensaje">
                     </textarea> -->
                     </div>

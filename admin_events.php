@@ -1,10 +1,21 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require 'include/connections/connect.php';
 $db = ConectarDB();
 $queryEventos = "SELECT * FROM eventos";
 $result = mysqli_query($db, $queryEventos);
 
-// Variable para verificar si hay resultados de búsqueda
 $hayResultados = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -43,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 

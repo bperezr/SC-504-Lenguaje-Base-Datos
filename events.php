@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+}
+?>
+<?php
 require 'include/connections/connect.php';
 $db = ConectarDB();
 $queryEventos = "SELECT * FROM eventos ";

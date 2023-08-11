@@ -1,15 +1,26 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require_once 'include/database/db_cargo.php';
-$cargo = new Cargo(); 
+$cargo = new Cargo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nuevoCargo = $_POST['nuevo_cargo'];
-    $cargo->insertCargo($nuevoCargo); 
-    header('Location: admin_cargos.php'); 
+    $cargo->insertCargo($nuevoCargo);
+    header('Location: admin_cargos.php');
     exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -23,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_workers';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -32,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <section class="evento">
-            <div class="evento__detalle">                  
+            <div class="evento__detalle">
                 <h2 class="centrar-texto">Agregar Cargo</h2>
                 <form id="formularioEvento" class="formulario-evento" method="POST">
                     <div class="campo">
@@ -42,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Agregar Cargo</button>
                         <a class="cancelar" href="admin_cargos.php">Cancelar</a>
-                    </div>                                  
+                    </div>
                 </form>
             </div>
         </section>

@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require 'include/connections/connect.php';
 $db = ConectarDB();
 
@@ -110,7 +122,7 @@ $db->close();
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
         <div class="btn_atras">

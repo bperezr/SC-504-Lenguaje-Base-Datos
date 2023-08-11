@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+/*  */
 require_once 'include/database/db_tipomascota.php';
 
 $tipoMascota = new TipoMascota();
@@ -7,9 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
     $nombre = $_POST['tipo'];
 
-    
     $tipoMascotaData = $tipoMascota->getTipoMascota($id);
-    
 
     $tipoMascota->updateTipoMascota($id, $nombre);
 
@@ -44,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_mascotas';
-    include 'include/template/nav_admin.php'; ?>
+    include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
 
