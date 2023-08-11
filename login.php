@@ -40,16 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuarioAutenticado = $cliente->validarCredenciales($correo, $contrasena);
 
         if ($usuarioAutenticado) {
+            session_start();
+            $_SESSION['correo'] = $correo;
             if ($cliente->camposNull($correo)) {
+
                 header("Location: profile.php");
                 exit();
+
             } else {
                 header("Location: index.php");
                 exit();
             }
         } else {
-            // Autenticación fallida
-            $mensajeError = "Error - Credenciales incorrectas.";
+            $mensajeError = "Usuario o contraseña incorrecta.";
         }
     }
 }
@@ -97,8 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" name="loginForm">Iniciar</button>
             </form>
         </div>
-
     </div>
+        <!-- JS -->
+    <script src="js/singUp_login.js"></script>
 </body>
 
 </html>

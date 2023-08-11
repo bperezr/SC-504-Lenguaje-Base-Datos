@@ -33,7 +33,7 @@
                     <li><a href="login.php" <?php if ($enlaceActivo == 'iniciar')
                         echo 'class="active"'; ?>>Iniciar</a>
                     </li>
-                    <li><a href="login.php" <?php if ($enlaceActivo == 'salir')
+                    <li><a href="logout.php" <?php if ($enlaceActivo == 'salir')
                         echo 'class="active"'; ?>>Salir</a></li>
                     <li><a href="profile.php" <?php if ($enlaceActivo == 'perfil')
                         echo 'class="active"'; ?>>Perfil</a>
