@@ -6,11 +6,6 @@ if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
-
-    if (!validarAcceso(basename(__FILE__), $rolUsuario)) {
-        header("Location: acceso_denegado.php");
-        exit();
-    }
 }
 ?>
 
@@ -61,7 +56,7 @@ if (isset($_SESSION['usuario'])) {
         </main>
 
         <!-- Cita -->
-        <?php include 'include/template/cita.php'; ?>
+
     </div>
 
     <!-- Footer -->

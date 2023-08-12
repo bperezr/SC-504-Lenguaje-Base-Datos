@@ -149,7 +149,14 @@
     <header>
         <!-- Logo -->
         <a class="logo" href="admin_index.php"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
-
+        <!-- Usuario -->
+        <?php if (!empty($correoUsuario)): ?>
+            <p>Admin:
+                <?php echo $correoUsuario; ?>
+            </p>
+        <?php else: ?>
+            <p>Admin: </p>
+        <?php endif; ?>
         <!-- Menu 2 -->
         <input type="checkbox" id="menu-bar" />
         <label for="menu-bar"><ion-icon name="menu-outline"></ion-icon></label>

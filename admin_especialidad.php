@@ -14,18 +14,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 
 
 /*  */
-session_start();
-
-if (isset($_SESSION['usuario'])) {
-    $usuario = $_SESSION['usuario'];
-    $correoUsuario = $usuario['correo'];
-    $rolUsuario = $usuario['idRol'];
-} else {
-    header("Location: login.php");
-    exit();
-}
-?>
-<?php
 require_once 'include/database/db_especialidad.php';
 $especialidad = new Especialidad();
 

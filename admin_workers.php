@@ -11,6 +11,29 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: acceso_denegado.php");
     exit();
 }
+
+require_once 'include/database/db_colaborador.php';
+
+$c = new Colaborador();
+$resultados = $c->getColaboradores();
+$hayResultados = true;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idColaborador = $_POST['id'];
+    $c->deleteColaborador($idColaborador);
+    header('Location: admin_workers.php');
+    exit;
+}
+
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $resultados = $c->buscarColaboradores($searchTerm);
+    if (count($resultados) === 0) {
+        $hayResultados = false;
+    } else {
+        $hayResultados = true;
+    }
+}
 ?>
 
 <!DOCTYPE html>

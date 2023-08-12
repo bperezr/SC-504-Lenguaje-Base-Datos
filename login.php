@@ -6,6 +6,7 @@ if (isset($_SESSION['usuario'])) {
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
 }
+
 require_once 'include/database/db_colaborador.php';
 require_once 'include/database/db_cliente.php';
 
