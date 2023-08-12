@@ -49,15 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
 
         if ($clienteAutenticado) {
-            session_start();
             $clienteInfo = $cliente->obtenerClientePorCorreo($correo);
 
             $_SESSION['usuario'] = array(
                 'rol' => 'cliente',
+                'id' => $clienteInfo['idCliente'],
                 'idRol' => $clienteInfo['idRol'],
                 'correo' => $clienteInfo['correo']
             );
-
             if ($cliente->camposNull($correo)) {
                 header("Location: profile.php");
                 exit();
@@ -66,11 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
         } elseif ($colaboradorAutenticado) {
-            session_start();
             $colaboradorInfo = $colaborador->obtenerColaboradorPorCorreo($correo);
 
             $_SESSION['usuario'] = array(
                 'rol' => 'colaborador',
+                'id' => $colaboradorInfo['idColaborador'],
                 'idRol' => $colaboradorInfo['idRol'],
                 'correo' => $colaboradorInfo['correo']
             );
@@ -82,12 +81,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: medical_index.php");
                 exit();
             }
-            exit();
         } else {
             $mensajeError = "Usuario o contraseña incorrecta.";
         }
     }
 }
+
+/* if (isset($_SESSION['usuario'])) {
+    echo "Rol: " . $_SESSION['usuario']['rol'] . "<br>";
+    echo "ID: " . $_SESSION['usuario']['id'] . "<br>";
+    echo "ID Rol: " . $_SESSION['usuario']['idRol'] . "<br>";
+    echo "Correo: " . $_SESSION['usuario']['correo'] . "<br>";
+} */
 ?>
 
 <!DOCTYPE html>

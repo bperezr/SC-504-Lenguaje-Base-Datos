@@ -4,6 +4,8 @@ session_start();
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $rolUsuario = $usuario['idRol'];
+    $rol = $usuario['rol'];
+    $id = $usuario['id'];
 
     $volver = "";
 

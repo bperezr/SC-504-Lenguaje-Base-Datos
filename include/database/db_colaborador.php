@@ -200,7 +200,7 @@ class Colaborador
 
     public function obtenerColaboradorPorCorreo($correo)
     {
-        $sql = "SELECT idRol, correo FROM colaborador WHERE correo = :correo";
+        $sql = "SELECT idColaborador, idRol, correo FROM colaborador WHERE correo = :correo";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
         $stmt->execute();
