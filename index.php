@@ -1,13 +1,20 @@
 <?php
+require_once 'include/functions/auth.php';
 session_start();
 
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
-}
 
+    if (!validarAcceso(basename(__FILE__), $rolUsuario)) {
+        header("Location: acceso_denegado.php");
+        exit();
+    }
+}
+echo $rolUsuario;
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 

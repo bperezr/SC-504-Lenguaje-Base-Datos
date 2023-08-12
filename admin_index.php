@@ -5,11 +5,16 @@ if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
-} else {
-    header("Location: login.php");
+}
+
+if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
+    header("Location: acceso_denegado.php");
     exit();
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 

@@ -182,6 +182,32 @@ class Colaborador
         return false;
     }
 
+    /* -----------------Login Cliente ----------------- */
+    public function validarCredenciales($correo, $contrasena)
+    {
+        $query = "SELECT contrasena FROM colaborador WHERE correo = :correo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result && password_verify($contrasena, $result['contrasena'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function obtenerColaboradorPorCorreo($correo)
+    {
+        $sql = "SELECT idRol, correo FROM colaborador WHERE correo = :correo";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $colaborador = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $colaborador;
+    }
 
 }
 ?>

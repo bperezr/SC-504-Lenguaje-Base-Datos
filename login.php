@@ -1,10 +1,18 @@
 <?php
+session_start();
+
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+    $correoUsuario = $usuario['correo'];
+    $rolUsuario = $usuario['idRol'];
+}
 require_once 'include/database/db_colaborador.php';
 require_once 'include/database/db_cliente.php';
 
 $colaborador = new Colaborador();
 $cliente = new Cliente();
 $mensajeError = '';
+echo $rolUsuario;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['signupForm'])) {
@@ -69,8 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($colaboradorInfo['idRol'] == 1) {
                 header("Location: admin_index.php");
+                exit();
             } elseif ($colaboradorInfo['idRol'] == 2) {
                 header("Location: medical_index.php");
+                exit();
             }
             exit();
         } else {

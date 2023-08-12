@@ -5,12 +5,22 @@ if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
-} else {
-    header("Location: login.php");
-    exit();
-}
-/*  */
 
+if ($rolUsuario == 2) {
+        header("Location: acceso_denegado.php");
+        exit();
+
+    } elseif ($rolUsuario == 3) {
+        header("Location: acceso_denegado.php");
+        exit();
+
+    } else {
+        header("Location: login.php");
+        exit();
+    }
+}
+
+/*  */
 require_once 'include/database/db_colaborador.php';
 require_once 'include/database/db_cargo.php';
 require_once 'include/database/db_especialidad.php';

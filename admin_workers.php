@@ -1,36 +1,20 @@
 <?php
-session_start();
-
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
-} else {
-    header("Location: login.php");
-    exit();
-}
 
-/*  */
-require_once 'include/database/db_colaborador.php';
+if ($rolUsuario == 2) {
+        header("Location: acceso_denegado.php");
+        exit();
 
-$c = new Colaborador();
-$resultados = $c->getColaboradores();
-$hayResultados = true;
+    } elseif ($rolUsuario == 3) {
+        header("Location: acceso_denegado.php");
+        exit();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idColaborador = $_POST['id'];
-    $c->deleteColaborador($idColaborador);
-    header('Location: admin_workers.php');
-    exit;
-}
-
-if (isset($_GET['search'])) {
-    $searchTerm = $_GET['search'];
-    $resultados = $c->buscarColaboradores($searchTerm);
-    if (count($resultados) === 0) {
-        $hayResultados = false;
     } else {
-        $hayResultados = true;
+        header("Location: login.php");
+        exit();
     }
 }
 ?>

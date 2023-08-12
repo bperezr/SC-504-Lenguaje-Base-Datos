@@ -3,13 +3,29 @@ session_start();
 
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
-    $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
-}else {
-    header("Location: login.php");
-    exit();
+
+    $volver = "";
+
+    switch ($rolUsuario) {
+        case 1:
+            $volver = "admin_index.php";
+            break;
+        case 2:
+            $volver = "medical_index.php";
+            break;
+        case 3:
+            $volver = "index.php";
+            break;
+        default:
+            $volver = "index.php";
     }
+} elseif (!isset($_SESSION['usuario']) && basename($_SERVER['PHP_SELF']) != 'index.php') {
+    header("Location: index.php");
+    exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -24,8 +40,11 @@ if (isset($_SESSION['usuario'])) {
     <main class="contenedor">
         <section class="hero">
             <h3 class="hero__error centrar-texto">Acceso Denegado</h3>
-            <h3 class="hero__mensaje centrar-texto">Este usuario no tiene permitido esta vista</h3>
-            <img class="hero__imagen" src="img/denegado.png" alt="page_not_fout">
+            <h3 class="hero__mensaje centrar-texto">No tiene permitido esta vista</h3>
+            <div class="imagen-contenedor">
+                <img class="hero__imagen2 reducida" src="img/denegado.png" alt="page_not_found">
+            </div>
+            <a class="boton centrar-texto" href="<?php echo $volver ?>">Volver al inicio</a>
         </section>
     </main>
 
