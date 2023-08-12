@@ -12,7 +12,6 @@ require_once 'include/database/db_cliente.php';
 $colaborador = new Colaborador();
 $cliente = new Cliente();
 $mensajeError = '';
-echo $rolUsuario;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['signupForm'])) {

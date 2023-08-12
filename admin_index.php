@@ -13,8 +13,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="es">
 
