@@ -15,7 +15,7 @@ if (isset($_SESSION['usuario'])) {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
+    <?php $rutaCSS = 'css/client_profile.css';
     include 'include/template/header.php'; ?>
 </head>
 
@@ -23,90 +23,162 @@ if (isset($_SESSION['usuario'])) {
     <!-- Nav template -->
     <?php
     $enlaceActivo = 'perfil';
-    $nombreUsuario = $correoUsuario;
-    $rol = $rolUsuario;
     include 'include/template/nav.php';
     ?>
 
     <main class="contenedor">
 
-        <section class="evento">
-            <div class="evento__detalle">
+        <h1 class="centrar-texto">Perfil de Usuario</h1>
 
-                <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
-
-                    <h1 class="centrar-texto">Perfil de Usuario</h1>
-
-                    <div class="campo">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" required>
+        <section class="perfil">
+            <!-- Encabezado -->
+            <div class="perfil__head">
+                <div class="perfil__head-sec1">
+                    <div class="imagen">
+                        <img src="img/images_workers/14f597ebf1fd6cdceb59484b86234efc.jpg" alt="">
+                        <a href="" class="btn-1">Editar Perfil</a>
                     </div>
-
-                    <div class="campo">
-                        <label for="apellido1">Apellido 1:</label>
-                        <input type="text" id="apellido1" name="apellido1" required>
+                    <div class="head-sec2">
+                        <p class="nombre">Jorge</p>
+                        <p class="apellido">Hernandez Araya</p>
+                        <div class="detalle">
+                            <p>Telefono: 6024-5117</p>
+                            <p>Correo: correo@correo.com</p>
+                            <div></div>
+                        </div>
                     </div>
-
-                    <div class="campo">
-                        <label for="apellido2">Apellido 2:</label>
-                        <input type="text" id="apellido2" name="apellido2" required>
-                    </div>
-
-                    <div class="campo">
-                        <label for="telefono">Telefono:</label>
-                        <input type="number" id="telefono" name="telefono" required>
-                    </div>
-
-                    <div class="campo">
-                        <label for="correo">Correo:</label>
-                        <input type="text" id="correo" name="correo" required readonly>
-                    </div>
-
-                    <div class="campo">
-                        <label for="contrasena">Contraseña:</label>
-                        <input type="password" id="contrasena" name="contrasena" required>
-                    </div>
-
-                    <div class="campo">
-                        <!--                         <label for="contrasena">Dirección:</label>
-                        <textarea id="mensaje" name="mensaje" class="input-text" placeholder="Ingrese su mensaje">
-                    </textarea> -->
-                    </div>
-
-                    <div class="campo">
-                        <label for="rol">Provincia:</label>
-                        <select id="rol" name="rol" required>
-                            <?php foreach ($colaborador->getRoles() as $rol): ?>
-                                <option value="<?php echo $rol['idRol']; ?>"><?php echo $rol['nombreRol']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label for="rol">Canton:</label>
-                        <select id="rol" name="rol" required>
-                            <?php foreach ($colaborador->getRoles() as $rol): ?>
-                                <option value="<?php echo $rol['idRol']; ?>"><?php echo $rol['nombreRol']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label for="rol">Distrito:</label>
-                        <select id="rol" name="rol" required>
-                            <?php foreach ($colaborador->getRoles() as $rol): ?>
-                                <option value="<?php echo $rol['idRol']; ?>"><?php echo $rol['nombreRol']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Agregar Médico</button>
-                        <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
-                    </div>
-
-                </form>
+                </div>
             </div>
+
+            <!-- Informacion -->
+
+            <h2>Direccion</h2>
+
+            <div class="perfil__detalle">
+                <div class="perfil__detalle-info">
+                    <p>Provincia: Alajuela</p>
+                    <p>Canton: Atenas</p>
+                    <p>Distrito: Mercedes</p>
+                    <p>Direccion: 200m sur del hotel Villas de la Colina</p>
+                </div>
+            </div>
+
+            <!-- Mascotas -->
+            <h2>Mascotas</h2>
+
+            <!-- Buscador -->
+            <form action="buscar" method="get">
+                <div class="contenedor_buscar">
+                    <div class="buscador buscador_buscar">
+                        <!-- Texto buscar -->
+                        <div class="textBuscar">
+                            <input type="text" placeholder="Buscar..." name="search">
+                        </div>
+                        <!-- Buscar -->
+                        <div class="buscar">
+                            <button class="btn_buscar" type="submit">Buscar</button>
+                        </div>
+                        <!-- Recargar -->
+                        <div class="recargar">
+                            <a href="admin_appointments.php"><ion-icon name="refresh-circle"></ion-icon></a>
+                        </div>
+                    </div>
+                    <div class="buscador buscador_agregar">
+                        <!---Agregar-->
+                        <div class="agregar">
+                            <a href="admin_appointments_new.php" class="btn_agregar"><ion-icon
+                                    name="add-circle-outline"></ion-icon>
+                                Agregar</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </form>
+
+            <div class="perfil__mascota">
+
+                <div class="perfil__mascota-card">
+                    <div class="mascota__img">
+                        <img src="img/img_1.jpg" alt="">
+                    </div>
+                    <div class="mascota__detalle">
+                        <h4>Felix</h4>
+                        <p>Gato</p>
+                    </div>
+                    <div class="mascota__btn">
+                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                        <form action="" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="">
+                            <button type="submit" class="eliminar"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
+                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="perfil__mascota-card">
+                    <div class="mascota__img">
+                        <img src="img/img_1.jpg" alt="">
+                    </div>
+                    <div class="mascota__detalle">
+                        <h4>Felix</h4>
+                        <p>Gato</p>
+                    </div>
+                    <div class="mascota__btn">
+                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                        <form action="" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="">
+                            <button type="submit" class="eliminar"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
+                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="perfil__mascota-card">
+                    <div class="mascota__img">
+                        <img src="img/img_1.jpg" alt="">
+                    </div>
+                    <div class="mascota__detalle">
+                        <h4>Felix</h4>
+                        <p>Gato</p>
+                    </div>
+                    <div class="mascota__btn">
+                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                        <form action="" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="">
+                            <button type="submit" class="eliminar"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
+                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="perfil__mascota-card">
+                    <div class="mascota__img">
+                        <img src="img/img_1.jpg" alt="">
+                    </div>
+                    <div class="mascota__detalle">
+                        <h2>Felix</h2>
+                        <p>Gato</p>
+                    </div>
+                    <div class="mascota__btn">
+                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                        <form action="" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="">
+                            <button type="submit" class="eliminar"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
+                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
     </main>
     <!-- Footer -->
