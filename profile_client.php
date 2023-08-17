@@ -36,7 +36,6 @@ if (isset($_SESSION['usuario'])) {
                 <div class="perfil__head-sec1">
                     <div class="imagen">
                         <img src="img/images_workers/14f597ebf1fd6cdceb59484b86234efc.jpg" alt="">
-                        <a href="" class="btn-1">Editar Perfil</a>
                     </div>
                     <div class="head-sec2">
                         <p class="nombre">Jorge</p>
@@ -48,6 +47,11 @@ if (isset($_SESSION['usuario'])) {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="perfil__bnt">
+                <a href="" class="btn-1">Editar Perfil</a>
+                <a href="" class="btn-2">Agendar cita</a>
             </div>
 
             <!-- Informacion -->

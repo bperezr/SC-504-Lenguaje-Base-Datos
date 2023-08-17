@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Agregar Médico</button>
+                        <button class="enviar" type="submit">Agregar</button>
                         <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
                 </form>

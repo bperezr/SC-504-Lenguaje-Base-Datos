@@ -133,8 +133,8 @@ if (isset($_SESSION['usuario'])) {
                 <div class="team_card">
                     <a href="about_team_dr1.php">
                         <img src="img/dr1_luis.png" alt="">
-                        <h3 class="centrar-texto">Dr. Juan Carlos Morales</h3>
-                        <p class="justificar-texto">El Dr. Juan Carlos Morales es un experto en medicina interna con una
+                        <h3 class="centrar-texto">Dr. Luis Carlos Morales Mena</h3>
+                        <p class="justificar-texto">El Dr. Luis Carlos Morales Mena es un experto en medicina interna con una
                             pasión por resolver los casos más complejos. Su enfoque analítico y su amplio conocimiento
                             médico le permiten diagnosticar y tratar enfermedades de manera eficiente. Siempre se
                             esfuerza por brindar la mejor atención y mantener una comunicación clara con los
@@ -145,8 +145,8 @@ if (isset($_SESSION['usuario'])) {
                 <div class="team_card">
                     <a href="about_team_dr2.php">
                         <img src="img/dr2_ana.gif" alt="">
-                        <h3 class="centrar-texto">Dra. Valentina Rodríguez</h3>
-                        <p class="justificar-texto">La Dra. Valentina Rodríguez es una apasionada defensora del
+                        <h3 class="centrar-texto">Dra. Ana Rodríguez Moya</h3>
+                        <p class="justificar-texto">La Dra. Ana Rodríguez Moya es una apasionada defensora del
                             bienestar animal. Su enfoque amable y compasivo la convierte en una profesional cercana a
                             los animales y sus dueños. Siempre se esfuerza por brindar un trato personalizado a cada
                             mascota, asegurándose de que se sientan cómodas y seguras durante su visita.</p>
@@ -156,8 +156,8 @@ if (isset($_SESSION['usuario'])) {
                 <div class="team_card">
                     <a href="about_team_dr3.php">
                         <img src="img/dr3_elizabeth.webp" alt="">
-                        <h3 class="centrar-texto">Dra. Martina Gómez</h3>
-                        <p class="justificar-texto">La Dra. Martina Gómez es una cirujana veterinaria altamente
+                        <h3 class="centrar-texto">Dra. Elizabeth Gómez Roldan</h3>
+                        <p class="justificar-texto">La Dra. Elizabeth Gómez Roldan es una cirujana veterinaria altamente
                             capacitada y dedicada. Su destreza quirúrgica y atención meticulosa garantizan que cada
                             procedimiento sea realizado con la más alta calidad. Además de su habilidad técnica, su amor
                             incondicional por los animales la impulsa a cuidar de cada paciente como si fuera su propia

@@ -30,13 +30,13 @@ if (isset($_SESSION['usuario'])) {
         <section class="hero">
             <div class="contact">
                 <img src="img/dr2_ana.gif" alt="medico">
-                <h2>Dra. Valentina Rodríguez</h2>
+                <h2>Dra. Ana Rodríguez Moya</h2>
                 <p>Cirugía Veterinaria.</p>
             </div>
 
             <div class="hero">
                 <h2 class="centrar-texto no-margin">Acerca de mí</h2>
-                <p class="justificar-texto">¡Hola a todos! Soy la Dra. Valentina Rodríguez y me emociona formar parte
+                <p class="justificar-texto">¡Hola a todos! Soy la Dra. Ana Rodríguez Moya y me emociona formar parte
                     del equipo de Happy Paws como especialista en Medicina Veterinaria General. Desde muy temprana edad,
                     supe que mi pasión por los animales me llevaría a dedicar mi vida a cuidar de ellos y a promover su
                     bienestar.</p>

@@ -89,6 +89,25 @@ class Cliente
         return $stmt->execute();
     }
 
+    public function updateClienteNuevo($idCliente, $nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $imagen)
+    {
+        $query = "UPDATE cliente SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, telefono = :telefono, domicilio = :domicilio, idProvincia = :idProvincia, idCanton = :idCanton, idDistrito = :idDistrito, imagen = :imagen WHERE idCliente = :idCliente";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido1', $apellido1);
+        $stmt->bindParam(':apellido2', $apellido2);
+        $stmt->bindParam(':telefono', $telefono);
+        $stmt->bindParam(':domicilio', $domicilio);
+        $stmt->bindParam(':idProvincia', $idProvincia);
+        $stmt->bindParam(':idCanton', $idCanton);
+        $stmt->bindParam(':idDistrito', $idDistrito);
+        $stmt->bindParam(':imagen', $imagen);
+
+        return $stmt->execute();
+    }
+
+
     public function deleteCliente($idCliente)
     {
         $query = "DELETE FROM cliente WHERE idCliente = :idCliente";
@@ -187,6 +206,24 @@ class Cliente
         $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $cliente;
+    }
+
+    public function uploadImagen($imagen)
+    {
+        $carpetaImagenes = 'img/images_clients/';
+        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+        return $nombreImagen;
+    }
+
+    public function deleteImagen($nombreImagen)
+    {
+        $rutaImagen = "img/images_clients/" . $nombreImagen;
+        if (file_exists($rutaImagen)) {
+            unlink($rutaImagen);
+            return true;
+        }
+        return false;
     }
 
 }

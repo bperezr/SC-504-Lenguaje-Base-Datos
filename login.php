@@ -30,59 +30,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $cliente->insertClienteNuevo($correo, $contrasena);
                 $mensajeError = "¡Registro exitoso!";
-                $registroCorrecto = true;
+
+            }
+        }
+    }if (isset($_POST['loginForm'])) {
+        $correo = $_POST['email'];
+        $contrasena = $_POST['pswd'];
+
+        $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
+        echo $colaboradorAutenticado;
+
+        // Verificar si el correo tiene el dominio @happypaws.com
+        if (strpos($correo, '@happypaws.com') !== false) {
+            $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
+
+            if ($colaboradorAutenticado) {
+                $colaboradorInfo = $colaborador->obtenerColaboradorPorCorreo($correo);
+
+                $_SESSION['usuario'] = array(
+                    'rol' => 'colaborador',
+                    'id' => $colaboradorInfo['idColaborador'],
+                    'idRol' => $colaboradorInfo['idRol'],
+                    'correo' => $colaboradorInfo['correo']
+                );
+
+                if ($colaboradorInfo['idRol'] == 1) {
+                    header("Location: admin_index.php");
+                    exit();
+                } elseif ($colaboradorInfo['idRol'] == 2) {
+                    header("Location: medical_index.php");
+                    exit();
+                }
+            } else {
+                $mensajeError = "Usuario o contraseña incorrecta.";
+            }
+        } else {
+            // El correo no tiene el dominio @happypaws.com, buscar en clientes
+            $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena);
+
+            if ($clienteAutenticado) {
+                $clienteInfo = $cliente->obtenerClientePorCorreo($correo);
+
+                $_SESSION['usuario'] = array(
+                    'rol' => 'cliente',
+                    'id' => $clienteInfo['idCliente'],
+                    'idRol' => $clienteInfo['idRol'],
+                    'correo' => $clienteInfo['correo']
+                );
 
                 if ($cliente->camposNull($correo)) {
-                    header("Location: profile.php");
+                    header("Location: profile_client_new.php");
                     exit();
                 } else {
                     header("Location: index.php");
                     exit();
                 }
-            }
-        }
-    } elseif (isset($_POST['loginForm'])) {
-        $correo = $_POST['email'];
-        $contrasena = $_POST['pswd'];
-
-        $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena);
-        $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
-
-        if ($clienteAutenticado) {
-            $clienteInfo = $cliente->obtenerClientePorCorreo($correo);
-
-            $_SESSION['usuario'] = array(
-                'rol' => 'cliente',
-                'id' => $clienteInfo['idCliente'],
-                'idRol' => $clienteInfo['idRol'],
-                'correo' => $clienteInfo['correo']
-            );
-            if ($cliente->camposNull($correo)) {
-                header("Location: profile.php");
-                exit();
             } else {
-                header("Location: index.php");
-                exit();
+                $mensajeError = "Usuario o contraseña incorrecta.";
             }
-        } elseif ($colaboradorAutenticado) {
-            $colaboradorInfo = $colaborador->obtenerColaboradorPorCorreo($correo);
-
-            $_SESSION['usuario'] = array(
-                'rol' => 'colaborador',
-                'id' => $colaboradorInfo['idColaborador'],
-                'idRol' => $colaboradorInfo['idRol'],
-                'correo' => $colaboradorInfo['correo']
-            );
-
-            if ($colaboradorInfo['idRol'] == 1) {
-                header("Location: admin_index.php");
-                exit();
-            } elseif ($colaboradorInfo['idRol'] == 2) {
-                header("Location: medical_index.php");
-                exit();
-            }
-        } else {
-            $mensajeError = "Usuario o contraseña incorrecta.";
         }
     }
 }

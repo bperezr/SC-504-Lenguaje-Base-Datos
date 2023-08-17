@@ -30,13 +30,13 @@ if (isset($_SESSION['usuario'])) {
         <section class="hero">
             <div class="contact">
                 <img src="img/dr1_luis.png" alt="medico">
-                <h2>Dr. Juan Carlos Morales</h2>
+                <h2>Dr. Luis Carlos Morales Mena</h2>
                 <p>Medicina Interna Veterinaria.</p>
             </div>
 
             <div class="hero">
                 <h2 class="centrar-texto no-margin">Acerca de mí</h2>
-                <p class="justificar-texto">¡Hola a todos! Soy el Dr. Juan Carlos Morales, y me complace ser parte del
+                <p class="justificar-texto">¡Hola a todos! Soy el Dr. Luis Carlos Morales Mena, y me complace ser parte del
                     equipo de Happy Paws como especialista en Medicina Interna Veterinaria. Desde muy joven, siempre
                     supe que quería dedicar mi vida a cuidar y proteger a los animales, y aquí estoy, viviendo mi sueño
                     cada día.</p>

@@ -6,11 +6,11 @@
         <a class="logo" href="index.php"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
 
         <?php if (!empty($correoUsuario)): ?>
-            <p></ion-icon>
+            <p>
                 <?php echo $correoUsuario; ?>
             </p>
         <?php else: ?>
-            <p></ion-icon></p>
+            <p></p>
         <?php endif; ?>
 
         <!-- Menu 2 -->

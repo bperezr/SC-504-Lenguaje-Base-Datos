@@ -30,13 +30,13 @@ if (isset($_SESSION['usuario'])) {
         <section class="hero">
             <div class="contact">
                 <img src="img/dr3_elizabeth.webp" alt="medico">
-                <h2>Dra. Martina Gómez</h2>
+                <h2>Dra. Elizabeth Gómez Roldan</h2>
                 <p>Medicina Veterinaria General y Estética.</p>
             </div>
 
             <div class="hero">
                 <h2 class="centrar-texto no-margin">Acerca de mí</h2>
-                <p class="justificar-texto">¡Hola a todos! Soy la Dra. Martina Gómez, y estoy emocionada de ser parte
+                <p class="justificar-texto">¡Hola a todos! Soy la Dra. Elizabeth Gómez Roldan, y estoy emocionada de ser parte
                     del maravilloso equipo de Happy Paws como especialista en Medicina Veterinaria General y Estética
                     Canina y Felina. Desde muy joven, mi pasión por los animales y mi fascinación por el arte de
                     embellecerlos me llevaron a seguir este camino profesional único.</p>

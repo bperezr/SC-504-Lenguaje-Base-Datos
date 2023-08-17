@@ -648,8 +648,13 @@ textarea {
 
 .perfil__head-sec2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     background-color: var(--blanco);
+}
+
+.perfil__bnt {
+    display: flex;
+    justify-content: space-around;
 }
 
 .imagen {
@@ -685,6 +690,23 @@ textarea {
     color: var(--blanco);
 }
 
+.btn-2 {
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: var(--color2);
+    color: var(--negro);
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-2:hover {
+    background-color: var(--color8);
+    color: var(--blanco);
+}
+
 .head-sec2 {
     margin: 0;
     padding: 0;
@@ -710,7 +732,7 @@ textarea {
     padding: 0;
 }
 
-.detalle p{
+.detalle p {
     font-size: 1.5rem;
     font-weight: normal;
     margin: 0;
