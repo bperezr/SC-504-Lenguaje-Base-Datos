@@ -8,6 +8,39 @@ if (isset($_SESSION['usuario'])) {
     $rol = $usuario['rol'];
     $id = $usuario['id'];
 }
+
+if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 3) {
+    header("Location: acceso_denegado.php");
+    exit();
+}
+
+/*  */
+require_once 'include/database/db_cliente.php';
+require_once 'include/database/db_lugar.php';
+
+$cliente = new Cliente();
+$lugar = new Lugar();
+
+$provincias = $lugar->getProvincias();
+$cantones = $lugar->getCantones();
+$distritos = $lugar->getDistritos();
+
+$mensajeError = '';
+
+$clienteData = $cliente->getCliente($id);
+/* echo "<pre>";
+print_r($clienteData);
+echo "</pre>"; */
+
+$nombre = $clienteData['nombre'];
+$apellido1 = $clienteData['apellido1'];
+$apellido2 = $clienteData['apellido2'];
+$telefono = $clienteData['telefono'];
+$domicilio = $clienteData['domicilio'];
+$idProvincia = $clienteData['idProvincia'];
+$idCanton = $clienteData['idCanton'];
+$idDistrito = $clienteData['idDistrito'];
+$imagen = $clienteData['imagen'];
 ?>
 
 <!DOCTYPE html>
@@ -35,14 +68,23 @@ if (isset($_SESSION['usuario'])) {
             <div class="perfil__head">
                 <div class="perfil__head-sec1">
                     <div class="imagen">
-                        <img src="img/images_workers/14f597ebf1fd6cdceb59484b86234efc.jpg" alt="">
+                        <img src="img/images_clients/<?php echo $imagen; ?>" alt="">
                     </div>
                     <div class="head-sec2">
-                        <p class="nombre">Jorge</p>
-                        <p class="apellido">Hernandez Araya</p>
+                        <p class="nombre">
+                            <?php echo $clienteData['nombre']; ?>
+                        </p>
+                        <p class="apellido">
+                            <?php echo $clienteData['apellido1']; ?>
+                            <?php echo $clienteData['apellido2']; ?>
+                        </p>
                         <div class="detalle">
-                            <p>Telefono: 6024-5117</p>
-                            <p>Correo: correo@correo.com</p>
+                            <p>Telefono:
+                                <?php echo $clienteData['telefono']; ?>
+                            </p>
+                            <p>Correo:
+                                <?php echo $clienteData['correo']; ?>
+                            </p>
                             <div></div>
                         </div>
                     </div>
@@ -63,7 +105,9 @@ if (isset($_SESSION['usuario'])) {
                     <p>Provincia: Alajuela</p>
                     <p>Canton: Atenas</p>
                     <p>Distrito: Mercedes</p>
-                    <p>Direccion: 200m sur del hotel Villas de la Colina</p>
+                    <p>Direccion:
+                        <?php echo $clienteData['domicilio']; ?>
+                    </p>
                 </div>
             </div>
 
