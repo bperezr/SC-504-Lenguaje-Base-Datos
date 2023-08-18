@@ -136,7 +136,7 @@ CREATE TABLE `cliente` (
   CONSTRAINT `fk_Cliente_Distrito` FOREIGN KEY (`idDistrito`) REFERENCES `distrito` (`idDistrito`),
   CONSTRAINT `fk_Cliente_Provincia` FOREIGN KEY (`idProvincia`) REFERENCES `provincia` (`idProvincia`),
   CONSTRAINT `fk_Cliente_Rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Juan','Perez','Gomez','123456789','189ba5b5d0faca5ed2140e4441c31ee3.jpg','Calle 22, avenida 18. Piso 5',1,101,10101,3,'juan.p@email.com','$2y$10$Yt.BcsxFL2r/Yf9G5DGJW.Q3tG8jVXyBSRww9ofuQ49V3.480WIwe'),(2,'Maria','Gonzalez','Lopez','987654321','18e79dcb1c54ac519b99607a55ca0365.jpg','Calle 20, Avenida 12.',1,101,10101,3,'maria.g@email.com','$2y$10$Yt.BcsxFL2r/Yf9G5DGJW.Q3tG8jVXyBSRww9ofuQ49V3.480WIwe'),(14,'Ana','Rojas','Quesada','123466','e2c4478e72034fcc9e5981184a823615.jpg','20020',1,101,10101,3,'cliente2@test.com','$2y$10$Yt.BcsxFL2r/Yf9G5DGJW.Q3tG8jVXyBSRww9ofuQ49V3.480WIwe');
+INSERT INTO `cliente` VALUES (1,'Juan','Perez','Gomez','123456789','189ba5b5d0faca5ed2140e4441c31ee3.jpg','Calle 22, avenida 18. Piso 5',1,101,10101,3,'juan.p@email.com','$2y$10$Yt.BcsxFL2r/Yf9G5DGJW.Q3tG8jVXyBSRww9ofuQ49V3.480WIwe'),(2,'Maria','Gonzalez','Lopez','987654321','18e79dcb1c54ac519b99607a55ca0365.jpg','Calle 20, Avenida 12.',1,101,10101,3,'maria.g@email.com','$2y$10$Yt.BcsxFL2r/Yf9G5DGJW.Q3tG8jVXyBSRww9ofuQ49V3.480WIwe'),(14,'Ana','Rojas','Quesada','123466','e2c4478e72034fcc9e5981184a823615.jpg','20020',1,101,10101,3,'cliente2@test.com','$2y$10$Yt.BcsxFL2r/Yf9G5DGJW.Q3tG8jVXyBSRww9ofuQ49V3.480WIwe'),(18,'Jorge','Hernández','Araya','60245117','f044667adf711a3ec27fb6d1da4fe8cf.jpg','200 metros sur del hotel Villas de la Colina',1,101,10101,3,'jorge@email.com','$2y$10$EeR5YV6qbqeCwr6KyhPhs.9OE7iJU8AJSwWlx1PYmJWjxCibIZm5O'),(19,NULL,NULL,NULL,NULL,'NULL',NULL,NULL,NULL,NULL,3,'cliente4@test.com','$2y$10$qEYbIdORKiUYsai5Y3rQ.O0LFvgmNaSyBRQXV4G5enc5R95ze9qv6');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -426,6 +426,7 @@ CREATE TABLE `mascota` (
   `idMascota` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(30) NOT NULL,
   `descripcion` varchar(1000) NOT NULL,
+  `imagen` varchar(400) DEFAULT NULL,
   `idTipoMascota` int NOT NULL,
   `idCliente` int NOT NULL,
   PRIMARY KEY (`idMascota`),
@@ -442,7 +443,7 @@ CREATE TABLE `mascota` (
 
 LOCK TABLES `mascota` WRITE;
 /*!40000 ALTER TABLE `mascota` DISABLE KEYS */;
-INSERT INTO `mascota` VALUES (1,'Buddy','Es un doberman de 80kg, pelo negro y muy amigable',1,1),(2,'Max','Es un gato muy especial, pero un poco arizco',1,2),(3,'Luna','Es mi mejor amiga, tiene 2 anios',2,1);
+INSERT INTO `mascota` VALUES (1,'Buddy','Es un doberman de 80kg, pelo negro y muy amigable',NULL,1,18),(2,'Max','Es un gato muy especial, pero un poco arizco',NULL,1,18),(3,'Luna','Es mi mejor amiga, tiene 2 anios',NULL,2,18);
 /*!40000 ALTER TABLE `mascota` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +553,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-17  0:09:45
+-- Dump completed on 2023-08-17 23:44:12

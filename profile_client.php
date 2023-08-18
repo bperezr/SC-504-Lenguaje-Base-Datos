@@ -17,6 +17,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 3) {
 /*  */
 require_once 'include/database/db_cliente.php';
 require_once 'include/database/db_lugar.php';
+require_once 'include/database/db_mascota.php';
 
 $cliente = new Cliente();
 $lugar = new Lugar();
@@ -41,6 +42,18 @@ $idProvincia = $clienteData['idProvincia'];
 $idCanton = $clienteData['idCanton'];
 $idDistrito = $clienteData['idDistrito'];
 $imagen = $clienteData['imagen'];
+
+/* Mascotas */
+$hayResultados = true;
+$mascota = new Mascota();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idMascota = $_POST['id'];
+    $mascota->deleteMascota($idMascota);
+    header('Location: profile_client.php');
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -102,9 +115,15 @@ $imagen = $clienteData['imagen'];
 
             <div class="perfil__detalle">
                 <div class="perfil__detalle-info">
-                    <p>Provincia: Alajuela</p>
-                    <p>Canton: Atenas</p>
-                    <p>Distrito: Mercedes</p>
+                    <p>Provincia:
+                        <?php echo $lugar->obtenerNombreProvinciaPorID($clienteData['idProvincia']); ?>
+                    </p>
+                    <p>Canton:
+                        <?php echo $lugar->obtenerNombreCantonPorID($clienteData['idCanton']); ?>
+                    </p>
+                    <p>Distrito:
+                        <?php echo $lugar->obtenerNombreDistritoPorID($clienteData['idDistrito']); ?>
+                    </p>
                     <p>Direccion:
                         <?php echo $clienteData['domicilio']; ?>
                     </p>
@@ -115,7 +134,7 @@ $imagen = $clienteData['imagen'];
             <h2>Mascotas</h2>
 
             <!-- Buscador -->
-            <form action="buscar" method="get">
+            <form action="profile_client.php" method="get">
                 <div class="contenedor_buscar">
                     <div class="buscador buscador_buscar">
                         <!-- Texto buscar -->
@@ -128,14 +147,13 @@ $imagen = $clienteData['imagen'];
                         </div>
                         <!-- Recargar -->
                         <div class="recargar">
-                            <a href="admin_appointments.php"><ion-icon name="refresh-circle"></ion-icon></a>
+                            <a href="profile_client.php"><ion-icon name="refresh-circle"></ion-icon></a>
                         </div>
                     </div>
                     <div class="buscador buscador_agregar">
                         <!---Agregar-->
                         <div class="agregar">
-                            <a href="admin_appointments_new.php" class="btn_agregar"><ion-icon
-                                    name="add-circle-outline"></ion-icon>
+                            <a href="pet_new.php" class="btn_agregar"><ion-icon name="add-circle-outline"></ion-icon>
                                 Agregar</a>
                         </div>
                     </div>
@@ -144,87 +162,59 @@ $imagen = $clienteData['imagen'];
             </form>
 
             <div class="perfil__mascota">
+                <?php
+                $mascota = new Mascota();
+                $todasLasMascotas = $mascota->getMascotasPorCliente($id);
 
-                <div class="perfil__mascota-card">
-                    <div class="mascota__img">
-                        <img src="img/img_1.jpg" alt="">
-                    </div>
-                    <div class="mascota__detalle">
-                        <h4>Felix</h4>
-                        <p>Gato</p>
-                    </div>
-                    <div class="mascota__btn">
-                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-                        <form action="" method="post" style="display: inline;">
-                            <input type="hidden" name="id" value="">
-                            <button type="submit" class="eliminar"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
-                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                if (isset($_GET['search'])) {
+                    $searchTerm = $_GET['search'];
+                    $mascotas = $mascota->buscarMascotas($id, $searchTerm);
+                    if (count($mascotas) === 0) {
+                        $hayResultados = false;
+                    } else {
+                        $hayResultados = true;
+                    }
+                }
+                ?>
 
-                <div class="perfil__mascota-card">
-                    <div class="mascota__img">
-                        <img src="img/img_1.jpg" alt="">
-                    </div>
-                    <div class="mascota__detalle">
-                        <h4>Felix</h4>
-                        <p>Gato</p>
-                    </div>
-                    <div class="mascota__btn">
-                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-                        <form action="" method="post" style="display: inline;">
-                            <input type="hidden" name="id" value="">
-                            <button type="submit" class="eliminar"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
-                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <?php if ((isset($_GET['search']) && $hayResultados) || !isset($_GET['search'])): ?>
+                    <?php foreach ((isset($_GET['search']) && $hayResultados) ? $mascotas : $todasLasMascotas as $mascota): ?>
+                        <!-- Tarjeta mascota -->
+                        <div class="perfil__mascota-card">
+                            <div class="mascota__img">
+                                <?php if (isset($mascota['imagen']) && file_exists("img/images_pets/" . $mascota['imagen'])): ?>
+                                    <img src="img/images_pets/<?php echo $mascota['imagen']; ?>" alt="Imagen de la mascota">
+                                <?php else: ?>
+                                    <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                                <?php endif; ?>
+                            </div>
 
-                <div class="perfil__mascota-card">
-                    <div class="mascota__img">
-                        <img src="img/img_1.jpg" alt="">
-                    </div>
-                    <div class="mascota__detalle">
-                        <h4>Felix</h4>
-                        <p>Gato</p>
-                    </div>
-                    <div class="mascota__btn">
-                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-                        <form action="" method="post" style="display: inline;">
-                            <input type="hidden" name="id" value="">
-                            <button type="submit" class="eliminar"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
-                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                            <div class="mascota__detalle">
+                                <h4>
+                                    <?php echo $mascota['nombre']; ?>
+                                </h4>
+                            </div>
+                            <!-- Botones -->
+                            <div class="tarjeta__btn">
+                                <a href="admin_worker_edit.php?id=<?php echo $mascota['idMascota']; ?>"
+                                    class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                                <form action="" method="post" style="display: inline;">
+                                    <input type="hidden" name="id" value="<?php echo $mascota['idMascota']; ?>">
+                                    <button type="submit" class="eliminar"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
+                                        <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                                    </button>
+                                </form>
+                            </div>
 
-                <div class="perfil__mascota-card">
-                    <div class="mascota__img">
-                        <img src="img/img_1.jpg" alt="">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="err_busqueda">
+                        <h2 class="brincar">No se encontraron mascotas que coincidan con la búsqueda.</h2>
+                        <img class="" src="img/dog1.webp" alt="no encontrado">
                     </div>
-                    <div class="mascota__detalle">
-                        <h2>Felix</h2>
-                        <p>Gato</p>
-                    </div>
-                    <div class="mascota__btn">
-                        <a href="mascota_edit.php" class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-                        <form action="" method="post" style="display: inline;">
-                            <input type="hidden" name="id" value="">
-                            <button type="submit" class="eliminar"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
-                                <ion-icon name="trash-sharp"></ion-icon>Eliminar
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
+                <?php endif; ?>
             </div>
 
         </section>
