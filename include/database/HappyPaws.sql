@@ -72,6 +72,14 @@ UNLOCK TABLES;
 -- Table structure for table `citas`
 --
 
+CREATE table estado (
+idestado int NOT NULL AUTO_INCREMENT,
+estado varchar(30) not null,
+primary key (idestado)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
+
+insert into estado (estado) values ('Asignada'),('Atendida'),('Cancelada');
+
 DROP TABLE IF EXISTS `citas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -84,15 +92,18 @@ CREATE TABLE `citas` (
   `idMascota` int NOT NULL,
   `idServicio` int NOT NULL,
   `idCliente` int NOT NULL,
+  `idestado` int NOT NULL,
   PRIMARY KEY (`idCita`),
   KEY `fk_Citas_Horario` (`idHorario`),
   KEY `fk_Citas_Mascota` (`idMascota`),
   KEY `fk_Citas_Servicio` (`idServicio`),
   KEY `fk_Citas_Cliente` (`idCliente`),
+  KEY `fk_Citas_Estado` (`idestado`),
   CONSTRAINT `fk_Citas_Cliente` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
   CONSTRAINT `fk_Citas_Horario` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`),
   CONSTRAINT `fk_Citas_Servicio` FOREIGN KEY (`idServicio`) REFERENCES `servicios` (`idServicio`),
-  CONSTRAINT `fk_Citas_TipoMascota` FOREIGN KEY (`idMascota`) REFERENCES `tipomascota` (`idTipoMascota`)
+  CONSTRAINT `fk_Citas_TipoMascota` FOREIGN KEY (`idMascota`) REFERENCES `tipomascota` (`idTipoMascota`),
+   CONSTRAINT `fk_Citas_Estado` FOREIGN KEY (`idestado`) REFERENCES `estado` (`idestado`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -102,7 +113,7 @@ CREATE TABLE `citas` (
 
 LOCK TABLES `citas` WRITE;
 /*!40000 ALTER TABLE `citas` DISABLE KEYS */;
-INSERT INTO `citas` VALUES (1,'John Doe','john.doe@example.com','2023-07-30',1,1,1,1),(2,'Jane Smith','jane.smith@example.com','2023-07-30',2,2,2,2),(3,'Tony','tony@email.es','2023-08-02',2,1,3,1),(4,'Jorge','jorge09ha@email.test','2023-08-09',3,2,5,2),(5,'TEST2','test2@gmail.com','2023-08-31',1,2,5,2),(6,'Andres','ant@test.cr','2023-08-24',5,2,4,2),(7,'Marco','marco.antonio@test.com','2023-08-16',4,2,6,2);
+INSERT INTO `citas` VALUES (1,'John Doe','john.doe@example.com','2023-07-30',1,1,1,1,1),(2,'Jane Smith','jane.smith@example.com','2023-07-30',2,2,2,2,1),(3,'Tony','tony@email.es','2023-08-02',2,1,3,1,1),(4,'Jorge','jorge09ha@email.test','2023-08-09',3,2,5,2,1),(5,'TEST2','test2@gmail.com','2023-08-31',1,2,5,2,1),(6,'Andres','ant@test.cr','2023-08-24',5,2,4,2,1),(7,'Marco','marco.antonio@test.com','2023-08-16',4,2,6,2,1);
 /*!40000 ALTER TABLE `citas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -390,32 +401,6 @@ INSERT INTO `horariocitas` VALUES (1,'08:00:00','09:00:00'),(2,'09:00:00','10:00
 UNLOCK TABLES;
 
 --
--- Table structure for table `horariocolaborador`
---
-
-DROP TABLE IF EXISTS `horariocolaborador`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `horariocolaborador` (
-  `idHorario` int NOT NULL,
-  `idColaborador` int NOT NULL,
-  PRIMARY KEY (`idHorario`,`idColaborador`),
-  KEY `fk_ColaboradorHorario` (`idColaborador`),
-  CONSTRAINT `fk_ColaboradorHorario` FOREIGN KEY (`idColaborador`) REFERENCES `colaborador` (`idColaborador`),
-  CONSTRAINT `fk_horario_Colaborador` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `horariocolaborador`
---
-
-LOCK TABLES `horariocolaborador` WRITE;
-/*!40000 ALTER TABLE `horariocolaborador` DISABLE KEYS */;
-/*!40000 ALTER TABLE `horariocolaborador` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `mascota`
 --
 
@@ -554,3 +539,13 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-08-17 23:44:12
+
+create table asignacioncitas (
+idasignacionCita int NOT NULL AUTO_INCREMENT,
+idHorario int NOT NULL,
+idColaborador int NOT NULL,
+primary key (idasignacionCita),
+ CONSTRAINT `fk_Asignacion_Horario` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`),
+CONSTRAINT `fk_Asignacion_Colaborador` FOREIGN KEY (`idColaborador`) REFERENCES `colaborador` (`idColaborador`)
+)ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+
