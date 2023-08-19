@@ -542,10 +542,10 @@ UNLOCK TABLES;
 
 create table asignacioncitas (
 idasignacionCita int NOT NULL AUTO_INCREMENT,
-idHorario int NOT NULL,
+idcita int NOT NULL,
 idColaborador int NOT NULL,
 primary key (idasignacionCita),
- CONSTRAINT `fk_Asignacion_Horario` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`),
+ CONSTRAINT `fk_Asignacion_Cita` FOREIGN KEY (`idCita`) REFERENCES `citas` (`idCita`),
 CONSTRAINT `fk_Asignacion_Colaborador` FOREIGN KEY (`idColaborador`) REFERENCES `colaborador` (`idColaborador`)
 )ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 
