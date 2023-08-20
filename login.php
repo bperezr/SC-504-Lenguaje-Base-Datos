@@ -75,7 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'rol' => 'cliente',
                     'id' => $clienteInfo['idCliente'],
                     'idRol' => $clienteInfo['idRol'],
-                    'correo' => $clienteInfo['correo']
+                    'correo' => $clienteInfo['correo'],
+                    'nombre' => $clienteInfo['nombre'],
+                    'apellido1' => $clienteInfo['apellido1'],
+                    'apellido2' => $clienteInfo['apellido2']
                 );
 
                 if ($cliente->camposNull($correo)) {
