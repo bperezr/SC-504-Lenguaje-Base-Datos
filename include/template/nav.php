@@ -125,7 +125,7 @@
         <!-- Navegacion -->
         <nav class="navbar">
             <ul>
-                <li><a href="" <?php if ($enlaceActivo == 'citas')
+                <li><a href="medical_appointments.php" <?php if ($enlaceActivo == 'mecical_appointments')
                     echo 'class="active"'; ?>>Citas</a></li>
                 <li><a href="" <?php if ($enlaceActivo == 'pacientes')
                     echo 'class="active"'; ?>>Pacientes</a></li>
@@ -163,45 +163,40 @@
         <!-- Navegacion -->
         <nav class="navbar">
             <ul>
-                <!-- Mascotas -->
-                <li>
-                    <a href="admin_mascotas.php" <?php if ($enlaceActivo == 'admin_mascotas')
-                        echo 'class="active"'; ?>>Mascotas</a>
-                </li>
                 <!-- Personal -->
                 <li>
                     <a href="admin_workers.php" <?php if ($enlaceActivo == 'admin_workers')
                         echo 'class="active"'; ?>>Personal
                     </a>
-                    <ul>
-                        <li><a href="admin_cargos.php" <?php if ($enlaceActivo == 'admin_cargos')
-                            echo 'class="active"'; ?>>Cargos</a></li>
-                        <li><a href="admin_especialidad.php" <?php if ($enlaceActivo == 'admin_especialidad')
-                            echo 'class="active"'; ?>>Especialidad</a></li>
-                    </ul>
                 </li>
-                <!-- Citas -->
-                <li><a href="admin_appointments.php" <?php if ($enlaceActivo == 'admin_appointments')
-                    echo 'class="active"'; ?>>Citas</a>
-                    <ul>
-                        <!-- Servicios -->
-                        <li><a href="admin_servicios.php" <?php if ($enlaceActivo == 'admin_servicios')
-                            echo 'class="active"'; ?>>Servicios</a></li>
-                    </ul>
+                <!-- Clientes -->
+                <li>
+                    <a href="admin_clientes.php" <?php if ($enlaceActivo == 'admin_clientes')
+                        echo 'class="active"'; ?>>Clientes
+                    </a>
+                </li>
+                <!-- Eventos -->
+                <li>
+                    <a href="admin_events.php" <?php if ($enlaceActivo == 'admin_events')
+                        echo 'class="active"'; ?>>Eventos
+                    </a>
                 </li>
                 <!-- Otros -->
                 <li><a href="" <?php if ($enlaceActivo == 'admin_otros')
                     echo 'class="active"'; ?>>Otros</a>
                     <ul>
-                        <!-- Eventos -->
-                        <li><a href="admin_events.php" <?php if ($enlaceActivo == 'admin_events')
-                            echo 'class="active"'; ?>>Eventos</a></li>
-                        <!-- Contacto -->
-                        <li><a href="admin_contactos.php" <?php if ($enlaceActivo == 'admin_contactos')
-                            echo 'class="active"'; ?>>Contacto</a></li>
-                        <!-- Clientes -->
-                        <li><a href="admin_clientes.php" <?php if ($enlaceActivo == 'admin_clientes')
-                            echo 'class="active"'; ?>>Clientes</a></li>
+                        <!-- Servicios -->
+                        <li><a href="admin_services.php" <?php if ($enlaceActivo == 'admin_servicios')
+                            echo 'class="active"'; ?>>Servicios</a></li>
+                        <!-- Cargos -->
+                        <li><a href="admin_cargos.php" <?php if ($enlaceActivo == 'admin_cargos')
+                            echo 'class="active"'; ?>>Cargos</a></li>
+                        <!-- Especialidad -->
+                        <li><a href="admin_especialidad.php" <?php if ($enlaceActivo == 'admin_especialidad')
+                            echo 'class="active"'; ?>>Especialidad</a></li>
+                        <!-- Mascotas -->
+                        <li><a href="admin_mascotas.php" <?php if ($enlaceActivo == 'admin_mascotas')
+                            echo 'class="active"'; ?>>Tipos de Mascotas</a></li>
                     </ul>
                 </li>
 

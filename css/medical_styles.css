@@ -43,6 +43,7 @@ body {
 .contenedor {
     width: min(90%, 120rem);
     margin: 5rem auto;
+    min-height: 100vh;
 }
 
 a {

@@ -14,23 +14,20 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }
 
-/*  */
-require_once 'include/database/db_colaborador.php';
+require_once 'include/database/db_cliente.php';
+$cliente = new Cliente();
 
-$c = new Colaborador();
-$resultados = $c->getColaboradores();
+$resultados = $cliente->getVerClientes();
 $hayResultados = true;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idColaborador = $_POST['id'];
-    $c->deleteColaborador($idColaborador);
-    header('Location: admin_workers.php');
-    exit;
-}
+/* echo "<pre>";
+print_r($resultados);
+echo "</pre>"; */
+
 
 if (isset($_GET['search'])) {
     $searchTerm = $_GET['search'];
-    $resultados = $c->buscarColaboradores($searchTerm);
+    $resultados = $cliente->buscarClientess($searchTerm);
     if (count($resultados) === 0) {
         $hayResultados = false;
     } else {
@@ -55,10 +52,10 @@ if (isset($_GET['search'])) {
 
     <main class="contenedor">
 
-        <h1 class="centrar-texto">Administrar Clientes</h1>
+        <h1 class="centrar-texto">Clientes</h1>
 
-        <!-- Buscador -->
-        <form action="" method="get">
+                <!-- Buscador -->
+                <form action="" method="get">
             <div class="contenedor_buscar">
                 <div class="buscador buscador_buscar">
                     <!-- Texto buscar -->
@@ -71,19 +68,47 @@ if (isset($_GET['search'])) {
                     </div>
                     <!-- Recargar -->
                     <div class="recargar">
-                        <a href="admin_workers.php"><ion-icon name="refresh-circle"></ion-icon></a>
-                    </div>
-                </div>
-                <div class="buscador buscador_agregar">
-                    <!---Agregar-->
-                    <div class="agregar">
-                        <a href="admin_worker_new.php" class="btn_agregar"><ion-icon
-                                name="add-circle-outline"></ion-icon>
-                            Agregar</a>
+                        <a href="admin_clientes.php"><ion-icon name="refresh-circle"></ion-icon></a>
                     </div>
                 </div>
             </div>
         </form>
+
+        <?php if ($hayResultados): ?>
+            <section class="event__tarjetas">
+                <?php foreach ($resultados as $cliente): ?>
+                    <div class="tarjeta">
+                    <div class="tarjeta__imagen">
+                            <?php if (file_exists("img/images_clients/" . $cliente['imagen'])): ?>
+                                <img src="img/images_clients/<?php echo $cliente['imagen']; ?>" alt="Evento 1">
+                            <?php else: ?>
+                                <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                            <?php endif; ?>
+                        </div>
+                        <div class="tarjeta__detalle">
+                            <h2>
+                                <?php echo $cliente['nombre'] . ' ' . $cliente['apellido1'] . ' ' . $cliente['apellido2']; ?>
+                            </h2>
+                            <ul class="detalle-evento">
+                                <li><strong>Correo:</strong>
+                                    <?php echo $cliente['correo']; ?>
+                                </li>
+
+                                <li><strong>Correo:</strong>
+                                    <?php echo $cliente['telefono']; ?>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+        <?php else: ?>
+            <div class="err_busqueda">
+                <h2 class="brincar">No se encontraron clientes que coincidan con la búsqueda.</h2>
+                <img class="" src="img/dog1.webp" alt="">
+            </div>
+        <?php endif; ?>
 
     </main>
 

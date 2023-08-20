@@ -43,6 +43,13 @@ class Cliente
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getVerClientes()
+    {
+        $query = "SELECT idCliente, nombre, apellido1, apellido2, telefono, imagen, domicilio, idProvincia, idCanton, idDistrito, correo FROM cliente";
+        $stmt = $this->db->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getRoles()
     {
         $query = "SELECT idRol, nombreRol FROM rol";
@@ -129,6 +136,19 @@ class Cliente
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function buscarClientess($searchTerm)
+    {
+        $query = "SELECT idCliente, nombre, apellido1, apellido2, correo, imagen, telefono FROM cliente
+            WHERE nombre LIKE :searchTerm OR apellido1 LIKE :searchTerm OR apellido2 LIKE :searchTerm OR correo LIKE :searchTerm";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     /* -----------------Login Cliente ----------------- */
     public function verificarCorreoExistente($correo)
