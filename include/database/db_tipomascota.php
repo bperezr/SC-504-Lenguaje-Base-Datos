@@ -72,7 +72,7 @@ class TipoMascota
     public function buscarTipoMascota($searchTerm)
     {
         $query = "SELECT tp.* FROM tipomascota tp
-                  WHERE tp.tipo LIKE :searchTerm";
+                WHERE tp.tipo LIKE :searchTerm";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
         $stmt->execute();

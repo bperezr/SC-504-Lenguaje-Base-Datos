@@ -105,8 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="perfil__bnt">
-                <a href="" class="btn-1">Editar Perfil</a>
-                <a href="" class="btn-2">Agendar cita</a>
+                <a href="profile_client_edit.php" class="btn-1">Editar Perfil</a>
+                <a href="profile_client_edit.php" class="btn-2">Agendar cita</a>
             </div>
 
             <!-- Informacion -->
@@ -181,12 +181,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php foreach ((isset($_GET['search']) && $hayResultados) ? $mascotas : $todasLasMascotas as $mascota): ?>
                         <!-- Tarjeta mascota -->
                         <div class="perfil__mascota-card">
-                            <div class="mascota__img">
-                                <?php if (isset($mascota['imagen']) && file_exists("img/images_pets/" . $mascota['imagen'])): ?>
-                                    <img src="img/images_pets/<?php echo $mascota['imagen']; ?>" alt="Imagen de la mascota">
-                                <?php else: ?>
-                                    <img src="img/no_disponible.webp" alt="Imagen no disponible">
-                                <?php endif; ?>
+                            <div class="contenedor__mascota-img">
+                                <div class="mascota__img">
+                                    <?php if (isset($mascota['imagen']) && file_exists("img/images_pets/" . $mascota['imagen'])): ?>
+                                        <img src="img/images_pets/<?php echo $mascota['imagen']; ?>" alt="Imagen de la mascota">
+                                    <?php else: ?>
+                                        <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                                    <?php endif; ?>
+                                </div>
                             </div>
 
                             <div class="mascota__detalle">
@@ -196,8 +198,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <!-- Botones -->
                             <div class="tarjeta__btn">
-                                <a href="admin_worker_edit.php?id=<?php echo $mascota['idMascota']; ?>"
-                                    class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                                <a href="pet_edit.php?id=<?php echo $mascota['idMascota']; ?>" class="editar"><ion-icon
+                                        name="create-sharp"></ion-icon>Editar</a>
                                 <form action="" method="post" style="display: inline;">
                                     <input type="hidden" name="id" value="<?php echo $mascota['idMascota']; ?>">
                                     <button type="submit" class="eliminar"

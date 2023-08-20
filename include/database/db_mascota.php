@@ -36,6 +36,14 @@ class Mascota
         return $stmt->execute();
     }
 
+    public function getMascota($idMascota) {
+        $query = "SELECT * FROM mascota WHERE idMascota = :idMascota";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':idMascota', $idMascota, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getMascotasPorCliente($idCliente)
     {
         $query = "SELECT * FROM mascota WHERE idCliente = :idCliente";
@@ -81,7 +89,7 @@ class Mascota
 
     public function uploadImagen($imagen)
     {
-        $carpetaImagenes = 'img/images_clients/';
+        $carpetaImagenes = 'img/images_pets/';
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
         move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
         return $nombreImagen;
@@ -89,7 +97,7 @@ class Mascota
 
     public function deleteImagen($nombreImagen)
     {
-        $rutaImagen = "img/images_clients/" . $nombreImagen;
+        $rutaImagen = "img/images_pets/" . $nombreImagen;
         if (file_exists($rutaImagen)) {
             unlink($rutaImagen);
             return true;

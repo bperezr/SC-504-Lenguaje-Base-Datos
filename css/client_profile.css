@@ -404,10 +404,23 @@ footer {
     transform: translateY(-5px);
 }
 
+.contenedor__mascota-img {
+    max-width: 30rem;
+    max-height: 40rem;
+    overflow: hidden;
+    position: relative;
+}
+
 .mascota__img img {
     width: 100%;
-    object-fit: cover;
-    justify-content: center;
+    height: 100%;
+    object-fit:fill; /* Ajusta la imagen sin recortar ni deformar */
+}
+
+.mascota__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .mascota__detalle {
@@ -427,6 +440,7 @@ footer {
     padding: 1rem;
     text-align: center;
 }
+
 
 /*----------------------- btm  -----------------------*/
 
@@ -608,8 +622,7 @@ form.tarjeta__btn {
 }
 
 input[type="text"],
-input[type="date"],
-input[type="time"],
+input[type="number"],
 select,
 textarea {
     font-size: 2rem;
@@ -680,14 +693,8 @@ textarea {
     color: var(--negro);
     padding: 1rem 2rem;
     border-radius: .5rem;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.1s ease;
     margin-top: 1rem;
-}
-
-.btn-1:hover {
-    background-color: var(--color8);
-    color: var(--blanco);
 }
 
 .btn-2 {
@@ -697,11 +704,11 @@ textarea {
     color: var(--negro);
     padding: 1rem 2rem;
     border-radius: .5rem;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.1s ease;
     margin-top: 1rem;
 }
 
+.btn-1:hover ,
 .btn-2:hover {
     background-color: var(--color8);
     color: var(--blanco);
@@ -756,4 +763,132 @@ textarea {
     border-radius: 2rem;
     margin: 2rem;
     padding: 2rem;
+}
+
+.telefono {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="number"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ----------------Formulario nuevo evento---------------- */
+
+
+.evento__detalle {
+    background-color: var(--grisClaro);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 .4rem .8rem rgba(0, 0, 0, 0.5);
+}
+
+.centrar-texto {
+    text-align: center;
+}
+
+.formulario-evento {
+    display: block;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin-top: 1rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-imagen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.campo-imagen img {
+    max-width: 100%;
+    height: auto;
+}
+
+.campo-imagen img {
+    max-height: 30rem;
+    object-fit: contain;
+}
+
+#preview {
+    max-width: 60%;
+    height: auto;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    padding: 0.8rem;
+    font-size: 2rem;
+    border: 0.2rem solid var(--gris);
+    border-radius: 0.5rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.enviar {
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: var(--color3);
+    color: var(--blanco);
+    display: inline-block;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    height: 5rem;
+    margin-right: 2rem;
+}
+
+.cancelar {
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: var(--color5);
+    color: var(--blanco);
+    display: inline-block;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    height: 5rem;
+}
+
+.enviar:hover,
+.cancelar:hover {
+    background-color: var(--color8);
+    color: var(--blanco);
+}
+
+.botones_evento {
+    margin-top: 5rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.btn_atras {
+    margin-bottom: 2rem;
 }
