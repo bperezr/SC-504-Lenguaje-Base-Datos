@@ -216,7 +216,7 @@ class Cliente
 
     public function obtenerClientePorCorreo($correo)
     {
-        $sql = "SELECT idCliente, idRol, correo FROM cliente WHERE correo = :correo";
+        $sql = "SELECT idCliente, idRol, correo, nombre, apellido1, apellido2 FROM cliente WHERE correo = :correo";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
