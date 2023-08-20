@@ -55,10 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
 
                 if ($colaboradorInfo['idRol'] == 1) {
-                    header("Location: admin_index.php");
+                    header("Location: admin/admin_index.php");
                     exit();
                 } elseif ($colaboradorInfo['idRol'] == 2) {
-                    header("Location: medical_index.php");
+                    header("Location: medical/medical_index.php");
                     exit();
                 }
             } else {

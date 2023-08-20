@@ -10,11 +10,11 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
-require_once 'include/database/db_servicio.php';
+require_once '../include/database/db_servicio.php';
 $servicio = new Servicio();
 
 $servicios = $servicio->getServicios();
@@ -43,14 +43,14 @@ if (isset($_GET['search'])) {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_servicios';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -118,14 +118,14 @@ if (isset($_GET['search'])) {
         <?php else: ?>
             <div class="err_busqueda">
                 <h2 class="brincar">No se encontraron servicios que coincidan con la búsqueda.</h2>
-                <img class="" src="img/no_encontrado.jpg" alt="No encontrado">
+                <img class="" src="../img/dog1.webp" alt="No encontrado">
             </div>
         <?php endif; ?>
 
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
 </body>
 

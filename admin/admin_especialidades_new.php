@@ -10,37 +10,23 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 /*  */
-require_once 'include/database/db_especialidad.php';
+require_once '../include/database/db_especialidad.php';
 
 $especialidad = new Especialidad();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_GET['id'];
     $especialidadNombre = $_POST['especialidad'];
     $descripcion = $_POST['descripcion'];
 
-    $especialidad->updateEspecialidad($id, $especialidadNombre, $descripcion);
+    $especialidad->insertEspecialidad($especialidadNombre, $descripcion);
 
     header('Location: admin_especialidad.php');
     exit;
-} else {
-
-    if (isset($_GET['id'])) {
-        $id = $_GET['id'];
-        $especialidadData = $especialidad->getEspecialidad($id);
-        if (!$especialidadData) {
-            header('Location: admin_especialidades.php');
-            exit;
-        }
-    } else {
-        header('Location: admin_especialidades.php');
-        exit;
-    }
 }
 ?>
 
@@ -49,38 +35,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_especialidad';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_especialidades.php" class="boton input-text">Atras</a>
+            <a href="admin_especialidad.php" class="boton input-text">Atras</a>
         </div>
 
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Editar Especialidad</h2>
+                <h2 class="centrar-texto">Agregar Especialidad</h2>
                 <form id="formularioEvento" class="formulario-evento" method="POST">
                     <div class="campo">
                         <label for="especialidad">Especialidad:</label>
-                        <input type="text" id="especialidad" name="especialidad"
-                            value="<?php echo $especialidadData['especialidad']; ?>" required>
+                        <input type="text" id="especialidad" name="especialidad" required>
                     </div>
                     <div class="campo">
                         <label for="descripcion">Descripción:</label>
-                        <input type="text" id="descripcion" name="descripcion"
-                            value="<?php echo $especialidadData['descripcion']; ?>" required>
+                        <input type="text" id="descripcion" name="descripcion" required>
                     </div>
                     <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Guardar Cambios</button>
-                        <a class="cancelar" href="admin_especialidades.php">Cancelar</a>
+                        <button class="enviar" type="submit">Agregar Especialidad</button>
+                        <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
                 </form>
             </div>
@@ -88,9 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/medico.js"></script>
+    <script src="../js/medico.js"></script>
 </body>
 
 </html>

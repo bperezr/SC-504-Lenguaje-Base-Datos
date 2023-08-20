@@ -10,12 +10,12 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 /*  */
-require_once 'include/database/db_cargo.php';
+require_once '../include/database/db_cargo.php';
 $cargo = new Cargo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,14 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_workers';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -64,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/medico.js"></script>
+    <script src="../js/medico.js"></script>
 </body>
 
 </html>

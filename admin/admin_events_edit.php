@@ -16,7 +16,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 
 /*  */
 $id = $_GET['id'];
-require 'include/connections/connect.php';
+require '../include/connections/connect.php';
 $db = ConectarDB();
 
 $queryEventos = "SELECT
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        $carpetaImagenes = 'img/images/';
+        $carpetaImagenes = '../img/images/';
 
         $nombreImagen = '';
 
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $insertResult = mysqli_query($db, $sqlUpdate);
 
         if ($insertResult) {
-            header('Location: /SC-502-Proyecto/admin_events.php');
+            header('Location: admin_events.php');
         }
     }
 }
@@ -131,14 +131,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_events.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_events.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -233,11 +233,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="imagen">Imagen:</label>
 
                         <!-- Lógica condicional para mostrar la imagen -->
-                        <?php if (file_exists("img/images/" . $imagen)): ?>
-                            <img id="preview" src="img/images/<?php echo $imagen; ?>" alt="">
+                        <?php if (file_exists("../img/images/" . $imagen)): ?>
+                            <img id="preview" src="../img/images/<?php echo $imagen; ?>" alt="">
                         <?php else: ?>
                             <!-- Si la imagen no existe, muestra una imagen alternativa -->
-                            <img id="preview" src="img/no_disponible.webp" alt="Imagen no disponible">
+                            <img id="preview" src="../img/no_disponible.webp" alt="Imagen no disponible">
                         <?php endif; ?>
 
                         <input type="file" id="imagen" name="imagen" accept="image/*">
@@ -253,9 +253,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </main>
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/evento.js"></script>
+    <script src="../js/evento.js"></script>
 </body>
 
 </html>

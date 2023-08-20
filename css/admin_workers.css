@@ -33,6 +33,7 @@ body {
     font-family: var(--fuenteParrafos);
     font-size: 1.6rem;
     line-height: 2;
+    margin: 0;
 }
 
 /** Globales **/

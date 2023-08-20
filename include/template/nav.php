@@ -110,7 +110,7 @@
 <?php elseif (!empty($correoUsuario) && $rolUsuario == 2): ?>
     <header>
         <!-- Logo -->
-        <a class="logo" href="medical_index.php"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
+        <a class="logo" href="medical_index.php"><img src="../img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Usuario -->
         <?php if (!empty($correoUsuario)): ?>
             <p>Médico:
@@ -135,7 +135,7 @@
                         <li><a href="profile.php" <?php if ($enlaceActivo == 'perfil')
                             echo 'class="active"'; ?>>Perfil</a>
                         </li>
-                        <li><a href="logout.php" <?php if ($enlaceActivo == 'salir')
+                        <li><a href="../logout.php" <?php if ($enlaceActivo == 'salir')
                             echo 'class="active"'; ?>>Salir</a></li>
                     </ul>
                 </li>
@@ -143,12 +143,12 @@
         </nav>
     </header>
 
-    <!-- Cliente -->
+    <!-- Admin -->
 <?php elseif (!empty($correoUsuario) && $rolUsuario == 1): ?>
 
     <header>
         <!-- Logo -->
-        <a class="logo" href="admin_index.php"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
+        <a class="logo" href="admin_index.php"><img src="../img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Usuario -->
         <?php if (!empty($correoUsuario)): ?>
             <p>Admin:
@@ -203,7 +203,7 @@
                 <li class="login">
                     <p><ion-icon name="person-circle-outline"></ion-icon></p>
                     <ul>
-                        <li><a href="logout.php" <?php if ($enlaceActivo == 'salir')
+                        <li><a href="../logout.php" <?php if ($enlaceActivo == 'salir')
                             echo 'class="active"'; ?>>Salir</a></li>
                     </ul>
                 </li>

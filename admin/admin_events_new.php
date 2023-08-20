@@ -10,13 +10,13 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 
 /*  */
-require 'include/connections/connect.php';
+require '../include/connections/connect.php';
 $db = ConectarDB();
 
 echo ($_SERVER['REQUEST_METHOD']);
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($requeridos)) {
 
-        $carpetaImagenes = 'img/images/';
+        $carpetaImagenes = '../img/images/';
 
         //Genera un nombre unico para las imagenes
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $insertResult = mysqli_query($db, $sqlInsert);
 
         if ($insertResult) {
-            header('Location: /SC-502-Proyecto/admin_events.php');
+            header('Location: admin_events.php');
         }
     }
 }
@@ -120,14 +120,14 @@ $db->close();
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_events.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_events.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
         <div class="btn_atras">
@@ -208,7 +208,7 @@ $db->close();
                     </div>
                     <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
-                        <img id="preview" src="img/no_disponible.webp" alt="no_image">
+                        <img id="preview" src="../img/no_disponible.webp" alt="no_image">
                         <input type="file" id="imagen" name="imagen" accept="image/*" required>
                     </div>
                     <div class="campo centrar-texto botones_evento">
@@ -221,9 +221,9 @@ $db->close();
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/evento.js"></script>
+    <script src="../js/evento.js"></script>
 </body>
 
 </html>

@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }
 
-require_once 'include/database/db_colaborador.php';
+require_once '../include/database/db_colaborador.php';
 
 $c = new Colaborador();
 $resultados = $c->getColaboradores();
@@ -43,14 +43,14 @@ if (isset($_GET['search'])) {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_workers';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -90,10 +90,10 @@ if (isset($_GET['search'])) {
                     <!-- Tarjeta de cada colaborador -->
                     <div class="tarjeta">
                         <div class="tarjeta__imagen">
-                            <?php if (file_exists("img/images_workers/" . $colaborador['imagen'])): ?>
-                                <img src="img/images_workers/<?php echo $colaborador['imagen']; ?>" alt="Evento 1">
+                            <?php if (file_exists("../img/images_workers/" . $colaborador['imagen'])): ?>
+                                <img src="../img/images_workers/<?php echo $colaborador['imagen']; ?>" alt="Evento 1">
                             <?php else: ?>
-                                <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                                <img src="../img/no_disponible.webp" alt="Imagen no disponible">
                             <?php endif; ?>
                         </div>
                         <div class="tarjeta__detalle">
@@ -127,14 +127,14 @@ if (isset($_GET['search'])) {
         <?php else: ?>
             <div class="err_busqueda">
                 <h2 class="brincar">No se encontraron eventos que coincidan con la búsqueda.</h2>
-                <img class="" src="img/dog1.webp" alt="">
+                <img class="" src="../img/dog1.webp" alt="">
             </div>
         <?php endif; ?>
 
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
 </body>
 

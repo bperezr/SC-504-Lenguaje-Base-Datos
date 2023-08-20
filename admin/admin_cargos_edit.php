@@ -15,15 +15,15 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }
 
 /*  */
-require_once 'include/database/db_cargo.php';
+require_once '../include/database/db_cargo.php';
 
 $cargo = new Cargo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
     $nuevoCargo = $_POST['cargo'];
-    $cargo->updateCargo($id, $nuevoCargo); // Agregado para actualizar el cargo
-    header('Location: admin_cargos.php'); // Redirigir después de la actualización
+    $cargo->updateCargo($id, $nuevoCargo);
+    header('Location: admin_cargos.php');
     exit;
 } else {
     if (isset($_GET['id'])) {
@@ -45,14 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_cargos';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -78,9 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/medico.js"></script>
+    <script src="../js/medico.js"></script>
 </body>
 
 </html>

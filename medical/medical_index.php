@@ -8,9 +8,8 @@ if (isset($_SESSION['usuario'])) {
     $rol = $usuario['rol'];
     $id = $usuario['id'];
 }
-
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 ?>
@@ -20,26 +19,26 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_styles.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/medical_styles.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'administrar';
-    include 'include/template/nav.php'; ?>
+    <?php $enlaceActivo = 'medico';
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
         <div class="bg">
-            <h1 class="centrar-texto">Panel Administrativo</h1>
+            <h1 class="centrar-texto">Panel Médico</h1>
             <div class="bg_img">
-                <img src="img/logo_color.svg" alt="Happy Paws">
+                <img src="../img/logo_color.svg" alt="Happy Paws">
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
 </body>
 

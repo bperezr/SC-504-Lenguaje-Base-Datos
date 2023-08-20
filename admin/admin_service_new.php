@@ -10,22 +10,22 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 /*  */
-require_once 'include/database/db_especialidad.php';
+require_once '../include/database/db_servicio.php';
 
-$especialidad = new Especialidad();
+$servicio = new Servicio();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $especialidadNombre = $_POST['especialidad'];
+    $servicioNombre = $_POST['servicio'];
     $descripcion = $_POST['descripcion'];
 
-    $especialidad->insertEspecialidad($especialidadNombre, $descripcion);
+    $servicio->insertServicio($servicioNombre, $descripcion);
 
-    header('Location: admin_especialidad.php');
+    header('Location: admin_services.php');
     exit;
 }
 ?>
@@ -35,35 +35,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_especialidad';
-    include 'include/template/nav.php'; ?>
+    <?php $enlaceActivo = 'admin_services';
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_especialidad.php" class="boton input-text">Atras</a>
+            <a href="admin_services.php" class="boton input-text">Atras</a>
         </div>
 
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Agregar Especialidad</h2>
-                <form id="formularioEvento" class="formulario-evento" method="POST">
+                <h2 class="centrar-texto">Agregar Servicio</h2>
+                <form id="formularioServicio" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
-                        <label for="especialidad">Especialidad:</label>
-                        <input type="text" id="especialidad" name="especialidad" required>
+                        <label for="servicio">Nombre del Servicio:</label>
+                        <input type="text" id="servicio" name="servicio" required>
                     </div>
                     <div class="campo">
                         <label for="descripcion">Descripción:</label>
-                        <input type="text" id="descripcion" name="descripcion" required>
+                        <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
                     </div>
                     <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Agregar Especialidad</button>
+                        <button class="enviar" type="submit">Agregar Servicio</button>
                         <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
                 </form>
@@ -72,9 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/medico.js"></script>
 </body>
 
 </html>

@@ -12,10 +12,10 @@ if (isset($_SESSION['usuario'])) {
 
     switch ($rolUsuario) {
         case 1:
-            $volver = "admin_index.php";
+            $volver = "admin/admin_index.php";
             break;
         case 2:
-            $volver = "medical_index.php";
+            $volver = "medical/medical_index.php";
             break;
         case 3:
             $volver = "index.php";

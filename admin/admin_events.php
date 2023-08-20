@@ -10,12 +10,12 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 /*  */
-require 'include/connections/connect.php';
+require '../include/connections/connect.php';
 $db = ConectarDB();
 $queryEventos = "SELECT * FROM eventos";
 $result = mysqli_query($db, $queryEventos);
@@ -32,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resultImg = mysqli_query($db, $queryImagen);
         $eventoImagen = mysqli_fetch_assoc($resultImg);
 
-        unlink('img/images/' . $eventoImagen['imagen']);
+        unlink('../img/images/' . $eventoImagen['imagen']);
 
         //Eliminar evento
         $queryDelete = "DELETE FROM eventos WHERE idEvento = ${id}";
         $result = mysqli_query($db, $queryDelete);
 
         if ($result) {
-            header('Location: /SC-502-Proyecto/admin_events.php');
+            header('Location: admin_events.php');
         }
     }
 }
@@ -51,14 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_events.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_events.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -113,10 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Evento -->
                     <div class="tarjeta">
                         <div class="tarjeta__imagen">
-                            <?php if (file_exists("img/images/" . $eventos['imagen'])): ?>
-                                <img src="img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                            <?php if (file_exists("../img/images/" . $eventos['imagen'])): ?>
+                                <img src="../img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
                             <?php else: ?>
-                                <img src="img/no_disponible.webp" alt="Imagen no disponible">
+                                <img src="../img/no_disponible.webp" alt="Imagen no disponible">
                             <?php endif; ?>
                         </div>
                         <div class="tarjeta__detalle">
@@ -154,14 +154,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php else: ?>
             <div class="err_busqueda">
                 <h2 class="brincar">No se encontraron eventos que coincidan con la búsqueda.</h2>
-                <img class="" src="img/dog1.webp" alt="">
+                <img class="" src="../img/dog1.webp" alt="">
             </div>
         <?php endif; ?>
 
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
 </body>
 
 </html>

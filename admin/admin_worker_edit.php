@@ -10,14 +10,14 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 /*  */
-require_once 'include/database/db_colaborador.php';
-require_once 'include/database/db_cargo.php';
-require_once 'include/database/db_especialidad.php';
+require_once '../include/database/db_colaborador.php';
+require_once '../include/database/db_cargo.php';
+require_once '../include/database/db_especialidad.php';
 
 $colaborador = new Colaborador();
 $cargo = new Cargo();
@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombreImagen = $colaborador->uploadImagen($imagen);
         $colaboradorData = $colaborador->getColaborador($id);
 
-        if ($colaboradorData && file_exists("img/images_workers/" . $colaboradorData['imagen'])) {
-            unlink("img/images_workers/" . $colaboradorData['imagen']);
+        if ($colaboradorData && file_exists("../img/images_workers/" . $colaboradorData['imagen'])) {
+            unlink("../img/images_workers/" . $colaboradorData['imagen']);
         }
     } else {
         $colaboradorData = $colaborador->getColaborador($id);
@@ -76,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_workers';
-    include 'include/template/nav.php'; ?>
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
@@ -148,11 +148,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Imagen -->
                     <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
-                        <?php if (file_exists("img/images_workers/" . $colaboradorData['imagen'])): ?>
-                            <img id="preview" src="img/images_workers/<?php echo $colaboradorData['imagen']; ?>"
+                        <?php if (file_exists("../img/images_workers/" . $colaboradorData['imagen'])): ?>
+                            <img id="preview" src="../img/images_workers/<?php echo $colaboradorData['imagen']; ?>"
                                 alt="Imagen actual">
                         <?php else: ?>
-                            <img id="preview" src="img/no_disponible.webp" alt="Imagen no disponible">
+                            <img id="preview" src="../img/no_disponible.webp" alt="Imagen no disponible">
                         <?php endif; ?>
                         <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
@@ -178,9 +178,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
-    <script src="js/medico.js"></script>
+    <script src="../js/medico.js"></script>
 </body>
 
 </html>

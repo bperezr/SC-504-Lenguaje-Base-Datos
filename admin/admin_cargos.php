@@ -10,28 +10,28 @@ if (isset($_SESSION['usuario'])) {
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: acceso_denegado.php");
+    header("Location: ../acceso_denegado.php");
     exit();
 }
 
 /*  */
-require_once 'include/database/db_tipomascota.php';
+require_once '../include/database/db_cargo.php';
+$cargo = new Cargo();
 
-$c = new TipoMascota();
-$resultados = $c->getTipoMascotas();
+$cargos = $cargo->getCargos();
 $hayResultados = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idTipoMascota = $_POST['id'];
-    $c->deleteTipoMascota($idTipoMascota);
-    header('Location: admin_mascotas.php');
+    $idCargo = $_POST['id'];
+    $cargo->deleteCargo($idCargo);
+    header('Location: admin_cargos.php');
     exit;
 }
 
 if (isset($_GET['search'])) {
     $searchTerm = $_GET['search'];
-    $resultados = $c->buscarTipoMascota($searchTerm);
-    if (count($resultados) === 0) {
+    $cargos = $cargo->buscarCargos($searchTerm);
+    if (count($cargos) === 0) {
         $hayResultados = false;
     } else {
         $hayResultados = true;
@@ -39,23 +39,23 @@ if (isset($_GET['search'])) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <!-- styles -->
-    <?php $rutaCSS = 'css/admin_workers.css';
-    include 'include/template/header.php'; ?>
+    <?php $rutaCSS = '../css/admin_workers.css';
+    include '../include/template/header.php'; ?>
 </head>
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_mascotas';
-    include 'include/template/nav.php'; ?>
+    <?php $enlaceActivo = 'admin_cargos';
+    include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
-
-        <h1 class="centrar-texto">Administrar Tipos de Mascotas</h1>
+        <h1 class="centrar-texto">Administrar Cargos</h1>
 
         <!-- Buscador -->
         <form action="" method="get">
@@ -71,13 +71,13 @@ if (isset($_GET['search'])) {
                     </div>
                     <!-- Recargar -->
                     <div class="recargar">
-                        <a href="admin_mascotas.php"><ion-icon name="refresh-circle"></ion-icon></a>
+                        <a href="admin_cargos.php"><ion-icon name="refresh-circle"></ion-icon></a>
                     </div>
                 </div>
                 <div class="buscador buscador_agregar">
                     <!---Agregar-->
                     <div class="agregar">
-                        <a href="admin_mascotas_new.php" class="btn_agregar"><ion-icon
+                        <a href="admin_cargos_new.php" class="btn_agregar"><ion-icon
                                 name="add-circle-outline"></ion-icon>
                             Agregar</a>
                     </div>
@@ -87,24 +87,24 @@ if (isset($_GET['search'])) {
 
         <?php if ($hayResultados): ?>
             <section class="event__tarjetas">
-                <?php foreach ($resultados as $tipomascota): ?>
-                    <!-- Tarjeta de cada colaborador -->
+                <?php foreach ($cargos as $cargo): ?>
+                    <!-- Tarjeta de cada cargo -->
                     <div class="tarjeta">
                         <div class="tarjeta__detalle">
                             <ul class="detalle-evento">
-                                <li><strong>Tipo de mascota:</strong>
-                                    <?php echo $tipomascota['tipo']; ?>
+                                <li><strong>Cargo:</strong>
+                                    <?php echo $cargo['cargo']; ?>
                                 </li>
                             </ul>
                         </div>
                         <!-- Botones -->
                         <div class="tarjeta__btn">
-                            <a href="admin_mascotas_edit.php?id=<?php echo $tipomascota['idTipoMascota']; ?>"
-                                class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                            <a href="admin_cargos_edit.php?id=<?php echo $cargo['idCargo']; ?>" class="editar"><ion-icon
+                                    name="create-sharp"></ion-icon>Editar</a>
                             <form action="" method="post" style="display: inline;">
-                                <input type="hidden" name="id" value="<?php echo $tipomascota['idTipoMascota']; ?>">
+                                <input type="hidden" name="id" value="<?php echo $cargo['idCargo']; ?>">
                                 <button type="submit" class="eliminar"
-                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este tipo de mascota?')">
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este cargo?')">
                                     <ion-icon name="trash-sharp"></ion-icon>Eliminar
                                 </button>
                             </form>
@@ -114,15 +114,15 @@ if (isset($_GET['search'])) {
             </section>
         <?php else: ?>
             <div class="err_busqueda">
-                <h2 class="brincar">No se encontraron tipos de mascota que coincidan con la búsqueda.</h2>
-                <img class="" src="img/dog1.webp" alt="">
+                <h2 class="brincar">No se encontraron cargos que coincidan con la búsqueda.</h2>
+                <img class="" src="../img/dog1.webp" alt="">
             </div>
         <?php endif; ?>
 
     </main>
 
     <!-- Footer -->
-    <?php include 'include/template/footer.php'; ?>
+    <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
 </body>
 
