@@ -27,6 +27,7 @@ if (isset($_SESSION['usuario'])) {
     <div class="contenedor">
 
         <main class="informacion ">
+            <a class="boton centrar-texto" href="cita.php">Agendar cita</a>
             <article class="entrada">
                 <h1 class="centrar-texto no-margin">Castración</h1>
                 <img class="service_icon" src="img/s3.svg" alt="icono">
@@ -56,8 +57,6 @@ if (isset($_SESSION['usuario'])) {
             </div>
         </main>
 
-        <!-- Cita -->
-        <?php include 'include/template/cita.php'; ?>
     </div>
 
     <!-- Footer -->

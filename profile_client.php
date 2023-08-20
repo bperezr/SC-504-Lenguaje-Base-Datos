@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="perfil__bnt">
                 <a href="profile_client_edit.php" class="btn-1">Editar Perfil</a>
-                <a href="profile_client_edit.php" class="btn-2">Agendar cita</a>
+                <a href="cita.php" class="btn-2">Agendar cita</a>
             </div>
 
             <!-- Informacion -->

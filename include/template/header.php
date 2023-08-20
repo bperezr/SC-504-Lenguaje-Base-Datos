@@ -27,3 +27,6 @@
 <!-- Styles -->
 <link rel="preload" href="<?php echo $rutaCSS ?? 'css/styles.css'; ?>" as="style">
 <link rel="stylesheet" href="<?php echo $rutaCSS ?? 'css/styles.css'; ?>">
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

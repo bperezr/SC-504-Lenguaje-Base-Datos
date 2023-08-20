@@ -98,6 +98,8 @@
                         <li><a href="profile_client.php" <?php if ($enlaceActivo == 'perfil')
                             echo 'class="active"'; ?>>Perfil</a>
                         </li>
+                        <li><a href="cita.php" <?php if ($enlaceActivo == 'cita')
+                            echo 'class="active"'; ?>>Nueva Cita</a></li>
                         <li><a href="logout.php" <?php if ($enlaceActivo == 'salir')
                             echo 'class="active"'; ?>>Salir</a></li>
                     </ul>

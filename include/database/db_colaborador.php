@@ -128,8 +128,6 @@ class Colaborador
         return $stmt->execute();
     }
 
-
-
     public function deleteColaborador($id)
     {
         $query = "SELECT imagen FROM colaborador WHERE idColaborador = :id";
@@ -149,7 +147,6 @@ class Colaborador
         return $stmt->execute();
     }
 
-
     public function buscarColaboradores($searchTerm)
     {
         $query = "SELECT c.*, ca.cargo, e.especialidad
@@ -163,10 +160,9 @@ class Colaborador
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
     public function uploadImagen($imagen)
     {
-        $carpetaImagenes = 'img/images_workers/';
+        $carpetaImagenes = '../img/images_workers/';
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
         move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
         return $nombreImagen;
@@ -174,12 +170,26 @@ class Colaborador
 
     public function deleteImagen($nombreImagen)
     {
-        $rutaImagen = "img/images_workers/" . $nombreImagen;
+        $rutaImagen = "../img/images_workers/" . $nombreImagen;
         if (file_exists($rutaImagen)) {
             unlink($rutaImagen);
             return true;
         }
         return false;
+    }
+
+    public function getMedicosPorServicio($idServicio)
+    {
+        $query = "SELECT c.idColaborador, c.nombre, c.apellido1, c.apellido2
+                FROM colaborador c
+                INNER JOIN serviciomedico sm ON c.idColaborador = sm.idColaborador
+                WHERE sm.idServicio = :idServicio";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':idServicio', $idServicio, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /* -----------------Login Cliente ----------------- */
