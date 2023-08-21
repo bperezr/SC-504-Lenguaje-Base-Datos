@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+require_once '../include/database/db_config.php';
+require_once '../include/database/db_cita.php';
+
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
@@ -12,6 +15,11 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
     header("Location: ../acceso_denegado.php");
     exit();
 }
+
+$cita = new Cita();
+
+$citaDetalle = $cita->getDetalleCitaMedico($id);
+
 ?>
 
 <!DOCTYPE html>
@@ -28,17 +36,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
     <?php $enlaceActivo = 'medico';
     include '../include/template/nav.php'; ?>
 
-    <main class="contenedor">
-        <div class="bg">
-            <h1 class="centrar-texto">Panel Médico</h1>
-            <div class="bg_img">
-                <img src="../img/logo_color.svg" alt="Happy Paws">
-            </div>
-        </div>
-    </main>
 
     <!-- Footer -->
-    <?php include '../include/template/footer2.php'; ?>
+     <?php include '../include/template/footer2.php'; ?> 
     <!-- JS -->
 </body>
 
