@@ -2,6 +2,6 @@
 $host = 'localhost';
 $port = '3306';
 $user = 'root';
-$pass = 'admin01';
+$pass = 'admin';
 $dbname = 'happypaws';
 ?>
