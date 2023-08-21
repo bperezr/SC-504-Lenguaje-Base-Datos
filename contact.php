@@ -148,8 +148,10 @@
                 </div><!-- contenedor-campos -->
 
                 <div class="boton-contacto">
-                    <input class="boton input-text" type="submit" value="Enviar" id="enviarBtn">
+                <input class="boton input-text" type="button" value="Enviar" id="enviarBtn">
                 </div>
+               
+
 
                 <div class="contenedor-mensaje">
 
@@ -161,27 +163,9 @@
 
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
+    
     <!-- JS -->
-    <script>
-        document.getElementById("enviarBtn").addEventListener("click", function(event) {
-        event.preventDefault();
-
-        var nombre = document.getElementById("nombre").value;
-        var telefono = document.getElementById("telefono").value;
-        var correo = document.getElementById("correo").value;
-        var mensaje = document.getElementById("mensaje").value;
-
-        var mailtoLink = "mailto:happyPaws@email.com" +
-                        "?subject=Formulario de contacto Happy Paws" +
-                        "&body=Nombre: " + encodeURIComponent(nombre) +
-                        "%0ATeléfono: " + encodeURIComponent(telefono) +
-                        "%0ACorreo: " + encodeURIComponent(correo) +
-                        "%0AMensaje: " + encodeURIComponent(mensaje);
-
-        window.location.href = mailtoLink;
-        });
-    </script>
-    <!-- <script src="js/contacto.js"></script> -->
+    <script src="js/contacto.js"></script> 
 </body>
 
 </html>`

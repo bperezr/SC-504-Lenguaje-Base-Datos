@@ -1,7 +1,8 @@
 // Función para validar el formulario de contacto
-
 function validarFormulario(event) {
-    event.preventDefault();
+    if (event) {
+        event.preventDefault();
+    }
 
     // Validar el nombre
     var nombreInput = document.getElementById('nombre');
@@ -79,3 +80,29 @@ var formulario = document.querySelector('.formulario');
 
 // Agregar el evento de validación al enviar el formulario
 formulario.addEventListener('submit', validarFormulario);
+
+document.getElementById("enviarBtn").addEventListener("click", function(event) {
+    // Llamar a la función de validación del formulario pasando el evento
+    validarFormulario(event);
+
+    // Obtener el estado de las validaciones
+    var contenedorMensaje = document.querySelector('.contenedor-mensaje');
+    var mensajeError = contenedorMensaje.querySelector('.mensaje-error');
+    
+    if (!mensajeError) {
+        // Si no hay mensajes de error, enviar el correo
+        var nombre = document.getElementById("nombre").value;
+        var telefono = document.getElementById("telefono").value;
+        var correo = document.getElementById("correo").value;
+        var mensaje = document.getElementById("mensaje").value;
+
+        var mailtoLink = "mailto:happyPaws@email.com" +
+                        "?subject=Formulario de contacto Happy Paws" +
+                        "&body=Nombre: " + encodeURIComponent(nombre) +
+                        "%0ATeléfono: " + encodeURIComponent(telefono) +
+                        "%0ACorreo: " + encodeURIComponent(correo) +
+                        "%0AMensaje: " + encodeURIComponent(mensaje);
+
+        window.location.href = mailtoLink;
+    }
+});
