@@ -26,6 +26,38 @@ echo "</pre>";
 echo "<pre>";
 print_r($servicios);
 echo "</pre>"; */
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idCliente = $id;
+    $idMascota = $_POST['mascota'];
+    $idServicio = $_POST['servicio'];
+    $fecha = $_POST['fecha'];
+    $idHorario = $_POST['horario'];
+    $idColaborador = $_POST['colaborador'];
+
+    echo "<pre>";
+    print_r($idCliente);
+    print_r($idMascota);
+    print_r($idServicio);
+    print_r($fecha);
+    print_r($idHorario);
+    print_r($idColaborador);
+    echo "</pre>";
+
+    // Insertar cita en la tabla 'citas'
+    $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
+
+    // Obtén el ID de la cita recién insertada
+    $idCita = $cita->getLastInsertId();
+
+    // Insertar asignación de cita en la tabla 'asignacioncitas'
+    $idColaborador = $_POST['colaborador'];
+    $cita->insertAsignacionCita($idCita, $idColaborador);
+
+/*     header('Location: profile_client.php');
+    exit; */
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +75,7 @@ echo "</pre>"; */
     include 'include/template/nav.php'; ?>
 
     <main class="contenedor">
-        <form class="formulario" id="formulario">
+        <form class="formulario" id="formulario" method="POST" action="cita.php">
             <fieldset>
                 <h3 class="centrar-texto">Agendar cita</h3>
                 <div class="contenedor-campos">
@@ -93,14 +125,6 @@ echo "</pre>"; */
                         <label for="horario">Horario:</label>
                         <select id="horario" name="horario">
                             <option value="" disabled selected>Seleccione un horario</option>
-                            <option value="8:00 AM">8:00 AM</option>
-                            <option value="10:00 AM">9:00 AM</option>
-                            <option value="2:00 PM">10:00 AM</option>
-                            <option value="4:00 PM">11:00 AM</option>
-                            <option value="8:00 AM">1:00 PM</option>
-                            <option value="10:00 AM">2:00 PM</option>
-                            <option value="2:00 PM">3:00 PM</option>
-                            <option value="4:00 PM">4:00 PM</option>
                         </select>
                     </div>
                 </div><!-- contenedor-campos -->
@@ -142,23 +166,47 @@ echo "</pre>"; */
                     $('#campoMedico').hide();
                 }
             });
-        });
 
-        function validarFecha() {
-            var fechaInput = new Date($('#fecha').val());
-            var diaSemana = fechaInput.getDay(); // 0: domingo, 6: sábado
-            // Verificar si es sábado o domingo
-            if (diaSemana === 0 || diaSemana === 6) {
-                // Sumar días para obtener el siguiente día laboral (lunes)
-                fechaInput.setDate(fechaInput.getDate() + (diaSemana === 0 ? 1 : 2));
+            $('#fecha').on('change', function () {
+                var selectedFecha = $(this).val();
+                var selectedMedico = $('#colaborador').val();
+
+                if (selectedFecha && selectedMedico) {
+                    $.ajax({
+                        url: 'include/functions/get_horarios_disponibles.php',
+                        method: 'POST',
+                        data: { fecha: selectedFecha, medico: selectedMedico },
+                        dataType: 'json',
+                        success: function (data) {
+                            var selectHorario = $('#horario');
+                            selectHorario.empty();
+                            selectHorario.append('<option value="" disabled selected>Seleccione un horario</option>');
+                            $.each(data, function (index, horario) {
+                                selectHorario.append('<option value="' + horario.idHorario + '">' + horario.horaInicio + ' - ' + horario.horaFin + '</option>');
+                            });
+                            $('#campoHorario').show();
+                        }
+                    });
+                } else {
+                    $('#campoHorario').hide();
+                }
+            });
+            function validarFecha() {
+                var fechaInput = new Date($('#fecha').val());
+                var diaSemana = fechaInput.getDay(); // 0: domingo, 6: sábado
+                // Verificar si es sábado o domingo
+                if (diaSemana === 0 || diaSemana === 6) {
+                    // Sumar días para obtener el siguiente día laboral (lunes)
+                    fechaInput.setDate(fechaInput.getDate() + (diaSemana === 0 ? 1 : 2));
+                }
+                // Obtener la fecha mínima permitida (día actual)
+                var fechaMinima = new Date($('#fecha').attr('min'));
+                // Si la fecha actual es menor que la fecha mínima, ajustarla
+                if (fechaInput < fechaMinima) {
+                    $('#fecha').val(fechaMinima.toISOString().slice(0, 10)); // Formato yyyy-mm-dd
+                }
             }
-            // Obtener la fecha mínima permitida (día actual)
-            var fechaMinima = new Date($('#fecha').attr('min'));
-            // Si la fecha actual es menor que la fecha mínima, ajustarla
-            if (fechaInput < fechaMinima) {
-                $('#fecha').val(fechaMinima.toISOString().slice(0, 10)); // Formato yyyy-mm-dd
-            }
-        }
+        });
     </script>
 </body>
 

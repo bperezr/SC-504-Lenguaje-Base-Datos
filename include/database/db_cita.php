@@ -54,4 +54,73 @@ class Cita
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario)
+    {
+        $query = "INSERT INTO citas (idCliente, idMascota, idServicio, fecha, idHorario, idestado)
+            VALUES (:idCliente, :idMascota, :idServicio, :fecha, :idHorario, :idestado)";
+        $stmt = $this->db->prepare($query);
+        $idestado = 1;
+        $stmt->bindValue(':idCliente', $idCliente, PDO::PARAM_INT);
+        $stmt->bindValue(':idMascota', $idMascota, PDO::PARAM_INT);
+        $stmt->bindValue(':idServicio', $idServicio, PDO::PARAM_INT);
+        $stmt->bindValue(':fecha', $fecha, PDO::PARAM_STR);
+        $stmt->bindValue(':idHorario', $idHorario, PDO::PARAM_INT);
+        $stmt->bindValue(':idestado', $idestado, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function updateCita($idCita, $idCliente, $idMascota, $idServicio, $fecha, $idHorario)
+    {
+        $query = "UPDATE citas SET idCliente = :idCliente, idMascota = :idMascota, idServicio = :idServicio, fecha = :fecha, idHorario = :idHorario WHERE idCita = :idCita";
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
+        $stmt->bindValue(':idCliente', $idCliente, PDO::PARAM_INT);
+        $stmt->bindValue(':idMascota', $idMascota, PDO::PARAM_INT);
+        $stmt->bindValue(':idServicio', $idServicio, PDO::PARAM_INT);
+        $stmt->bindValue(':fecha', $fecha, PDO::PARAM_STR);
+        $stmt->bindValue(':idHorario', $idHorario, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function updateEstadoCita($idCita, $idEstado)
+    {
+        $query = "UPDATE citas SET idestado = :idEstado WHERE idCita = :idCita";
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
+        $stmt->bindValue(':idEstado', $idEstado, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function insertAsignacionCita($idCita, $idColaborador)
+    {
+        $query = "INSERT INTO asignacioncitas (idcita, idColaborador) VALUES (:idCita, :idColaborador)";
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
+        $stmt->bindValue(':idColaborador', $idColaborador, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function updateAsignacionCita($idasignacionCita, $idCita, $idColaborador)
+    {
+        $query = "UPDATE asignacioncitas SET idcita = :idCita, idColaborador = :idColaborador WHERE idasignacionCita = :idasignacionCita";
+        $stmt = $this->db->prepare($query);
+
+        $stmt->bindValue(':idasignacionCita', $idasignacionCita, PDO::PARAM_INT);
+        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
+        $stmt->bindValue(':idColaborador', $idColaborador, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function getLastInsertId() {
+        return $this->db->lastInsertId();
+    }
+
+
 }
