@@ -59,8 +59,11 @@
         <a class="logo" href="index.php"><img src="img/logo2_color.svg" alt="Happy-Paws" /></a>
 
         <?php if (!empty($correoUsuario)): ?>
-            <p></ion-icon>
-                <?php echo $correoUsuario; ?>
+            <p>
+                <?php
+                $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
+                echo $nombreUsuario;
+                ?>
             </p>
         <?php else: ?>
             <p></ion-icon></p>
@@ -98,8 +101,11 @@
                         <li><a href="profile_client.php" <?php if ($enlaceActivo == 'perfil')
                             echo 'class="active"'; ?>>Perfil</a>
                         </li>
+                        <li><a href="cita_vista.php" <?php if ($enlaceActivo == 'cita_vista')
+                            echo 'class="active"'; ?>>Mis Cita</a></li>
                         <li><a href="cita.php" <?php if ($enlaceActivo == 'cita')
-                            echo 'class="active"'; ?>>Nueva Cita</a></li>
+                            echo 'class="active"'; ?>>Nueva Cita</a>
+                        </li>
                         <li><a href="logout.php" <?php if ($enlaceActivo == 'salir')
                             echo 'class="active"'; ?>>Salir</a></li>
                     </ul>
@@ -115,8 +121,11 @@
         <a class="logo" href="medical_index.php"><img src="../img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Usuario -->
         <?php if (!empty($correoUsuario)): ?>
-            <p>Médico:
-                <?php echo $correoUsuario; ?>
+            <p>
+                <?php
+                $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
+                echo $nombreUsuario;
+                ?>
             </p>
         <?php else: ?>
             <p>Médico: </p>
@@ -138,7 +147,8 @@
                             echo 'class="active"'; ?>>Perfil</a>
                         </li>
                         <li><a href="../logout.php" <?php if ($enlaceActivo == 'salir')
-                            echo 'class="active"'; ?>>Salir</a></li>
+                            echo 'class="active"'; ?>>Salir</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -153,11 +163,15 @@
         <a class="logo" href="admin_index.php"><img src="../img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Usuario -->
         <?php if (!empty($correoUsuario)): ?>
-            <p>Admin:
-                <?php echo $correoUsuario; ?>
+            <p>
+                <?php
+                $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
+                echo $nombreUsuario;
+                ?>
             </p>
+
         <?php else: ?>
-            <p>Admin: </p>
+            <p> </p>
         <?php endif; ?>
         <!-- Menu 2 -->
         <input type="checkbox" id="menu-bar" />
@@ -201,12 +215,15 @@
                             echo 'class="active"'; ?>>Tipos de Mascotas</a></li>
                     </ul>
                 </li>
-
+                <!-- Cita -->
+                <li><a href="admin_cita.php"> <ion-icon name="medkit"></ion-icon></a></li>
+                <!-- Login -->
                 <li class="login">
                     <p><ion-icon name="person-circle-outline"></ion-icon></p>
                     <ul>
                         <li><a href="../logout.php" <?php if ($enlaceActivo == 'salir')
-                            echo 'class="active"'; ?>>Salir</a></li>
+                            echo 'class="active"'; ?>>Salir</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

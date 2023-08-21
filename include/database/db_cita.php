@@ -118,9 +118,50 @@ class Cita
         return $stmt->execute();
     }
 
-    public function getLastInsertId() {
+    public function getLastInsertId()
+    {
         return $this->db->lastInsertId();
     }
+
+    public function getCitasCliente($idCliente)
+    {
+        $query = "SELECT c.idCita, m.nombre AS nombreMascota, s.servicio AS nombreServicio, c.fecha, h.horaInicio, h.horaFin, co.nombre AS nombreMedico, e.estado AS nombreEstado,  e.estado AS idEstado
+                FROM citas c
+                JOIN mascota m ON c.idMascota = m.idMascota
+                JOIN servicios s ON c.idServicio = s.idServicio
+                JOIN horariocitas h ON c.idHorario = h.idHorario
+                JOIN asignacioncitas ac ON c.idCita = ac.idCita
+                JOIN colaborador co ON ac.idColaborador = co.idColaborador
+                JOIN estado e ON c.idestado = e.idestado
+                WHERE c.idCliente = :idCliente";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(":idCliente", $idCliente, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getCitasPorEstado($idEstado)
+    {
+        $query = "SELECT c.idCita, m.nombre AS nombreMascota, s.servicio AS nombreServicio, c.fecha, h.horaInicio, h.horaFin, co.nombre AS nombreMedico, e.estado AS nombreEstado
+                    FROM citas c
+                    JOIN mascota m ON c.idMascota = m.idMascota
+                    JOIN servicios s ON c.idServicio = s.idServicio
+                    JOIN horariocitas h ON c.idHorario = h.idHorario
+                    JOIN asignacioncitas ac ON c.idCita = ac.idCita
+                    JOIN colaborador co ON ac.idColaborador = co.idColaborador
+                    JOIN estado e ON c.idestado = e.idestado
+                    WHERE c.idestado = :idEstado";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(":idEstado", $idEstado, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 
 
 }

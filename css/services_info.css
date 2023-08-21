@@ -33,6 +33,7 @@ body {
     font-family: var(--fuenteParrafos);
     font-size: 1.6rem;
     line-height: 2;
+    margin: 0;
 }
 
 /** Globales **/
@@ -516,4 +517,42 @@ footer {
         font-size: 1.6rem;
         padding: 1rem;
     }
+}
+
+/* ------------------------------------------- */
+/* Tabla */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: .1rem solid var(--grisClaro);
+    font-size: 1.4rem;
+}
+
+th, td {
+    text-align: left;
+    padding: .8rem;
+}
+
+thead {
+    background-color: var(--blanco);
+}
+
+tr:nth-child(even) {
+    background-color: var(--blanco);
+}
+
+/* Btn cancelación */
+button {
+    background-color: var(--color5);
+    color: var(--blanco);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+button:hover {
+    background-color: var(--color8);
+    color: var(--blanco);
 }

@@ -121,7 +121,7 @@ CREATE TABLE `citas` (
   CONSTRAINT `fk_Citas_Estado` FOREIGN KEY (`idestado`) REFERENCES `estado` (`idestado`),
   CONSTRAINT `fk_Citas_Horario` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`),
   CONSTRAINT `fk_Citas_Servicio` FOREIGN KEY (`idServicio`) REFERENCES `servicios` (`idServicio`),
-  CONSTRAINT `fk_Citas_TipoMascota` FOREIGN KEY (`idMascota`) REFERENCES `tipomascota` (`idTipoMascota`)
+  CONSTRAINT `fk_Citas_Mascota` FOREIGN KEY (`idMascota`) REFERENCES `mascota` (`idMascota`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
