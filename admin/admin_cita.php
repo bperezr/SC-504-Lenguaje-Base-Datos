@@ -45,8 +45,7 @@ $correoCliente = '';
                 <h3 class="centrar-texto">Agendar cita</h3>
 
                 <label for="correoCliente">Buscar cliente por correo:</label>
-                <input type="email" name="correoCliente" id="correoCliente" value="<?php echo $correoCliente; ?>"
-                    required>
+                <input type="email" name="correoCliente" id="correoCliente" value="<?php echo $correoCliente; ?>">
                 <button type="submit" name="buscarCliente">Buscar</button>
 
                 <?php
@@ -59,14 +58,13 @@ $correoCliente = '';
                         echo "<p>Cliente encontrado:</p>";
                         echo "<p>ID de Cliente: " . $cliente['idCliente'] . "</p>";
                         echo "<p>Nombre: " . $cliente['nombre'] . " " . $cliente['apellido1'] . " " . $cliente['apellido2'] . "</p>";
-
                     } else {
                         echo "<p>Cliente no encontrado.</p>";
                     }
                 }
                 ?>
 
-                <div class="campo" id="campoMascota" style="display: none;">
+                <div class="campo" id="campoMascota">
                     <label for="mascota">Mascota:</label>
                     <select id="mascota" name="mascota">
                         <option value="" disabled selected>Seleccione la mascota</option>
@@ -86,7 +84,7 @@ $correoCliente = '';
                     </select>
                 </div>
 
-                <div class="campo" style="display: none;">
+                <div class="campo">
                     <label for="servicio">Servicio:</label>
                     <select id="servicio" name="servicio">
                         <option value="" disabled selected>Seleccione un servicio</option>
@@ -104,14 +102,14 @@ $correoCliente = '';
                     </select>
                 </div>
 
-                <div class="campo" style="display: none;">
+                <div class="campo">
                     <label for="fecha">Fecha:</label>
                     <input type="date" id="fecha" name="fecha" min="<?php echo date('Y-m-d'); ?>"
                         oninput="validarFecha()">
                 </div>
 
 
-                <div class="campo" style="display: none;">
+                <div class="campo">
                     <label for="horario">Horario:</label>
                     <select id="horario" name="horario">
                         <option value="" disabled selected>Seleccione un horario</option>
@@ -119,31 +117,29 @@ $correoCliente = '';
                 </div>
                 </div>
 
-                <div class="boton-contacto" style="display: none;">
-                    <input class="boton input-text" type="submit" value="Enviar" name="insertCita">
+                <div class="boton-contacto">
+                    <input class="boton input-text" type="submit" value="Enviar" name="nuevaCita">
                 </div>
-
-                <?php
-                if (isset($_POST['insertCita'])) {
-                    $cliente['idCliente'];
-                    $idMascota = $_POST['mascota'];
-                    $idServicio = $_POST['servicio'];
-                    $fecha = $_POST['fecha'];
-                    $idHorario = $_POST['horario'];
-                    $idColaborador = $_POST['colaborador'];
-
-                    $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
-                    $idCita = $cita->getLastInsertId();
-                    $idColaborador = $_POST['colaborador'];
-                    $cita->insertAsignacionCita($idCita, $idColaborador);
-
-                    header('Location: admin_cita.php');
-                    exit;
-                }
-                ?>
-
             </fieldset>
         </form>
+        <?php
+        if (isset($_POST['nuevaCita'])) {
+            $cliente['idCliente'];
+            $idMascota = $_POST['mascota'];
+            $idServicio = $_POST['servicio'];
+            $fecha = $_POST['fecha'];
+            $idHorario = $_POST['horario'];
+            $idColaborador = $_POST['colaborador'];
+
+            $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
+            $idCita = $cita->getLastInsertId();
+            $idColaborador = $_POST['colaborador'];
+            $cita->insertAsignacionCita($idCita, $idColaborador);
+
+            header('Location: admin_cita.php');
+            exit;
+        }
+        ?>
     </main>
 
     <!-- Footer -->
@@ -151,6 +147,30 @@ $correoCliente = '';
     <!-- JS -->
     <script>
         $(document).ready(function () {
+            $('#servicio').on('change', function () {
+                var selectedServicio = $(this).val();
+                if (selectedServicio !== "") {
+                    $.ajax({
+                        url: '../include/functions/get_medicos.php',
+                        method: 'POST',
+                        data: { servicio: selectedServicio },
+                        dataType: 'json',
+                        success: function (data) {
+                            var selectMedico = $('#colaborador');
+                            selectMedico.empty();
+                            selectMedico.append('<option value="" disabled selected>Seleccione un médico</option>');
+                            $.each(data, function (index, medico) {
+                                selectMedico.append('<option value="' + medico.idColaborador + '">' + medico.nombre + ' ' + medico.apellido1 + '</option>');
+                            });
+                            $('#campoMedico').show();
+                        }
+                    });
+                } else {
+                    $('#campoMedico').hide();
+                }
+            });
+
+
             $('#servicio').on('change', function () {
                 var selectedServicio = $(this).val();
                 if (selectedServicio !== "") {
@@ -210,6 +230,7 @@ $correoCliente = '';
                 }
             }
         });
+
     </script>
 </body>
 
