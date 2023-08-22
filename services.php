@@ -112,7 +112,7 @@ if (isset($_SESSION['usuario'])) {
                     </div>
 
                     <div class="service_text">
-                        <h3 class="centrar-texto">Aceo</h3>
+                        <h3 class="centrar-texto">Aseo</h3>
                         <p class="justificar-texto">
                             Consentimos a tus mascotas con nuestro servicio de Aseo y Estética, que incluye baños
                             relajantes, corte de pelo, limpieza de oídos y más, para mantenerlos con un aspecto fresco y

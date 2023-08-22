@@ -42,7 +42,7 @@ if (isset($_SESSION['usuario'])) {
                 <div class="iconos">
 
                     <div class="icono">
-                        <a href="">
+                        <a href="https://www.instagram.com/">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-instagram"
                                 width="60" height="60" viewBox="0 0 24 24" stroke-width="2" stroke="#ffca0f" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -57,7 +57,7 @@ if (isset($_SESSION['usuario'])) {
                     </div>
 
                     <div class="icono">
-                        <a href="">
+                        <a href="https://es-la.facebook.com/">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-facebook"
                                 width="60" height="60" viewBox="0 0 24 24" stroke-width="2" stroke="#ffca0f" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -69,7 +69,7 @@ if (isset($_SESSION['usuario'])) {
                     </div>
 
                     <div class="icono">
-                        <a href="">
+                        <a href="https://web.whatsapp.com/">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-whatsapp"
                                 width="60" height="60" viewBox="0 0 24 24" stroke-width="2" stroke="#ffca0f" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -160,8 +160,10 @@ if (isset($_SESSION['usuario'])) {
                 </div><!-- contenedor-campos -->
 
                 <div class="boton-contacto">
-                    <input class="boton input-text" type="submit" value="Enviar">
+                <input class="boton input-text" type="button" value="Enviar" id="enviarBtn">
                 </div>
+               
+
 
                 <div class="contenedor-mensaje">
 
@@ -173,8 +175,9 @@ if (isset($_SESSION['usuario'])) {
 
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
+    
     <!-- JS -->
-    <script src="js/contacto.js"></script>
+    <script src="js/contacto.js"></script> 
 </body>
 
 </html>`

@@ -5,7 +5,7 @@
     --color4: #DD883E;
     --color5: #f97561;
     --color8: #2C2524;
-
+    --color9: #c04242;
     --negro: #000000;
     --blanco: #FFFFFF;
 
@@ -32,7 +32,7 @@ html {
 body {
     font-family: var(--fuenteParrafos);
     font-size: 1.6rem;
-    line-height: 2;
+    line-height: 3;    
     background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../img/fondo3.webp');
     background-size: cover;
     background-repeat: no-repeat;
@@ -40,11 +40,14 @@ body {
     margin: 0;
 }
 
+
+
 /** Globales **/
 .contenedor {
     width: min(90%, 120rem);
     margin: 5rem auto;
-    min-height: 100vh;
+    min-height: 70vh;
+   
 }
 
 a {
@@ -398,4 +401,77 @@ footer {
 
 .contenedor .bg .bg_img img{
     max-width: 50%;
+}
+
+/* Tabla */
+table {
+    margin: auto;
+    width: 100%;
+    font-size: 1.4rem;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: var(--color1);
+
+}
+
+th, td {
+    text-align: center;
+    padding: 1rem;       
+}
+
+td.atendida {
+    background-color: rgb(114, 170, 114);
+    color: var(--blanco);
+    padding: 0.2rem 0.5rem;
+  }
+
+  td.asignada {
+    background-color: rgb(218, 210, 110);
+    color: var(--blanco);
+    padding: 0.2rem 0.5rem;
+  }
+
+  td.cancelada {
+    background-color: var(--color9);
+    color: var(--blanco);
+    padding: 0.2rem 0.5rem;
+  }
+
+
+
+tr:nth-child(even) {
+    background-color: var(--blanco);
+    margin: 1rem; 
+}
+
+/* Btn cancelación */
+.cancelarCita {
+    background-color: var(--color5);
+    color: var(--blanco);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Btn detalle cita */
+.detalleCita {
+    background-color: var(--color2);
+    color: var(--color8);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+button:hover {
+    background-color: var(--color8);
+    color: var(--blanco);
 }
