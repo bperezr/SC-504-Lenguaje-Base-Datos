@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <thead>
                 <tr>
                     <th>ID de Cita</th>
+                    <th>Médico</th>
                     <th>Cliente</th>
                     <th>Mascota</th>                    
                     <th>Fecha</th>
@@ -63,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 foreach ($citaDetalle as $cdetalle) {                
                         echo "<tr>";
                         echo "<td>" . $cdetalle['idcita'] . "</td>";
+                        echo "<td>" . $cdetalle['nombreMedico'] . "</td>";
                         echo "<td>" . $cdetalle['nombre'] . " ".  $cdetalle['apellido1'] . " ".  $cdetalle['apellido2'] . "</td>";
                         echo "<td>" . $cdetalle['nombreMascota'] . "</td>";
                         echo "<td>" . $cdetalle['fecha'] . "</td>";
