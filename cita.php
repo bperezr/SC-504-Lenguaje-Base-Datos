@@ -19,14 +19,6 @@ $cita = new Cita();
 $mascotasCliente = $cita->getMascotasCliente($id);
 $servicios = $cita->getServicios();
 
-/* echo "<pre>";
-print_r($mascotasCliente);
-echo "</pre>";
-
-echo "<pre>";
-print_r($servicios);
-echo "</pre>"; */
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idCliente = $id;
     $idMascota = $_POST['mascota'];
@@ -35,27 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idHorario = $_POST['horario'];
     $idColaborador = $_POST['colaborador'];
 
-    echo "<pre>";
-    print_r($idCliente);
-    print_r($idMascota);
-    print_r($idServicio);
-    print_r($fecha);
-    print_r($idHorario);
-    print_r($idColaborador);
-    echo "</pre>";
-
-    // Insertar cita en la tabla 'citas'
     $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
-
-    // Obtén el ID de la cita recién insertada
     $idCita = $cita->getLastInsertId();
-
-    // Insertar asignación de cita en la tabla 'asignacioncitas'
     $idColaborador = $_POST['colaborador'];
     $cita->insertAsignacionCita($idCita, $idColaborador);
 
-/*     header('Location: profile_client.php');
-    exit; */
+    header('Location: cita_vista.php');
+    exit;
 }
 
 ?>

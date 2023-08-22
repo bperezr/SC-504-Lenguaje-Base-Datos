@@ -23,9 +23,9 @@ $tipoMascota = new TipoMascota();
 
 $tiposMascotaData = $tipoMascota->getTipoMascotas();
 
-echo "<pre>";
+/* echo "<pre>";
 print_r($tiposMascotaData);
-echo "</pre>";
+echo "</pre>"; */
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
