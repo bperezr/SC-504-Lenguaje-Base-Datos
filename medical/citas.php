@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <option value="<?php echo $idEstado; ?>"><?php echo $nombreEstado; ?>
                                                         <?php
                                                         foreach ($estados as $estado) {
-                                                            if($estado["estado"] != $nombreEstado){
+                                                            if($estado["estado"] != $nombreEstado && $estado["estado"] != "Cancelada" ){
                                                                 echo '<option  value="' . $estado["idestado"] . '">' . $estado["estado"] . '</option>';
                                                             }
                                                             

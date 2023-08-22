@@ -129,8 +129,8 @@
             <ul>
                 <li><a href="medical_appointments.php" <?php if ($enlaceActivo == 'mecical_appointments')
                     echo 'class="active"'; ?>>Citas</a></li>
-                <li><a href="" <?php if ($enlaceActivo == 'pacientes')
-                    echo 'class="active"'; ?>>Pacientes</a></li>
+                <li><a href="historialMedico.php" <?php if ($enlaceActivo == 'pacientes')
+                    echo 'class="active"'; ?>>Historial Medico</a></li>
                 <li class="login">
                     <p><ion-icon name="person-circle-outline"></ion-icon></p>
                     <ul>

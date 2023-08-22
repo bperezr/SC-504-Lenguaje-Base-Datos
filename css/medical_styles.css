@@ -5,7 +5,7 @@
     --color4: #DD883E;
     --color5: #f97561;
     --color8: #2C2524;
-
+    --color9: #c04242;
     --negro: #000000;
     --blanco: #FFFFFF;
 
@@ -406,7 +406,7 @@ footer {
 /* Tabla */
 table {
     margin: auto;
-    width: 80%;
+    width: 100%;
     font-size: 1.4rem;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -432,6 +432,12 @@ td.atendida {
 
   td.asignada {
     background-color: rgb(218, 210, 110);
+    color: var(--blanco);
+    padding: 0.2rem 0.5rem;
+  }
+
+  td.cancelada {
+    background-color: var(--color9);
     color: var(--blanco);
     padding: 0.2rem 0.5rem;
   }

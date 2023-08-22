@@ -20,6 +20,13 @@ $cita = new Cita();
 
 $citaDetalle = $cita->getDetalleCitaMedico($id);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {   
+    $id= $_POST['idCita'];
+    $idEstado =3;
+
+    $cita->updateEstadoCita($id,$idEstado);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -53,8 +60,7 @@ $citaDetalle = $cita->getDetalleCitaMedico($id);
             </thead>
             <tbody> 
             <?php
-                foreach ($citaDetalle as $cdetalle) {
-                    if ($cdetalle['estado'] != 'Cancelada') {
+                foreach ($citaDetalle as $cdetalle) {                
                         echo "<tr>";
                         echo "<td>" . $cdetalle['idcita'] . "</td>";
                         echo "<td>" . $cdetalle['nombre'] . " ".  $cdetalle['apellido1'] . " ".  $cdetalle['apellido2'] . "</td>";
@@ -62,7 +68,7 @@ $citaDetalle = $cita->getDetalleCitaMedico($id);
                         echo "<td>" . $cdetalle['fecha'] . "</td>";
                         echo "<td>" . $cdetalle['horaInicio'] . " - " . $cdetalle['horaFin'] . "</td>";
                         // Aplica una clase CSS específica basada en el estado
-                        $estadoClass = $cdetalle['estado'] == 'Atendida' ? 'atendida' : 'asignada';
+                        $estadoClass = ($cdetalle['estado'] == 'Atendida' ? 'atendida' : ($cdetalle['estado'] == 'Asignada' ? 'asignada' : 'cancelada'));
                         echo "<td class='$estadoClass'>" . $cdetalle['estado'] . "</td>";
                        
                         if ($cdetalle['estado'] == 'Asignada') {
@@ -81,7 +87,7 @@ $citaDetalle = $cita->getDetalleCitaMedico($id);
                             echo "</td>"; 
                         }                    
                         echo "</tr>";
-                    }
+                    
 
                 }
                 ?>        

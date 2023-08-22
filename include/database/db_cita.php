@@ -153,7 +153,7 @@ class Cita
       join cliente as cli on c.idCliente = cli.idCliente
       join servicios as s on c.idServicio = s.idServicio
       join horariocitas as hc on c.idHorario = hc.idHorario
-      join estado as e on c.idestado = e.idestado WHERE ac.idColaborador = :idColaborador";
+      join estado as e on c.idestado = e.idestado WHERE ac.idColaborador = :idColaborador order by c.fecha desc";
        $stmt = $this->db->prepare($query);
        $stmt->bindParam(':idColaborador', $idColaborador, PDO::PARAM_INT);
        $stmt->execute();
@@ -193,9 +193,21 @@ class Cita
       $stmt = $this->db->prepare($query);
       $stmt->bindParam(':idCita', $idCita, PDO::PARAM_INT);
      $stmt->execute();
+     return $stmt->fetchAll(PDO::FETCH_ASSOC);     
+  }
 
-     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+  public function getAllHistorialMedico($idColaborador){
+    $query = "SELECT h.*, c.fecha, s.servicio, m.nombre as nombreMascota, c.idestado , c.idCliente, cli.nombre, cli.apellido1,cli.apellido2, e.estado
+    from historialmedico as h 
+    JOIN  mascota as m on h.idMascota = m.idmascota 
+    join citas as c on h.idCita = c.idcita
+    join cliente as cli on c.idCliente = cli.idCliente
+    join estado as e on c.idestado = e.idestado
+    join servicios as s on c.idServicio = s.idServicio WHERE h.idColaborador  = :idColaborador";
+      $stmt = $this->db->prepare($query);
+      $stmt->bindParam(':idColaborador', $idColaborador, PDO::PARAM_INT);
+     $stmt->execute();
+     return $stmt->fetchAll(PDO::FETCH_ASSOC);     
   }
 
 
