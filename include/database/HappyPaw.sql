@@ -33,7 +33,7 @@ CREATE TABLE `asignacioncitas` (
   KEY `fk_Asignacion_Colaborador` (`idColaborador`),
   CONSTRAINT `fk_Asignacion_Cita` FOREIGN KEY (`idcita`) REFERENCES `citas` (`idCita`),
   CONSTRAINT `fk_Asignacion_Colaborador` FOREIGN KEY (`idColaborador`) REFERENCES `colaborador` (`idColaborador`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `asignacioncitas` (
 
 LOCK TABLES `asignacioncitas` WRITE;
 /*!40000 ALTER TABLE `asignacioncitas` DISABLE KEYS */;
+INSERT INTO `asignacioncitas` VALUES (1,2,4),(2,3,2),(3,4,5),(4,5,2),(5,6,5),(6,7,2),(7,8,2),(8,9,2),(9,10,3),(10,11,4),(11,12,2),(12,13,3),(13,14,5),(14,15,3),(15,16,3),(16,17,5),(17,18,3),(18,19,4),(19,20,4);
 /*!40000 ALTER TABLE `asignacioncitas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,9 +121,9 @@ CREATE TABLE `citas` (
   CONSTRAINT `fk_Citas_Cliente` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
   CONSTRAINT `fk_Citas_Estado` FOREIGN KEY (`idestado`) REFERENCES `estado` (`idestado`),
   CONSTRAINT `fk_Citas_Horario` FOREIGN KEY (`idHorario`) REFERENCES `horariocitas` (`idHorario`),
-  CONSTRAINT `fk_Citas_Servicio` FOREIGN KEY (`idServicio`) REFERENCES `servicios` (`idServicio`),
-  CONSTRAINT `fk_Citas_Mascota` FOREIGN KEY (`idMascota`) REFERENCES `mascota` (`idMascota`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+  CONSTRAINT `fk_Citas_Mascota` FOREIGN KEY (`idMascota`) REFERENCES `mascota` (`idMascota`),
+  CONSTRAINT `fk_Citas_Servicio` FOREIGN KEY (`idServicio`) REFERENCES `servicios` (`idServicio`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +132,7 @@ CREATE TABLE `citas` (
 
 LOCK TABLES `citas` WRITE;
 /*!40000 ALTER TABLE `citas` DISABLE KEYS */;
-INSERT INTO `citas` VALUES (1,1,1,1,'2023-08-20',1,1);
+INSERT INTO `citas` VALUES (2,1,1,3,'2023-08-22',1,2),(3,1,2,1,'2023-08-31',2,1),(4,1,3,4,'2023-08-28',5,1),(5,1,4,1,'2023-09-04',4,1),(6,1,5,4,'2023-08-25',4,1),(7,1,1,1,'2023-08-22',1,2),(8,1,2,1,'2023-08-22',4,2),(9,2,6,1,'2023-08-22',2,2),(10,2,7,2,'2023-08-24',3,3),(11,2,8,3,'2023-08-24',5,1),(12,3,9,1,'2023-08-22',3,2),(13,3,9,2,'2023-08-22',3,2),(14,3,11,4,'2023-08-22',3,2),(15,4,12,2,'2023-08-23',4,1),(16,4,13,2,'2023-08-22',1,2),(17,4,14,4,'2023-08-24',2,3),(18,5,15,2,'2023-08-24',4,1),(19,5,16,3,'2023-08-22',6,2),(20,5,17,3,'2023-08-31',5,1);
 /*!40000 ALTER TABLE `citas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +166,7 @@ CREATE TABLE `cliente` (
   CONSTRAINT `fk_Cliente_Distrito` FOREIGN KEY (`idDistrito`) REFERENCES `distrito` (`idDistrito`),
   CONSTRAINT `fk_Cliente_Provincia` FOREIGN KEY (`idProvincia`) REFERENCES `provincia` (`idProvincia`),
   CONSTRAINT `fk_Cliente_Rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,7 +175,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Jorge','Hernández','Araya','60245117','7c62b90e2e77a68562e301db48ccbc76.jpg','200 metros sur del hotel Villas de la Colina',1,101,10101,3,'jorge@email.com','$2y$10$EeR5YV6qbqeCwr6KyhPhs.9OE7iJU8AJSwWlx1PYmJWjxCibIZm5O');
+INSERT INTO `cliente` VALUES (1,'Jorge','Hernández','Araya','60245117','7c62b90e2e77a68562e301db48ccbc76.jpg','200 metros sur del hotel Villas de la Colina',1,101,10101,3,'jorge@email.com','$2y$10$EeR5YV6qbqeCwr6KyhPhs.9OE7iJU8AJSwWlx1PYmJWjxCibIZm5O'),(2,'Ana Laura','Mora','Soto','65432109','e762144327664d80aa08485d61ed9ff7.jpg','Calle del Sol, Apartamento 7A',1,101,10101,3,'ana@email.com','$2y$10$UQQ0txeVobI7Amx/yZ.IBu5FiMNhGrJaWtRChgs6izzq.t5PyaBZ6'),(3,'Carlos','López','Chaves','87654321','cfb391f9fa4e6bda29ca7d3c39c7e5a4.jpg','Avenida Principal, Apartamento 12B',1,101,10101,3,'carlos@email.com','$2y$10$QA5cdAUq4smlps/IG.oxw.xzkQQuvpfWscY.rHv9T65jM7.y4aVnm'),(4,'Pedro','Rodríguez','Méndez','12345678','bf0affc46bdf31af64d2bc170e8cfbf4.jpg','Calle 123, Casa #45',1,101,10101,3,'pedro@email.com','$2y$10$ONrtbTU7yrWWCWAyPdqudO6hoxu8LNwGCvmU1Vy59GjChzW1Z/n/q'),(5,'María','Vargas','Cruz','23456789','9401d9199f70549d5b152ebcc68178c8.jpg','Avenida Central, Casa #56',1,101,10101,3,'maria@email.com','$2y$10$RVhiqXM2w3xdomXrzVXXU.w31e7ZVZJxc7xpSlQME2PeOODE8OUOC');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +204,7 @@ CREATE TABLE `colaborador` (
   CONSTRAINT `fk_Colaborador_Cargo` FOREIGN KEY (`idCargo`) REFERENCES `cargo` (`idCargo`),
   CONSTRAINT `fk_Colaborador_Especialidad` FOREIGN KEY (`idEspecialidad`) REFERENCES `especialidad` (`idEspecialidad`),
   CONSTRAINT `fk_Colaborador_Rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,7 +213,7 @@ CREATE TABLE `colaborador` (
 
 LOCK TABLES `colaborador` WRITE;
 /*!40000 ALTER TABLE `colaborador` DISABLE KEYS */;
-INSERT INTO `colaborador` VALUES (1,'admin','admin','admin',1,5,'2bec2643a2e49f487d6262bcf2bbb14a.jpg',1,'admin@happypaws.com','$2y$10$SorXZ98r6A1KtoxMQjjkTOBjr2EEOEELJKbxgBdFP8rJjclBmYht2'),(2,'Luis Carlos','Morales','Mena',3,1,'4512cd38ce4ed7fbf944f817a9e28b68.jpg',2,'juan.moreles@happypaws.com','$2y$10$TuO6Dyr3qF0tQtH0J0r/he6l40.wUOiea7bWXkK8cESCcPotlS7AS'),(3,'Ana','Rodríguez','Moya',3,2,'814bf8304eb6011bbf97fd94350b44fe.jpg',2,'ana.rodriges@happypaws.com','$2y$10$AiN6qE07lOjAOYWfrF.us.y19Rl72k7i3ekA9K5rz/s2LrGzJzKjS'),(4,'Elizabeth','Gómez','Roldan',1,4,'296728b02f2db0822d8658b214172f01.jpg',2,'elizabeth.gomez@happypaws.com','$2y$10$YK0opKbIEHSVEfKZ8FVCS.i3NzKVejkm27yATzyCiZ20FWOq25gd2'),(5,'Sofia','Rojas','Quesada',3,3,'fee34ecf2b12c6259162670efd678cd9.jpg',2,'sofia.rojas@happypaws.com','$2y$10$Nm70ne8cNIbaOpkCx19Eju/8e.dxqQazxbRWH1JJMgzAoLSPOoQ1W');
+INSERT INTO `colaborador` VALUES (1,'admin','admin','admin',1,5,'2bec2643a2e49f487d6262bcf2bbb14a.jpg',1,'admin@happypaws.com','$2y$10$TuO6Dyr3qF0tQtH0J0r/he6l40.wUOiea7bWXkK8cESCcPotlS7AS'),(2,'Luis Carlos','Morales','Mena',3,1,'4512cd38ce4ed7fbf944f817a9e28b68.jpg',2,'juan.moreles@happypaws.com','$2y$10$TuO6Dyr3qF0tQtH0J0r/he6l40.wUOiea7bWXkK8cESCcPotlS7AS'),(3,'Ana','Rodríguez','Moya',3,2,'814bf8304eb6011bbf97fd94350b44fe.jpg',2,'ana.rodriges@happypaws.com','$2y$10$AiN6qE07lOjAOYWfrF.us.y19Rl72k7i3ekA9K5rz/s2LrGzJzKjS'),(4,'Elizabeth','Gómez','Roldan',1,4,'296728b02f2db0822d8658b214172f01.jpg',2,'elizabeth.gomez@happypaws.com','$2y$10$YK0opKbIEHSVEfKZ8FVCS.i3NzKVejkm27yATzyCiZ20FWOq25gd2'),(5,'Sofia','Rojas','Quesada',3,3,'fee34ecf2b12c6259162670efd678cd9.jpg',2,'sofia.rojas@happypaws.com','$2y$10$Nm70ne8cNIbaOpkCx19Eju/8e.dxqQazxbRWH1JJMgzAoLSPOoQ1W');
 /*!40000 ALTER TABLE `colaborador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,7 +283,7 @@ CREATE TABLE `especialidad` (
   `especialidad` varchar(50) NOT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idEspecialidad`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -345,7 +346,7 @@ CREATE TABLE `eventos` (
   CONSTRAINT `fk_Eventos_Canton` FOREIGN KEY (`idCanton`) REFERENCES `canton` (`idCanton`),
   CONSTRAINT `fk_Eventos_Distrito` FOREIGN KEY (`idDistrito`) REFERENCES `distrito` (`idDistrito`),
   CONSTRAINT `fk_Eventos_Provincia` FOREIGN KEY (`idProvincia`) REFERENCES `provincia` (`idProvincia`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,7 +368,7 @@ DROP TABLE IF EXISTS `historialmedico`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `historialmedico` (
   `idHMedico` int NOT NULL AUTO_INCREMENT,
-  `detalleCita` varchar(200) NOT NULL,
+  `detalleCita` varchar(5000) NOT NULL,
   `costo` int DEFAULT NULL,
   `idMascota` int NOT NULL,
   `idColaborador` int NOT NULL,
@@ -379,7 +380,7 @@ CREATE TABLE `historialmedico` (
   CONSTRAINT `fk_HistorialMedico_Cita` FOREIGN KEY (`idCita`) REFERENCES `citas` (`idCita`),
   CONSTRAINT `fk_HistorialMedico_Colaborador` FOREIGN KEY (`idColaborador`) REFERENCES `colaborador` (`idColaborador`),
   CONSTRAINT `fk_HistorialMedico_Mascota` FOREIGN KEY (`idMascota`) REFERENCES `mascota` (`idMascota`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -388,6 +389,7 @@ CREATE TABLE `historialmedico` (
 
 LOCK TABLES `historialmedico` WRITE;
 /*!40000 ALTER TABLE `historialmedico` DISABLE KEYS */;
+INSERT INTO `historialmedico` VALUES (1,'Motivo de la Visita:\r\nEl propietario trajo a Coco a la clínica debido a un comportamiento inusual y falta de apetito en los últimos días.\r\n\r\nHistorial Médico:\r\nCoco es un perro macho de 3 años de edad, de raza Bulldog Francés, con un historial médico generalmente positivo. Ha estado al día con sus vacunas y controles de salud regulares.\r\n\r\nDescripción de los Síntomas:\r\nEl dueño informa que Coco ha estado mostrando falta de energía, ha estado durmiendo más de lo habitual y ha perdido interés en su comida favorita. No se han observado vómitos ni diarrea.\r\n\r\nExamen Físico:\r\nDurante el examen físico, se observó que Coco presenta signos de letargo y una ligera disminución en su peso. No se detectaron anomalías evidentes en su piel, pelaje ni estructura física.\r\n\r\nDiagnóstico Provisional:\r\nSe sospecha que Coco puede estar experimentando un malestar digestivo o algún nivel de malestar general. Se recomienda realizar análisis de sangre y heces para evaluar más a fondo su estado de salud.\r\n\r\nPlan de Acción:\r\n1. Se realizarán análisis de sangre y heces para obtener información detallada sobre la salud de Coco.\r\n2. Se proporcionarán líquidos por vía intravenosa para prevenir la deshidratación.\r\n3. Se recomienda mantener a Coco en un ambiente tranquilo y confortable mientras se espera el resultado de los análisis.\r\n4. Se recetará una dieta suave y fácil de digerir hasta que se aclare el diagnóstico.\r\n\r\nPróxima Cita:\r\nSe programará una cita de seguimiento en [Fecha] para revisar los resultados de los análisis y determinar un plan de tratamiento adecuado.',7500,1,2,7),(2,'Motivo de la Visita:\r\nEl dueño trajo a Gary a la clínica debido a una leve tos persistente que ha notado en los últimos días y para realizar un chequeo general de su salud.\r\n\r\nDescripción de los Síntomas:\r\nEl dueño informa que Gary ha estado presentando tos ocasional, especialmente después de jugar o comer. No ha habido cambios en su apetito ni en su comportamiento general.\r\n\r\nExamen Físico:\r\nDurante el examen físico, se observa que Gary tiene un peso un poco por encima de lo recomendado. No se detectaron problemas evidentes en su piel, pelaje ni en su estructura física.\r\n\r\nDiagnóstico Provisional:\r\nSe sospecha que la tos de Gary podría estar relacionada con una irritación en su garganta o vías respiratorias. Se recomienda realizar una radiografía torácica para descartar problemas pulmonares.\r\n\r\nPlan de Acción:\r\n1. Se realizará una radiografía torácica para evaluar la salud de los pulmones y las vías respiratorias de Gary.\r\n2. Se recetará un jarabe suave para aliviar cualquier irritación en la garganta.\r\n3. Se recomienda monitorear de cerca la tos de Gary y cualquier otro cambio en su comportamiento.\r\n4. Se discutirá un plan de control de peso para ayudar a mantener a Gary en un rango saludable.\r\n\r\nPróxima Cita:\r\nSe programará una cita de seguimiento en [Fecha] para revisar los resultados de la radiografía y evaluar la efectividad del tratamiento recomendado.\r\n',20000,2,2,8),(3,'Motivo de la Visita:\r\nEl dueño programó una cita de Medicina General para Oliver para realizar un chequeo de rutina y asegurarse de que esté en buen estado de salud.\r\n\r\nHistorial Médico:\r\nOliver tiene un historial médico generalmente positivo y ha estado al día con sus vacunas y controles regulares.\r\n\r\nDescripción de los Síntomas:\r\nEl dueño no ha notado ningún síntoma preocupante en Oliver. La visita es principalmente para un examen de salud de rutina y para discutir cualquier inquietud que pueda tener sobre su bienestar.\r\n\r\nExamen Físico:\r\nDurante el examen, se evaluará la condición general de Oliver, incluyendo su peso, pelaje, oídos, ojos y salud bucal.\r\n\r\nPlan de Acción:\r\n1. Se realizará un examen físico completo para evaluar la salud general de Oliver.\r\n2. Se discutirán las opciones de dieta y control de peso si es necesario.\r\n3. Se proporcionarán recomendaciones generales para el cuidado y el bienestar de Oliver.',15200,6,2,9),(4,'Motivo de la Visita:\r\nEl dueño ha programado una cita de Medicina General para Mia con el fin de realizar un chequeo de salud de rutina y asegurarse de que esté en buenas condiciones.\r\n\r\nHistorial Médico:\r\nMia tiene un historial médico positivo y ha estado al día con sus vacunas y controles regulares.\r\n\r\nDescripción de los Síntomas:\r\nEl dueño no ha observado ningún síntoma inusual en Mia. La visita tiene como objetivo principal garantizar que Mia siga gozando de una buena salud y abordar cualquier preocupación que el dueño pueda tener.\r\n\r\nExamen Físico:\r\nDurante el examen, se evaluará la condición general de Mia, incluyendo su peso, pelaje, oídos, ojos y salud bucal.\r\n\r\nPlan de Acción:\r\n1. Se llevará a cabo un examen físico exhaustivo para evaluar la salud general de Mia.\r\n2. Se discutirán aspectos relacionados con la dieta y el cuidado del pelaje.\r\n3. Se proporcionarán recomendaciones para el enriquecimiento ambiental y el bienestar general de Mia.\r\n',25000,9,2,12),(5,'Motivo de la Cita - Cirugía:\r\nMia ha sido programada para una cirugía específica [Descripción de la Cirugía], la cual ha sido recomendada por el veterinario para abordar [Razón Médica para la Cirugía].\r\n\r\nHistorial Médico:\r\nMia tiene un historial médico positivo y ha estado al día con sus vacunas y controles regulares.\r\n\r\nPreparación para la Cirugía:\r\n1. Mia debe estar en ayunas desde la medianoche anterior a la cirugía.\r\n2. Se debe asegurar de no darle comida ni agua antes de la cita programada.\r\n3. Se recomienda traer a Mia en su transportadora para minimizar el estrés antes de la cirugía.\r\n\r\nProcedimiento de la Cirugía:\r\n1. La cirugía será realizada por el equipo quirúrgico en nuestras instalaciones.\r\n2. Mia será sedada y monitoreada de cerca durante todo el procedimiento.\r\n3. La cirugía se realizará con el máximo cuidado y profesionalismo para garantizar la seguridad de Mia.\r\n\r\nPostoperatorio y Cuidados:\r\n1. Mia será monitoreada durante su recuperación en nuestras instalaciones.\r\n2. Se proporcionarán instrucciones detalladas para el cuidado posterior a la cirugía, incluyendo medicación y restricciones de actividad.\r\n3. Se programará una cita de seguimiento para evaluar su recuperación y retirar suturas si es necesario.\r\n',15000,9,3,13),(6,'Motivo de la Cita - Cirugía:\r\nMax ha sido programado para una cirugía específica [Descripción de la Cirugía], la cual ha sido recomendada por el veterinario para abordar [Razón Médica para la Cirugía].\r\n\r\nHistorial Médico:\r\nMax tiene un historial médico generalmente positivo y ha estado al día con sus vacunas y controles regulares.\r\n\r\nPreparación para la Cirugía:\r\n1. Max debe estar en ayunas desde la medianoche anterior a la cirugía.\r\n2. Se debe asegurar de no darle comida ni agua antes de la cita programada.\r\n3. Dado el comportamiento arisco de Max, se recomienda traerlo en una transportadora adecuada para garantizar la seguridad de todos.\r\n\r\nProcedimiento de la Cirugía:\r\n1. La cirugía será realizada por el equipo quirúrgico en nuestras instalaciones.\r\n2. Max será sedado y monitoreado de cerca durante todo el procedimiento.\r\n3. La cirugía se realizará con el máximo cuidado y profesionalismo para garantizar la seguridad de Max.\r\n\r\nPostoperatorio y Cuidados:\r\n1. Max será monitoreado durante su recuperación en nuestras instalaciones.\r\n2. Se proporcionarán instrucciones detalladas para el cuidado posterior a la cirugía, incluyendo medicación y restricciones de actividad.\r\n3. Se programará una cita de seguimiento para evaluar su recuperación y retirar suturas si es necesario.\r\n',65000,13,3,16),(7,'Motivo de la Cita - Castración:\r\nMango ha sido programado para una castración, que es una cirugía recomendada por el veterinario para controlar la población de mascotas y para ayudar a mejorar su salud y comportamiento.\r\n\r\nHistorial Médico:\r\nMango tiene un historial médico generalmente positivo y ha estado al día con sus vacunas y controles regulares.\r\n\r\nPreparación para la Castración:\r\n1. Mango debe estar en ayunas desde la medianoche anterior a la castración.\r\n2. Se debe asegurar de no darle comida ni agua antes de la cita programada.\r\n3. Mango debe ser traído en una transportadora adecuada para garantizar su seguridad y la de todos.\r\n\r\nProcedimiento de la Castración:\r\n1. La castración será realizada por el equipo quirúrgico en nuestras instalaciones.\r\n2. Mango será sedado y monitoreado de cerca durante todo el procedimiento.\r\n3. La castración se realizará con el máximo cuidado y profesionalismo para garantizar su seguridad y bienestar.\r\n\r\nPostoperatorio y Cuidados:\r\n1. Mango será monitoreado durante su recuperación en nuestras instalaciones.\r\n2. Se proporcionarán instrucciones detalladas para el cuidado posterior a la cirugía, incluyendo medicación y restricciones de actividad.\r\n3. Se programará una cita de seguimiento para evaluar su recuperación y retirar suturas si es necesario.\r\n',35000,1,4,2),(8,'Motivo de la Cita - Castración:\r\nBella ha sido programada para una castración, que es una cirugía recomendada por el veterinario para controlar la población de mascotas y para ayudar a mejorar su salud y comportamiento.\r\n\r\nHistorial Médico:\r\nBella tiene un historial médico generalmente positivo y ha estado al día con sus vacunas y controles regulares.\r\n\r\nPreparación para la Castración:\r\n1. Bella debe estar en ayunas desde la medianoche anterior a la castración.\r\n2. Se debe asegurar de no darle comida ni agua antes de la cita programada.\r\n3. Bella debe ser traída en su transportadora para garantizar su seguridad y la de todos.\r\n\r\nProcedimiento de la Castración:\r\n1. La castración será realizada por el equipo quirúrgico en nuestras instalaciones.\r\n2. Bella será sedada y monitoreada de cerca durante todo el procedimiento.\r\n3. La castración se realizará con el máximo cuidado y profesionalismo para garantizar su seguridad y bienestar.\r\n\r\nPostoperatorio y Cuidados:\r\n1. Bella será monitoreada durante su recuperación en nuestras instalaciones.\r\n2. Se proporcionarán instrucciones detalladas para el cuidado posterior a la cirugía, incluyendo medicación y restricciones de actividad.\r\n3. Se programará una cita de seguimiento para evaluar su recuperación y retirar suturas si es necesario.\r\n',32000,16,4,19),(9,'Servicio de Aseo de Mascotas:\r\nToby ha sido programado para un servicio completo de aseo en nuestro Salón de Aseo \"PawSpa\". Durante el servicio se realizará:\r\n\r\n1. Baño y Limpieza: Se realizará un baño completo con shampoo adecuado para su pelaje, seguido de un enjuague profundo. Se limpiarán las orejas y los ojos para asegurarse de que estén limpios y saludables.\r\n\r\n2. Corte de Uñas: Se recortarán las uñas de Toby para mantenerlas en una longitud adecuada y cómoda.\r\n\r\n3. Cepillado y Desenredado: Se cepillará su pelaje para eliminar nudos y enredos, además de estimular la circulación sanguínea y mantener su pelaje saludable y brillante.\r\n\r\n4. Secado: Toby será secado de manera suave y cuidadosa para asegurarse de que esté cómodo durante todo el proceso.\r\n\r\n5. Fragancia y Toque Final: Se aplicará una fragancia suave y se le dará un toque final para que luzca y huela genial.\r\n\r\nPost Aseo:\r\n1. Toby será entregado a su dueño después del servicio de aseo.\r\n2. Se proporcionarán recomendaciones para el cuidado posterior y cómo mantener su pelaje en óptimas condiciones.\r\n',15000,11,5,14);
 /*!40000 ALTER TABLE `historialmedico` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,7 +437,7 @@ CREATE TABLE `mascota` (
   KEY `fk_Mascota_Cliente` (`idCliente`),
   CONSTRAINT `fk_Mascota_Cliente` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
   CONSTRAINT `fk_Mascota_TipoMascota` FOREIGN KEY (`idTipoMascota`) REFERENCES `tipomascota` (`idTipoMascota`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,7 +446,7 @@ CREATE TABLE `mascota` (
 
 LOCK TABLES `mascota` WRITE;
 /*!40000 ALTER TABLE `mascota` DISABLE KEYS */;
-INSERT INTO `mascota` VALUES (1,'Buddy','Es un doberman de 80kg, pelo negro y muy amigable','bfe5dbd863e85065d8430e23bf8b74a4.jpg',1,1),(2,'Max','Es un gato muy especial, pero un poco arizco','c8fd00e7c02997095899aa70046c793e.jpg',2,1),(3,'Luna','Es mi mejor amiga, tiene 2 anios','5036650d388ff7d2b00798c43034b964.jpg',2,1);
+INSERT INTO `mascota` VALUES (1,'Mango','Es un gato macho de pelaje naranja intenso y ojos amarillos. Tiene una personalidad aventurera y le encanta explorar todos los rincones de su hogar. Siempre está curioso y listo para jugar con cualquier objeto que encuentre.','4ffe79e93549faee72849cccebdda394.jpg',2,1),(2,'Gary','Gato macho con pelaje negro y blanco en un patrón atigrado. Es un poco relleno, pero su personalidad es cariñosa y tranquila. Le encanta descansar y recibir caricias.','7e8d6f27bd91f750ece20db309593412.jpg',2,1),(3,'Ashoka','Es una gata hembra de pelaje blanco y gris con manchas, y ojos grandes y expresivos. Tiene una personalidad elegante y tranquila. Le gusta encontrar lugares cómodos para descansar y observar el mundo a su alrededor.','29a7748940a0ff56e235257f3e763a1f.jpg',2,1),(4,'Boots','Es un perro macho de raza mixta, con pelaje negro y blanco. Tiene una personalidad enérgica y siempre está dispuesto a jugar. Le encanta correr al aire libre y es un compañero leal y protector.','780bb5e3db0aa5e746aab40ab76cf2a1.jpg',1,1),(5,'Dory','Es una perra hembra de pelaje dorado y suave. Tiene ojos grandes y expresivos que reflejan su naturaleza amigable y cariñosa. ','5cfe4426c50640a5029419b3f84b0cbb.jpg',1,1),(6,'Oliver','Es un gato, un poco tímido pero extremadamente elegante y curioso.','4b622bd2f8d3256337cb32484a3c9c49.jpg',1,2),(7,'Coco','Es un bulldog francés de 12 kg, de color atigrado y con una personalidad divertida y juguetona. Le encanta hacer travesuras.','2737fc39e871ad5c0372dc6f1fb18c69.jpg',1,2),(8,'Zoe','Es una perrita pug de 6 kg, pelaje beige y hocico arrugado. Tiene una personalidad juguetona y le encanta estar cerca de las personas.','8fd4dc9b79f94f09dacf4ba133412428.jpg',2,2),(9,'Mia','Es una gata negra de pelaje brillante y ojos amarillos. Aunque puede ser independiente, también disfruta de momentos de afecto.','b78062f96cc60bca208eb16a2dcbc648.jpg',2,3),(10,'Leo','Es un gato Maine Coon, grande y pelaje atigrado. Aunque puede ser independiente, también puede ser un compañero cariñoso.','7ff2a5103e212856fce4c134c192cd3e.jpg',1,3),(11,'Toby','Es un golden retriever de 30 kg, pelaje dorado y un gran apetito por la diversión. Es muy sociable y le encanta estar rodeado de gente.','9099b773cc296be489fc0fd05198738f.jpg',1,3),(12,'Buddy','Es un doberman de 80kg, pelo negro y muy amigable','ab70f9105e1a6b8adda78d833ccb4706.jpg',2,4),(13,'Max','Es un gato muy especial, pero un poco arizco','702e89a4b21037e72608b0d1dd6214f1.jpg',1,4),(14,'Luna','Es mi mejor amiga, tiene 2 años','40093312e746915c54c711e2a56ac85e.jpg',2,4),(15,'Rocky','Es un labrador retriever de 35 kg, pelaje dorado y lleno de energía. Le encanta jugar al aire libre y es muy obediente.','fc37938a8c44531b15a366837b91cc74.jpg',1,5),(16,'Bella','Es una poodle toy de 4 kg, con pelaje blanco y rizado. Tiene una personalidad cariñosa y le encanta ser mimada.','465dbe4dec447b74fd8608f99acb9812.jpg',1,5),(17,'Maya','Es una gata hembra con pelaje blanco y negro en un patrón similar a las manchas de un leopardo. Tiene ojos grandes y curiosos que siempre parecen estar explorando su entorno. ','3e1aba7b906eb2a9792e4de72a276b60.jpg',2,5);
 /*!40000 ALTER TABLE `mascota` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,7 +510,7 @@ CREATE TABLE `servicios` (
   `servicio` varchar(50) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idServicio`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -532,7 +534,7 @@ CREATE TABLE `tipomascota` (
   `idTipoMascota` int NOT NULL AUTO_INCREMENT,
   `tipo` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idTipoMascota`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -554,4 +556,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-20 16:03:04
+-- Dump completed on 2023-08-22  3:37:51

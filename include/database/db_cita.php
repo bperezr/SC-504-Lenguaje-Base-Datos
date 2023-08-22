@@ -176,8 +176,8 @@ class Cita
       join servicios as s on c.idServicio = s.idServicio
       join horariocitas as hc on c.idHorario = hc.idHorario
       join estado as e on c.idestado = e.idestado  order by c.fecha desc";
-      $stmt = $this->db->query($query);
-      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->db->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
@@ -270,6 +270,25 @@ class Cita
     }
 
 
+    function getCitasPorEstadoYColaborador($idEstado, $idColaborador)
+    {
+        $query = "SELECT c.idCita, m.nombre AS nombreMascota, s.servicio AS nombreServicio, c.fecha, h.horaInicio, h.horaFin, e.estado AS nombreEstado
+            FROM citas c
+            JOIN mascota m ON c.idMascota = m.idMascota
+            JOIN servicios s ON c.idServicio = s.idServicio
+            JOIN horariocitas h ON c.idHorario = h.idHorario
+            JOIN asignacioncitas ac ON c.idCita = ac.idcita
+            JOIN colaborador co ON ac.idColaborador = co.idColaborador
+            JOIN estado e ON c.idestado = e.idestado
+            WHERE c.idestado = :idEstado AND co.idColaborador = :idColaborador";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(":idEstado", $idEstado, PDO::PARAM_INT);
+        $stmt->bindParam(":idColaborador", $idColaborador, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
 }

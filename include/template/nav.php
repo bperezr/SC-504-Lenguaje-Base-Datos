@@ -114,15 +114,15 @@
         <!-- Usuario -->
 
         <?php if (!empty($correoUsuario)): ?>
-            <p class="nombreUsuario">
+            <p>
                 <?php
                 $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
+                echo $nombreUsuario;
                 ?>
             </p>
+
         <?php else: ?>
-
-
-            <p>Médico: </p>
+            <p> </p>
         <?php endif; ?>
         <!-- Menu 2 -->
         <input type="checkbox" id="menu-bar" />

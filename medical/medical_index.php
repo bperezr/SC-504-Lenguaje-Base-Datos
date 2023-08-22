@@ -18,9 +18,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
 
 
 $cita = new Cita();
-$citasCanceladas = $cita->getCitasPorEstado(3);
-$citasAsignadas = $cita->getCitasPorEstado(1);
-$citasAtendidas = $cita->getCitasPorEstado(2);
+$citasCanceladas = $cita->getCitasPorEstadoYColaborador(3, $id);
+$citasAsignadas = $cita->getCitasPorEstadoYColaborador(1, $id);
+$citasAtendidas = $cita->getCitasPorEstadoYColaborador(2, $id);
 
 ?>
 
