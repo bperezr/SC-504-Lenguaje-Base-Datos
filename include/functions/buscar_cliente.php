@@ -1,16 +1,24 @@
 <?php
+require_once '../database/db_cliente.php';
+
+$response = array();
+
 if (isset($_POST['buscarCliente'])) {
     $correoCliente = $_POST['correoCliente'];
 
-    $cliente = $cliente->obtenerClientePorCorreo($correoCliente);
+    $cliente = new Cliente();
+    $clienteEncontrado = $cliente->obtenerClientePorCorreo($correoCliente);
 
-    if ($cliente) {
-        echo "<p>Cliente encontrado:</p>";
-        echo "<p>ID de Cliente: " . $cliente['idCliente'] . "</p>";
-        echo "<p>Nombre: " . $cliente['nombre'] . " " . $cliente['apellido1'] . " " . $cliente['apellido2'] . "</p>";
-
+    if ($clienteEncontrado) {
+        $response['clienteEncontrado'] = true;
+        $response['idCliente'] = $clienteEncontrado['idCliente'];
+        $response['nombre'] = $clienteEncontrado['nombre'];
+        $response['apellido1'] = $clienteEncontrado['apellido1'];
+        $response['apellido2'] = $clienteEncontrado['apellido2'];
     } else {
-        echo "<p>Cliente no encontrado.</p>";
+        $response['clienteEncontrado'] = false;
     }
 }
+
+echo json_encode($response);
 ?>
