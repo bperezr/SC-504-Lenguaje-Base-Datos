@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        
                         if ($cdetalle['estado'] == 'Asignada') {
                             echo "<td>";                           
-                            echo "<a href='citas.php?id=" . $cdetalle['idcita'] . "'class='detalleCita'>Detalle Cita</a>";
+                            echo "<a href='admin_verCitas.php?id=" . $cdetalle['idcita'] . "'class='detalleCita'>Detalle Cita</a>";
                             echo "</td>"; 
                             echo "<td>";
                             echo "<form action='medical_appointments.php' method='post' onsubmit='return confirm(\"¿Estás seguro de cancelar esta cita?\")'>";
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo "</td>";
                         } else{
                             echo "<td>";                           
-                            echo "<a href='citas.php?id=" . $cdetalle['idcita'] . "'class='detalleCita'>Detalle Cita</a>";
+                            echo "<a href='admin_verCitas.php?id=" . $cdetalle['idcita'] . "'class='detalleCita'>Detalle Cita</a>";
                             echo "</td>"; 
                         }                    
                         echo "</tr>";
