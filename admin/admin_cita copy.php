@@ -23,33 +23,6 @@ $mascotasCliente = $cita->getMascotasCliente($id);
 $servicios = $cita->getServicios();
 $correoCliente = '';
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['idCliente'])) {
-        $idCliente = $_POST['idCliente'];
-        $idMascota = $_POST['mascota'];
-        $idServicio = $_POST['servicio'];
-        $fecha = $_POST['fecha'];
-        $idHorario = $_POST['horario'];
-        $idColaborador = $_POST['colaborador'];
-
-        $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
-                    $idCita = $cita->getLastInsertId();
-                    $idColaborador = $_POST['colaborador'];
-                    $cita->insertAsignacionCita($idCita, $idColaborador);
-
-                    header('Location: admin_cita.php');
-                    exit;
-
-/*         echo "ID Cliente: $idCliente<br>";
-        echo "ID Mascota: $idMascota<br>";
-        echo "ID Servicio: $idServicio<br>";
-        echo "Fecha: $fecha<br>";
-        echo "ID Horario: $idHorario<br>";
-        echo "ID Colaborador: $idColaborador<br>"; */
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -67,86 +40,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
-        <form class="formulario" id="formulario1" method="POST">
-            <h3 class="centrar-texto">Agendar cita</h3>
+        <form class="formulario" id="formulario" method="POST" action="admin_cita.php">
+            <fieldset>
+                <h3 class="centrar-texto">Agendar cita</h3>
 
-            <?php
-            if (isset($_POST['buscarCliente'])) {
-                $correoCliente = $_POST['correoCliente'];
+                <label for="correoCliente">Buscar cliente por correo:</label>
+                <input type="email" name="correoCliente" id="correoCliente" value="<?php echo $correoCliente; ?>">
+                <button type="submit" name="buscarCliente">Buscar</button>
 
-                $cliente = $cliente->obtenerClientePorCorreo($correoCliente);
+                <?php
+                if (isset($_POST['buscarCliente'])) {
+                    $correoCliente = $_POST['correoCliente'];
 
-                if ($cliente) {
-                    echo "<p>Cliente encontrado:</p>";
-                    echo "<p>ID de Cliente: " . $cliente['idCliente'] . "</p>";
-                    echo "<p>Nombre: " . $cliente['nombre'] . " " . $cliente['apellido1'] . " " . $cliente['apellido2'] . "</p>";
-                } else {
-                    echo "<p>Cliente no encontrado.</p>";
-                }
-            }
-            ?>
-            <label for="correoCliente">Buscar cliente por correo:</label>
-            <input type="email" name="correoCliente" id="correoCliente" value="<?php echo $correoCliente; ?>">
-            <button type="submit" name="buscarCliente">Buscar</button>
+                    $cliente = $cliente->obtenerClientePorCorreo($correoCliente);
 
-            <input type="hidden" name="idCliente" id="idCliente" value="<?php echo $cliente['idCliente']; ?>">
-
-            <div class="campo" id="campoMascota">
-                <label for="mascota">Mascota:</label>
-                <select id="mascota" name="mascota">
-                    <option value="" disabled selected>Seleccione la mascota</option>
-                    <?php
                     if ($cliente) {
-                        $mascotasCliente = $cita->getMascotasCliente($cliente['idCliente']);
-
-                        if (!empty($mascotasCliente)) {
-                            foreach ($mascotasCliente as $mascota) {
-                                echo "<option value='" . $mascota['idMascota'] . "'>" . $mascota['nombre'] . "</option>";
-                            }
-                        } else {
-                            echo "<option value='' disabled>No hay mascotas registradas para este cliente</option>";
-                        }
+                        echo "<p>Cliente encontrado:</p>";
+                        echo "<p>ID de Cliente: " . $cliente['idCliente'] . "</p>";
+                        echo "<p>Nombre: " . $cliente['nombre'] . " " . $cliente['apellido1'] . " " . $cliente['apellido2'] . "</p>";
+                    } else {
+                        echo "<p>Cliente no encontrado.</p>";
                     }
-                    ?>
-                </select>
-            </div>
+                }
+                ?>
 
-            <div class="campo">
-                <label for="servicio">Servicio:</label>
-                <select id="servicio" name="servicio">
-                    <option value="" disabled selected>Seleccione un servicio</option>
-                    <?php foreach ($servicios as $servicio): ?>
-                        <option value="<?php echo $servicio['idServicio']; ?>"><?php echo $servicio['servicio']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+                <div class="campo" id="campoMascota">
+                    <label for="mascota">Mascota:</label>
+                    <select id="mascota" name="mascota">
+                        <option value="" disabled selected>Seleccione la mascota</option>
+                        <?php
+                        if ($cliente) {
+                            $mascotasCliente = $cita->getMascotasCliente($cliente['idCliente']);
 
-            <div class="campo" id="campoMedico" style="display: none;">
-                <label for="colaborador">Médico:</label>
-                <select id="colaborador" name="colaborador">
-                    <option value="" disabled selected>Seleccione un médico</option>
-                </select>
-            </div>
+                            if (!empty($mascotasCliente)) {
+                                foreach ($mascotasCliente as $mascota) {
+                                    echo "<option value='" . $mascota['idMascota'] . "'>" . $mascota['nombre'] . "</option>";
+                                }
+                            } else {
+                                echo "<option value='' disabled>No hay mascotas registradas para este cliente</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
 
-            <div class="campo">
-                <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" min="<?php echo date('Y-m-d'); ?>" oninput="validarFecha()">
-            </div>
+                <div class="campo">
+                    <label for="servicio">Servicio:</label>
+                    <select id="servicio" name="servicio">
+                        <option value="" disabled selected>Seleccione un servicio</option>
+                        <?php foreach ($servicios as $servicio): ?>
+                            <option value="<?php echo $servicio['idServicio']; ?>"><?php echo $servicio['servicio']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
 
+                <div class="campo" id="campoMedico" style="display: none;">
+                    <label for="colaborador">Médico:</label>
+                    <select id="colaborador" name="colaborador">
+                        <option value="" disabled selected>Seleccione un médico</option>
+                    </select>
+                </div>
 
-            <div class="campo">
-                <label for="horario">Horario:</label>
-                <select id="horario" name="horario">
-                    <option value="" disabled selected>Seleccione un horario</option>
-                </select>
-            </div>
+                <div class="campo">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" name="fecha" min="<?php echo date('Y-m-d'); ?>"
+                        oninput="validarFecha()">
+                </div>
 
-            <div class="boton-contacto">
-                <input class="boton input-text" type="submit" value="Enviar" name="nuevaCita">
-            </div>
+                <div class="campo">
+                    <label for="horario">Horario:</label>
+                    <select id="horario" name="horario">
+                        <option value="" disabled selected>Seleccione un horario</option>
+                    </select>
+                </div>
+                </div>
 
+                <div class="boton-contacto">
+                    <input class="boton input-text" type="submit" value="Enviar" name="nuevaCita">
+                </div>
+            </fieldset>
         </form>
+        <?php
+        if (isset($_POST['nuevaCita'])) {
+            $cliente['idCliente'];
+            $idMascota = $_POST['mascota'];
+            $idServicio = $_POST['servicio'];
+            $fecha = $_POST['fecha'];
+            $idHorario = $_POST['horario'];
+            $idColaborador = $_POST['colaborador'];
+
+            $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
+            $idCita = $cita->getLastInsertId();
+            $idColaborador = $_POST['colaborador'];
+            $cita->insertAsignacionCita($idCita, $idColaborador);
+
+            header('Location: admin_cita.php');
+            exit;
+        }
+        ?>
     </main>
 
     <!-- Footer -->
