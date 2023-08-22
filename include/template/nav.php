@@ -120,14 +120,17 @@
         <!-- Logo -->
         <a class="logo" href="medical_index.php"><img src="../img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Usuario -->
+       
         <?php if (!empty($correoUsuario)): ?>
-            <p>
+            <p class="nombreUsuario" >
                 <?php
                 $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
-                echo $nombreUsuario;
+                echo ( "Bienvenido ".$nombreUsuario);
                 ?>
             </p>
         <?php else: ?>
+   
+        
             <p>Médico: </p>
         <?php endif; ?>
         <!-- Menu 2 -->
@@ -140,17 +143,19 @@
                     echo 'class="active"'; ?>>Citas</a></li>
                 <li><a href="historialMedico.php" <?php if ($enlaceActivo == 'pacientes')
                     echo 'class="active"'; ?>>Historial Medico</a></li>
+                     <!-- Cita -->
+                 <li><a href="admin_cita.php"> <ion-icon name="medkit"></ion-icon></a></li>
                 <li class="login">
                     <p><ion-icon name="person-circle-outline"></ion-icon></p>
                     <ul>
-                        <li><a href="profile.php" <?php if ($enlaceActivo == 'perfil')
+                        <li><a href="" <?php if ($enlaceActivo == 'perfil')
                             echo 'class="active"'; ?>>Perfil</a>
                         </li>
                         <li><a href="../logout.php" <?php if ($enlaceActivo == 'salir')
                             echo 'class="active"'; ?>>Salir</a>
                         </li>
                     </ul>
-                </li>
+                </li>                
             </ul>
         </nav>
     </header>

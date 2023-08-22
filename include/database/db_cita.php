@@ -164,6 +164,23 @@ class Cita
 
     }
 
+    public function getAllDetalleCitaMedico()
+    {
+        $query = "select ac.idcita,ac.idColaborador,m.idMascota,col.nombre as nombreMedico, m.nombre as nombreMascota, m.descripcion, cli.nombre, 
+      cli.apellido1, cli.apellido2, cli.correo, cli.telefono, s.servicio, c.fecha, c.idestado, hc.horaInicio, hc.horaFin, e.estado  
+      from asignacioncitas AS ac 
+      join citas as c on ac.idcita = c.idcita
+      join colaborador as col on ac.idColaborador = col.idColaborador
+      join mascota as m on c.idMascota = m.idmascota 
+      join cliente as cli on c.idCliente = cli.idCliente
+      join servicios as s on c.idServicio = s.idServicio
+      join horariocitas as hc on c.idHorario = hc.idHorario
+      join estado as e on c.idestado = e.idestado  order by c.fecha desc";
+      $stmt = $this->db->query($query);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
     public function getCitaMedica($idCita)
     {
         $query = "select ac.idcita,ac.idColaborador,m.idMascota,col.nombre as nombreMedico, m.nombre as nombreMascota, m.descripcion, cli.nombre,
