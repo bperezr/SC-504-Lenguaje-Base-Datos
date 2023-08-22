@@ -33,7 +33,8 @@ body {
     font-family: var(--fuenteParrafos);
     font-size: 1.6rem;
     line-height: 3;    
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../img/fondo3.webp');
+    background: rgb(242,242,242);
+background: linear-gradient(90deg, rgba(242,242,242,1) 0%, rgba(236,255,255,0.927608543417367) 46%, rgba(244,244,244,1) 100%);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
