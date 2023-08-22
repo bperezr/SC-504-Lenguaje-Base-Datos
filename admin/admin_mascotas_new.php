@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     <!-- Footer -->
-    <?php include '../include/template/footer2.php'; ?>
+    <?php include '../include/template/footer.php'; ?>
     <!-- JS -->
 </body>
 

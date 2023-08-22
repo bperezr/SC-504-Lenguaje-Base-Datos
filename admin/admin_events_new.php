@@ -221,7 +221,7 @@ $db->close();
     </main>
 
     <!-- Footer -->
-    <?php include '../include/template/footer2.php'; ?>
+    <?php include '../include/template/footer.php'; ?>
     <!-- JS -->
     <script src="../js/evento.js"></script>
 </body>

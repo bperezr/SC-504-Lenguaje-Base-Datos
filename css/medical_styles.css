@@ -6,6 +6,7 @@
     --color5: #f97561;
     --color8: #2C2524;
     --color9: #c04242;
+
     --negro: #000000;
     --blanco: #FFFFFF;
 
@@ -32,16 +33,11 @@ html {
 body {
     font-family: var(--fuenteParrafos);
     font-size: 1.6rem;
-    line-height: 3;
+    line-height: 2;
+    margin: 0;
     background: rgb(242, 242, 242);
     background: linear-gradient(90deg, rgba(242, 242, 242, 1) 0%, rgba(236, 255, 255, 0.927608543417367) 46%, rgba(244, 244, 244, 1) 100%);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    margin: 0;
 }
-
-
 
 /** Globales **/
 .contenedor {
@@ -115,31 +111,6 @@ ul {
     text-align: justify;
 }
 
-/* Botones*/
-
-.boton {
-    background-color: var(--color1);
-    color: var(--negro);
-    padding: 1rem 3rem;
-    margin-top: 1rem;
-    font-size: 2rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: bold;
-    border-radius: .5rem;
-    border: none;
-}
-
-.boton:hover {
-    background-color: var(--color2);
-    cursor: pointer;
-}
-
-@media (max-width: 480px) {
-    .boton {
-        width: auto;
-    }
-}
 
 /** Header **/
 
@@ -387,21 +358,6 @@ footer {
 
 /*---------------------- Contenido -----------------------*/
 
-.bg {
-    color: var(--color8);
-    height: 100%;
-    padding: 3rem;
-}
-
-.bg_img {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.contenedor .bg .bg_img img {
-    max-width: 50%;
-}
 
 /* Tabla */
 table {
@@ -442,7 +398,6 @@ td.cancelada {
     color: var(--blanco);
     padding: 0.2rem 0.5rem;
 }
-
 
 
 tr:nth-child(even) {

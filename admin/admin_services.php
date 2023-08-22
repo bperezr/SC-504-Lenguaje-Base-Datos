@@ -125,7 +125,7 @@ if (isset($_GET['search'])) {
     </main>
 
     <!-- Footer -->
-    <?php include '../include/template/footer2.php'; ?>
+    <?php include '../include/template/footer.php'; ?>
     <!-- JS -->
 </body>
 

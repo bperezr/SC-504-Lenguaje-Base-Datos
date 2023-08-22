@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <!-- Footer -->
-    <?php include '../include/template/footer2.php'; ?>
+    <?php include '../include/template/footer.php'; ?>
     <!-- JS -->
     <script>
         $(document).ready(function () {

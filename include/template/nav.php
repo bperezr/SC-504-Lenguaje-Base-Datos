@@ -54,7 +54,6 @@
             <p>
                 <?php
                 $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
-                
                 ?>
             </p>
         <?php else: ?>
@@ -94,7 +93,8 @@
                             echo 'class="active"'; ?>>Perfil</a>
                         </li>
                         <li><a href="cita_vista.php" <?php if ($enlaceActivo == 'cita_vista')
-                            echo 'class="active"'; ?>>Mis Cita</a></li>
+                            echo 'class="active"'; ?>>Mis
+                                Cita</a></li>
                         <li><a href="cita.php" <?php if ($enlaceActivo == 'cita')
                             echo 'class="active"'; ?>>Nueva Cita</a>
                         </li>
@@ -112,17 +112,16 @@
         <!-- Logo -->
         <a class="logo" href="medical_index.php"><img src="../img/logo2_color.svg" alt="Happy-Paws" /></a>
         <!-- Usuario -->
-       
+
         <?php if (!empty($correoUsuario)): ?>
-            <p class="nombreUsuario" >
+            <p class="nombreUsuario">
                 <?php
                 $nombreUsuario = substr($correoUsuario, 0, strpos($correoUsuario, '@'));
-                
                 ?>
             </p>
         <?php else: ?>
-   
-        
+
+
             <p>Médico: </p>
         <?php endif; ?>
         <!-- Menu 2 -->
@@ -134,20 +133,18 @@
                 <li><a href="medical_appointments.php" <?php if ($enlaceActivo == 'mecical_appointments')
                     echo 'class="active"'; ?>>Citas</a></li>
                 <li><a href="historialMedico.php" <?php if ($enlaceActivo == 'pacientes')
-                    echo 'class="active"'; ?>>Historial Medico</a></li>
-                     <!-- Cita -->
-                 <li><a href="add_cita.php"> <ion-icon name="medkit"></ion-icon></a></li>
+                    echo 'class="active"'; ?>>Historial
+                        Medico</a></li>
+                <!-- Cita -->
+                <li><a href="add_cita.php"> <ion-icon name="medkit"></ion-icon></a></li>
                 <li class="login">
                     <p><ion-icon name="person-circle-outline"></ion-icon></p>
                     <ul>
-                        <li><a href="" <?php if ($enlaceActivo == 'perfil')
-                            echo 'class="active"'; ?>>Perfil</a>
-                        </li>
                         <li><a href="../logout.php" <?php if ($enlaceActivo == 'salir')
                             echo 'class="active"'; ?>>Salir</a>
                         </li>
                     </ul>
-                </li>                
+                </li>
             </ul>
         </nav>
     </header>
