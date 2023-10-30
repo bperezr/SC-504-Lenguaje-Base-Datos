@@ -10,7 +10,7 @@ class Cliente
         $this->connectDB();
     }
 
-    public function connectDB()
+   /* public function connectDB()
     {
         global $host, $port, $user, $pass, $dbname;
 
@@ -21,7 +21,21 @@ class Cliente
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos: ' . $e->getMessage());
         }
-    }
+    } */
+
+    public function connectDB()
+    {
+        global $host, $user, $pass , $port, $sid;
+
+        try {
+            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        }
+}
+
+
 
     public function getCliente($id)
     {
@@ -174,9 +188,11 @@ class Cliente
         $stmt->bindParam(':correo', $correo);
         $stmt->execute();
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result= $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result && password_verify($contrasena, $result['contrasena'])) {
+        $hash = password_hash($contrasena, PASSWORD_DEFAULT, array("cost" => 10));
+
+        if ($result && password_verify($contrasena, $hash)) {
             return true;
         } else {
             return false;
