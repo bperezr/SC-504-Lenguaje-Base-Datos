@@ -1,7 +1,9 @@
 <?php
 $user = "happypaws";
 $pass = "12345";
-$host = "localhost/orcldb";
+$host = "localhost/orcl";
 $port = "1521";
-$sid = "orcldb";
+$sid = "orcl";
 ?>
+
+*/Hola prueba*/
