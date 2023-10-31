@@ -6,4 +6,3 @@ $port = "1521";
 $sid = "orcl";
 ?>
 
-*/Hola prueba*/
