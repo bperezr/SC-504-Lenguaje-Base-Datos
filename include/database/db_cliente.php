@@ -181,7 +181,7 @@ class Cliente
         }
     }
 
-    public function validarCredenciales($correo, $contrasena)
+  /*  public function validarCredenciales($correo, $contrasena)
     {
         $query = "SELECT idCliente, contrasena FROM cliente WHERE correo = :correo";
         $stmt = $this->db->prepare($query);
@@ -198,8 +198,21 @@ class Cliente
             return false;
         }
     }
+*/
+public function validarCredenciales($correo, $contrasena,&$resultado)
+    {
+        $sql = "BEGIN validarcredenciales(:correo, :contrasena, :resultado); END;";
+        $stmt = $this->db->prepare($sql);
 
-    public function insertClienteNuevo($correo, $contrasena)
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':resultado', $resultado, PDO::PARAM_INT, 1);
+
+        $stmt->execute();
+    }
+
+
+ /*   public function insertClienteNuevo($correo, $contrasena)
     {
         $hashedContrasena = password_hash($contrasena, PASSWORD_DEFAULT);
 
@@ -209,6 +222,18 @@ class Cliente
         $stmt->bindParam(':contrasena', $hashedContrasena);
 
         return $stmt->execute();
+    } */
+
+    public function insertClienteNuevo($correo, $contrasena, &$resultado)
+    {    
+        $sql = "BEGIN insertClienteNuevo(:correo, :contrasena, :resultado); END;";
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':resultado', $resultado, PDO::PARAM_INT, 1);
+
+        $stmt->execute();
     }
 
     public function camposNull($correo)
@@ -230,7 +255,7 @@ class Cliente
         return false;
     }
 
-    public function obtenerClientePorCorreo($correo)
+  /*  public function obtenerClientePorCorreo($correo)
     {
         $sql = "SELECT idCliente, idRol, correo, nombre, apellido1, apellido2 FROM cliente WHERE correo = :correo";
 
@@ -242,7 +267,25 @@ class Cliente
         $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $cliente;
+    } */
+
+    public function obtenerClientePorCorreo($correo,&$idCliente,&$idRol,&$nombre,&$apellido1,&$apellido2,&$resultado)
+    {
+
+        $sql = "BEGIN obtenerClientePorCorreo(:correo, :idCliente, :idRol, :nombre, :apellido1, :apellido2, :resultado); END;";
+        $stmt = $this->db->prepare($sql);
+    
+        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT, 11);
+        $stmt->bindParam(':idRol', $idRol, PDO::PARAM_INT, 1);
+        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR, 255);
+        $stmt->bindParam(':apellido1', $apellido1, PDO::PARAM_STR, 255);
+        $stmt->bindParam(':apellido2', $apellido2, PDO::PARAM_STR, 255);
+        $stmt->bindParam(':resultado', $resultado, PDO::PARAM_INT, 1);
+    
+        $stmt->execute();
     }
+
 
     public function uploadImagen($imagen)
     {
@@ -263,4 +306,3 @@ class Cliente
     }
 
 }
-?>
