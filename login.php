@@ -86,11 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($clienteAutenticado) {
                 $idCliente = 0;
                 $idRol = 0;
-                $nombre = null;
+                $nombre = "";
                 $apellido1 =  null;
                 $apellido2 = null;
                 $clienteInfo= $cliente->obtenerClientePorCorreo($correo,$idCliente,$idRol,$nombre,$apellido1,$apellido2,$resultadoObtenerCorreo);
 
+
+                $nombre = "Perfil no ingresado";
                  if($resultadoObtenerCorreo=1){
                     $_SESSION['usuario'] = array(
                         'rol' => 'cliente',
@@ -103,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                  }
 
-                if (is_null($nombre)) {
+                if ($nombre = "Perfil no ingresado") {
                     header("Location: profile_client_new.php");
                     exit();
                 } else {

@@ -1,20 +1,20 @@
 <?php
 session_start();
 
-/*if (isset($_SESSION['usuario'])) {
+if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
     $rol = $usuario['rol'];
     $id = $usuario['id'];
-} */
+} 
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 3) {
     header("Location: acceso_denegado.php");
     exit();
 }
 
-/*  */
+
 require_once 'include/database/db_cliente.php';
 require_once 'include/database/db_lugar.php';
 
