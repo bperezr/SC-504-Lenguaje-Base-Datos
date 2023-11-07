@@ -1,7 +1,6 @@
 # SC-504-Lenguaje-Base-Datos
 
-------------------------------------------------------------------------------------------------------------
-# Corrección de la base
+## TABLESPACE
 
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 
@@ -20,7 +19,11 @@ CREATE ROLE Admin;
 GRANT CREATE SESSION, CREATE TABLE, CREATE ANY TABLE, ALTER ANY TABLE, CREATE VIEW, RESOURCE TO Admin;
 GRANT Admin to happypaws;
 
-------------------------------------------------------------------------------------------------------------
-# Corrección de error 'DBMS_CRYPTO' 
-Ejecutar con sys
+## Corrección de error 'DBMS_CRYPTO'
+
+Ejecutar con sys:
+
 GRANT EXECUTE ON DBMS_CRYPTO TO happypaws;
+
+## Configurar XDebug para PHP con XAMPP y Visual Studio Code
+https://www.youtube.com/watch?v=TexkCrk6njc
