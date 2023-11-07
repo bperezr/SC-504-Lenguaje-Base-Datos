@@ -13,6 +13,8 @@ require_once 'include/database/db_cliente.php';
 $colaborador = new Colaborador();
 $cliente = new Cliente();
 $mensajeError = '';
+$resultadoSP = 0;
+$resultadoObtenerCorreo = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['signupForm'])) {
@@ -28,8 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($correoExiste) {
                 $mensajeError = "Error - El correo ya existe. Por favor, usa otro correo.";
             } else {
-                $cliente->insertClienteNuevo($correo, $contrasena);
-                $mensajeError = "¡Registro exitoso!";
+                $cliente->insertClienteNuevo($correo, $contrasena,$resultadoSP);
+
+                if ($resultadoSP == 1) {
+                    $mensajeError = "¡Registro exitoso!";
+                } elseif ($resultadoSP == 2) {
+                    $mensajeError = "El correo digitado ya se encuentra registrado";
+                } else {
+                    $mensajeError = "¡Error al registrar el usuario!";
+                }     
 
             }
         }
@@ -66,22 +75,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } else {
             // El correo no tiene el dominio @happypaws.com, buscar en clientes
-            $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena);
+            $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena,$resultadoSP);
+
+                 if($resultadoSP=1){
+                    $clienteAutenticado = true;
+                 } else{
+                    $clienteAutenticado = false;
+                 }
 
             if ($clienteAutenticado) {
-                $clienteInfo = $cliente->obtenerClientePorCorreo($correo);
+                $idCliente = 0;
+                $idRol = 0;
+                $nombre = "";
+                $apellido1 =  null;
+                $apellido2 = null;
+                $clienteInfo= $cliente->obtenerClientePorCorreo($correo,$idCliente,$idRol,$nombre,$apellido1,$apellido2,$resultadoObtenerCorreo);
 
-                $_SESSION['usuario'] = array(
-                    'rol' => 'cliente',
-                    'id' => $clienteInfo['idCliente'],
-                    'idRol' => $clienteInfo['idRol'],
-                    'correo' => $clienteInfo['correo'],
-                    'nombre' => $clienteInfo['nombre'],
-                    'apellido1' => $clienteInfo['apellido1'],
-                    'apellido2' => $clienteInfo['apellido2']
-                );
 
-                if ($cliente->camposNull($correo)) {
+                $nombre = "Perfil no ingresado";
+                 if($resultadoObtenerCorreo=1){
+                    $_SESSION['usuario'] = array(
+                        'rol' => 'cliente',
+                        'id' => $idCliente,
+                        'idRol' => $idRol,
+                        'correo' => $correo,
+                        'nombre' => $nombre,
+                        'apellido1' => $apellido1,
+                        'apellido2' => $apellido2
+                    );
+                 }
+
+                if ($nombre = "Perfil no ingresado") {
                     header("Location: profile_client_new.php");
                     exit();
                 } else {
