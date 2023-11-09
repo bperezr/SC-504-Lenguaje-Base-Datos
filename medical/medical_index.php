@@ -11,10 +11,10 @@ if (isset($_SESSION['usuario'])) {
     $rol = $usuario['rol'];
     $id = $usuario['id'];
 }
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
+/*if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
     header("Location: ../acceso_denegado.php");
     exit();
-}
+}*/
 
 
 $cita = new Cita();
