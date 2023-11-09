@@ -22,7 +22,7 @@ class Especialidad
             die('Error al conectar a la base de datos: ' . $e->getMessage());
         }
     }
-
+    //fgff
     // Función para obtener una especialidad por su ID
     public function getEspecialidad($id)
     {
