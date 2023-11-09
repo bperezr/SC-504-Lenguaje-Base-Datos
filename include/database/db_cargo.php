@@ -10,9 +10,9 @@ class Cargo
         $this->connectDB();
     }
 
-   /* public function connectDB()
+    /*public function connectDB()
     {
-        global $host, $port, $user, $pass, $dbname;
+        //global $host, $port, $user, $pass, $dbname;
 
         $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
         try {
@@ -21,7 +21,7 @@ class Cargo
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos: ' . $e->getMessage());
         }
-    } */
+    }*/
 
     public function connectDB()
     {
@@ -33,18 +33,29 @@ class Cargo
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
         }
-    }
+}
 
 
     // Función para obtener un cargo por su ID
-    public function getCargo($id)
+   /* public function getCargo($id)
     {
         $query = "SELECT * FROM cargo WHERE idCargo = :idCargo";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':idCargo', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }*/
+
+
+    public function getCargo($id)
+    {
+        $sql = "BEGIN getCargo(:id); END;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+
+        $stmt->execute();
     }
+
 
     // Función para obtener todos los cargos
     public function getCargos()
