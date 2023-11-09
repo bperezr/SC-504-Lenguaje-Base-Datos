@@ -10,7 +10,7 @@ class Especialidad
         $this->connectDB();
     }
 
-    public function connectDB()
+   /* public function connectDB()
     {
         global $host, $port, $user, $pass, $dbname;
 
@@ -21,7 +21,20 @@ class Especialidad
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos: ' . $e->getMessage());
         }
-    }
+    } */
+
+    public function connectDB()
+    {
+        global $host, $user, $pass , $port, $sid;
+
+        try {
+            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        }
+}
+
 
     // Función para obtener una especialidad por su ID
     public function getEspecialidad($id)
