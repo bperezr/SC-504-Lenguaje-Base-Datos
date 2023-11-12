@@ -35,8 +35,7 @@ END;
 SET SERVEROUTPUT ON;
 
 
--------------------Para obtener los Cargos por su ID-----------------
-
+---SP PARA obtener todos los cargos--
 
 
 CREATE OR REPLACE PROCEDURE GetCargos(p_cargos OUT SYS_REFCURSOR)
@@ -76,13 +75,9 @@ END;
 
 
 
-
---SP para insertar un nuevo cargo----
-
-
 --SP PARA INSERTAR UN NUEVO CARGO--  LISTO
 
-CREATE OR REPLACE PROCEDURE InsertarNuevoCargo(
+CREATE OR REPLACE PROCEDURE InsertNuevoCargo(
     p_cargo IN VARCHAR2,
     p_resultado OUT NUMBER
 )
@@ -98,14 +93,14 @@ EXCEPTION
     WHEN OTHERS THEN
         p_resultado := 0; -- Indicar que hubo un error en la inserción
         DBMS_OUTPUT.PUT_LINE('Error en InsertarNuevoCargo: ' || SQLERRM);
-END InsertarNuevoCargo;
+END InsertNuevoCargo;
 /
 
 DECLARE
     v_nuevoCargo VARCHAR2(30) := 'Estetica'; -- Reemplaza con el nuevo cargo que deseas insertar
     v_resultado NUMBER := 0; -- 0: Error, 1: Éxito
 BEGIN
-    InsertarNuevoCargo(v_nuevoCargo, v_resultado);
+    InsertNuevoCargo(v_nuevoCargo, v_resultado);
 
     IF v_resultado = 1 THEN
         DBMS_OUTPUT.PUT_LINE('Nuevo cargo insertado exitosamente: ' || v_nuevoCargo);
@@ -116,12 +111,11 @@ END;
 /
 
 
---SP ACTUALIZAR CARGO---
 
 
 --SP para  actualizar un cargo--
 
-CREATE OR REPLACE PROCEDURE ActualizarCargo(
+CREATE OR REPLACE PROCEDURE updateCargo(
     p_idCargo IN NUMBER,
     p_nuevoCargo IN VARCHAR2,
     p_resultado OUT NUMBER
@@ -135,15 +129,15 @@ BEGIN
     COMMIT;
 
     p_resultado := SQL%ROWCOUNT; 
-END ActualizarCargo;
+END updateCargo;
 /
 
 DECLARE
     v_idCargo NUMBER := 5; -- Reemplaza con el ID del cargo que deseas actualizar
-    v_nuevoCargo VARCHAR2(30) := 'pelo'; -- Reemplaza con el nuevo nombre del cargo
+    v_nuevoCargo VARCHAR2(30) := 'Manicura'; -- Reemplaza con el nuevo nombre del cargo
     v_resultado NUMBER := 0; -- 0: No se actualizó, >0: Éxito
 BEGIN
-    ActualizarCargo(v_idCargo, v_nuevoCargo, v_resultado);
+    updateCargo(v_idCargo, v_nuevoCargo, v_resultado);
 
     IF v_resultado > 0 THEN
         DBMS_OUTPUT.PUT_LINE('Cargo actualizado exitosamente: ' || v_nuevoCargo);
@@ -158,11 +152,10 @@ END;
 SELECT * FROM CARGO;
 
 
---SP PARA ELIMINAR CARGO--
 
 --SP para  Eliminar un cargo--
 
-CREATE OR REPLACE PROCEDURE EliminarCargoPorID(
+CREATE OR REPLACE PROCEDURE deleteCargo(
     p_idCargo IN NUMBER,
     p_resultado OUT NUMBER
 )
@@ -173,14 +166,14 @@ BEGIN
     COMMIT;
     
     p_resultado := SQL%ROWCOUNT; -- Indicar el número de filas afectadas por la eliminación
-END EliminarCargoPorID;
+END deleteCargo;
 /
 
 DECLARE
-    v_idCargo NUMBER := 5; -- Reemplaza con el ID del cargo que deseas eliminar
+    v_idCargo NUMBER := 7; -- Reemplaza con el ID del cargo que deseas eliminar
     v_resultado NUMBER := 0; -- 0: No se eliminó, >0: Éxito
 BEGIN
-    EliminarCargoPorID(v_idCargo, v_resultado);
+    deleteCargo(v_idCargo, v_resultado);
 
     IF v_resultado > 0 THEN
         DBMS_OUTPUT.PUT_LINE('Cargo eliminado exitosamente.');
@@ -191,14 +184,10 @@ END;
 /
 
 
---SP PARA BUSCAR UN CARGO POR ID--
-
-
-
 
 --SP para  buscar un cargo por su ID--
 
-CREATE OR REPLACE PROCEDURE BuscarCargoPorID(
+CREATE OR REPLACE PROCEDURE BuscarCargos(
     p_idCargo IN NUMBER,
     p_nombreCargo OUT VARCHAR2,
     p_resultado OUT NUMBER
@@ -219,7 +208,7 @@ EXCEPTION
         p_resultado := 9; -- Indicar un error
         p_nombreCargo := NULL;
         DBMS_OUTPUT.PUT_LINE('Error en BuscarCargoPorID: ' || SQLERRM);
-END BuscarCargoPorID;
+END BuscarCargos;
 /
 
 
@@ -228,7 +217,7 @@ DECLARE
     v_nombreCargo VARCHAR2(30);
     v_resultado NUMBER := 0; -- 0: No se encontró, 1: Éxito, 9: Error
 BEGIN
-    BuscarCargoPorID(v_idCargo, v_nombreCargo, v_resultado);
+    BuscarCargos(v_idCargo, v_nombreCargo, v_resultado);
 
     IF v_resultado = 1 THEN
         DBMS_OUTPUT.PUT_LINE('Cargo encontrado exitosamente: ' || v_nombreCargo);
@@ -241,9 +230,8 @@ END;
 /
 
 
+----SP SERVICIOS--
 
-
------------------------SP DE SERVICIOS----------------------------
 ---SP  para obtener un servicio por su ID--
 
 CREATE OR REPLACE PROCEDURE GetServicioPorID(
@@ -298,6 +286,7 @@ END;
 /
 
 
+
 -- SP para obtener todos los servicios--
 CREATE OR REPLACE PROCEDURE GetServicios(
     p_resultado OUT SYS_REFCURSOR
@@ -336,7 +325,13 @@ END;
 /
 
 
---SP PARA INSERTAR UN SERVICIO
+
+
+
+
+
+
+
 --SP para insertar un nuevo servicio--  
 
 CREATE OR REPLACE PROCEDURE InsertarNuevoServicio(
@@ -381,7 +376,6 @@ END;
 /
 
 
---SP PARA ACTUALIZAR UN SERVICIO--
 
 --SP para actualizar un servicio--
 CREATE OR REPLACE PROCEDURE UpdateServicio(
@@ -432,9 +426,6 @@ END;
 SELECT * FROM SERVICIOS;
 
 
---SP PARA ELIMINAR UN SERVICIO--
-
-
 --SP para eliminar un servicio por su ID--
 
 CREATE OR REPLACE PROCEDURE DeleteServicio(
@@ -476,10 +467,8 @@ END;
 /
 
 
---SP PARA BUSCAR UN SERVICIO--
-
-
 --SP para buscar un servicio por su ID--
+
 CREATE OR REPLACE PROCEDURE BuscarServicios(
     p_searchTerm IN VARCHAR2,
     p_resultado OUT SYS_REFCURSOR,
@@ -503,10 +492,11 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error en BuscarServicios: ' || SQLERRM);
 END BuscarServicios;
 /
+
 DECLARE
     v_searchTerm VARCHAR2(50) := 'Cirugía';
     v_resultado SYS_REFCURSOR;
-    v_resultadoBusqueda VARCHAR2(100); 
+    v_resultadoBusqueda VARCHAR2(100); -- Mensaje de resultado
     v_servicio servicios%ROWTYPE;
 BEGIN
     BuscarServicios(v_searchTerm, v_resultado, v_resultadoBusqueda);
@@ -526,32 +516,5 @@ BEGIN
 END;
 /
 
-
 SELECT * FROM SERVICIOS;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
