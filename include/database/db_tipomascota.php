@@ -10,49 +10,86 @@ class TipoMascota
         $this->connectDB();
     }
 
-   /* public function connectDB()
-    {
-        global $host, $port, $user, $pass, $dbname;
+                                                        /* public function connectDB()
+                                            {
+                                                global $host, $port, $user, $pass, $dbname;
 
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-        try {
-            $this->db = new PDO($dsn, $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos: ' . $e->getMessage());
-        }
-    } */
+                                                $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
+                                                try {
+                                                    $this->db = new PDO($dsn, $user, $pass);
+                                                    $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                                } catch (PDOException $e) {
+                                                    die('Error al conectar a la base de datos: ' . $e->getMessage());
+                                                }
+                                            } */
 
     public function connectDB()
     {
-        global $host, $user, $pass , $port, $sid;
+        global $host, $user, $pass, $port, $sid;
 
         try {
-            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
+            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
         }
-}
+    }
 
 
     // Función para obtener un tipo de mascota por su ID
-    public function getTipoMascota($id)
+    /*public function getTipoMascota($id)
     {
         $query = "SELECT * FROM tipomascota WHERE idTipoMascota = :idTipoMascota";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':idTipoMascota', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+    }*/
+
+    
 
     // Función para obtener todos los tipos de mascotas
-    public function getTipoMascotas()
-    {
-        $query = "SELECT * FROM tipomascota";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                      /*   public function getTipoMascotas()
+                                     {
+                                            $query = "SELECT * FROM tipomascota";
+                                            $stmt = $this->db->query($query);
+                                            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        }*/
+
+
+
+
+
+public function getTipoMascotas()
+{
+    try {
+        // Llamada al procedimiento almacenado
+        $cursor = $this->db->prepare("BEGIN GETTIPOMASCOTAS(:cursor); END;");
+        $cursor->bindParam(':cursor', $result, PDO::PARAM_STMT);
+        $cursor->execute();
+
+        // Recuperar datos del cursor
+        $result = oci_new_cursor($this->db);  // Mover esta línea antes del execute
+        oci_execute($result);
+
+        $data = array();
+        while ($row = oci_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+
+        return $data;
+        $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass);
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+    } catch (PDOException $e) {
+        die('Error al obtener datos: ' . $e->getMessage() . ' (SQLSTATE ' . $e->getCode() . ')');
     }
+}
+
+
+
+
 
     // Función para insertar un nuevo tipo de mascota
     public function insertTipoMascota($tipo)
