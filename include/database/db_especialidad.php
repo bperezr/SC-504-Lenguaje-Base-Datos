@@ -10,7 +10,7 @@ class Especialidad
         $this->connectDB();
     }
 
-    public function connectDB()
+   /* public function connectDB()
     {
         global $host, $port, $user, $pass, $dbname;
 

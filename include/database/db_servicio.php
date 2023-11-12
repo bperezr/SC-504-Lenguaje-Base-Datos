@@ -10,7 +10,7 @@ class Servicio
         $this->connectDB();
     }
 
-    public function connectDB()
+    /*public function connectDB()
     {
         global $host, $port, $user, $pass, $dbname;
 
@@ -21,9 +21,23 @@ class Servicio
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos: ' . $e->getMessage());
         }
-    }
+    }*/
 
-    public function getServicio($id)
+    public function connectDB()
+    {
+        global $host, $user, $pass , $port, $sid;
+
+        try {
+            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        }
+}
+
+   
+
+   public function getServicio($id)
     {
         $query = "SELECT * FROM servicios WHERE idServicio = :id";
         $stmt = $this->db->prepare($query);
@@ -32,12 +46,20 @@ class Servicio
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+
+
+
+
+
+
     public function getServicios()
     {
         $query = "SELECT * FROM servicios";
         $stmt = $this->db->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
 
     public function insertServicio($servicio, $descripcion)
     {
@@ -48,7 +70,13 @@ class Servicio
         return $stmt->execute();
     }
 
-    public function updateServicio($id, $servicio, $descripcion)
+    
+
+
+
+
+
+   public function updateServicio($id, $servicio, $descripcion)
     {
         $query = "UPDATE servicios SET servicio = :servicio, descripcion = :descripcion WHERE idServicio = :id";
         $stmt = $this->db->prepare($query);
@@ -58,6 +86,10 @@ class Servicio
         return $stmt->execute();
     }
 
+
+
+
+
     public function deleteServicio($id)
     {
         $query = "DELETE FROM servicios WHERE idServicio = :id";
@@ -66,7 +98,11 @@ class Servicio
         return $stmt->execute();
     }
 
-    public function buscarServicios($searchTerm)
+
+
+
+
+public function buscarServicios($searchTerm)
     {
         $query = "SELECT * FROM servicios WHERE servicio LIKE :searchTerm OR descripcion LIKE :searchTerm";
         $stmt = $this->db->prepare($query);
@@ -75,5 +111,13 @@ class Servicio
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
+
+
+
+
+
 }
+
 ?>

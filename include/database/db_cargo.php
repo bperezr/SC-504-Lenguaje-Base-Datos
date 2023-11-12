@@ -10,9 +10,9 @@ class Cargo
         $this->connectDB();
     }
 
-    public function connectDB()
+    /*public function connectDB()
     {
-        global $host, $port, $user, $pass, $dbname;
+        //global $host, $port, $user, $pass, $dbname;
 
         $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
         try {
@@ -21,7 +21,20 @@ class Cargo
         } catch (PDOException $e) {
             die('Error al conectar a la base de datos: ' . $e->getMessage());
         }
-    }
+    }*/
+
+    public function connectDB()
+    {
+        global $host, $user, $pass , $port, $sid;
+
+        try {
+            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        }
+}
+
 
     // Función para obtener un cargo por su ID
     public function getCargo($id)
@@ -33,7 +46,11 @@ class Cargo
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+
+
+
     // Función para obtener todos los cargos
+
     public function getCargos()
     {
         $query = "SELECT * FROM cargo";
@@ -41,7 +58,14 @@ class Cargo
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+ 
+
+
+
     // Función para insertar un nuevo cargo
+    
+ 
     public function insertCargo($cargo)
     {
         $query = "INSERT INTO cargo (cargo) VALUES (:cargo)";
@@ -50,7 +74,12 @@ class Cargo
         return $stmt->execute();
     }
 
+
+
+
     // Función para actualizar un cargo
+
+
     public function updateCargo($id, $cargo)
     {
         $query = "UPDATE cargo SET cargo = :cargo WHERE idCargo = :idCargo";
@@ -60,6 +89,9 @@ class Cargo
         return $stmt->execute();
     }
 
+
+
+
     // Función para eliminar un cargo por su ID
     public function deleteCargo($id)
     {
@@ -68,6 +100,11 @@ class Cargo
         $stmt->bindParam(':idCargo', $id);
         return $stmt->execute();
     }
+
+   
+
+
+
 
     public function buscarCargos($searchTerm)
     {
@@ -79,7 +116,6 @@ class Cargo
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
 
 }

@@ -1,7 +1,6 @@
 # SC-504-Lenguaje-Base-Datos
 
-------------------------------------------------------------------------------------------------------------
-# Corrección de la base
+## TABLESPACE
 
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 
@@ -15,12 +14,53 @@ CREATE USER happypaws IDENTIFIED BY 12345
 	
 ALTER USER happypaws quota unlimited on HAPPYPAWS;
 
-
 CREATE ROLE Admin;
 GRANT CREATE SESSION, CREATE TABLE, CREATE ANY TABLE, ALTER ANY TABLE, CREATE VIEW, RESOURCE TO Admin;
 GRANT Admin to happypaws;
 
-------------------------------------------------------------------------------------------------------------
-# Corrección de error 'DBMS_CRYPTO' 
-Ejecutar con sys
+# DROP de las tablas
+
+DROP TABLE HAPPYPAWS.ASIGNACIONCITAS;
+
+DROP TABLE HAPPYPAWS.HISTORIALMEDICO;
+
+DROP TABLE HAPPYPAWS.COLABORADORSERVICIO;
+
+DROP TABLE HAPPYPAWS.CITAS;
+
+DROP TABLE HAPPYPAWS.COLABORADOR;
+
+DROP TABLE HAPPYPAWS.MASCOTA;
+
+DROP TABLE HAPPYPAWS.CLIENTE;
+
+DROP TABLE HAPPYPAWS.EVENTOS;
+
+DROP TABLE HAPPYPAWS.DISTRITO;
+
+DROP TABLE HAPPYPAWS.CANTON;
+
+DROP TABLE HAPPYPAWS.CARGO;
+
+DROP TABLE HAPPYPAWS.ESPECIALIDAD;
+
+DROP TABLE HAPPYPAWS.ESTADO;
+
+DROP TABLE HAPPYPAWS.HORARIOCITAS;
+
+DROP TABLE HAPPYPAWS.TIPOMASCOTA;
+
+DROP TABLE HAPPYPAWS.SERVICIOS;
+
+DROP TABLE HAPPYPAWS.PROVINCIA;
+
+DROP TABLE HAPPYPAWS.ROL;
+
+## Corrección de error 'DBMS_CRYPTO'
+
+Ejecutar con sys:
+
 GRANT EXECUTE ON DBMS_CRYPTO TO happypaws;
+
+## Configurar XDebug para PHP con XAMPP y Visual Studio Code
+https://www.youtube.com/watch?v=TexkCrk6njc
