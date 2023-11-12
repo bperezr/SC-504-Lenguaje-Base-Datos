@@ -51,8 +51,8 @@ class Cliente
 
         $stmt->execute();
     }
-
-    /*public function getClientes()
+    //DONE
+    public function getClientes()
     {
         $query = "SELECT c.*, p.nombre as provincia, cn.nombre as canton, d.nombre as distrito, r.nombre as rol FROM cliente as c
         JOIN provincia as p ON c.idProvincia = p.idProvincia
@@ -61,22 +61,22 @@ class Cliente
         JOIN rol as r ON c.idRol = r.idRol";
         $stmt = $this->db->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }*/
-
-    /*public function getVerClientes()
+    }
+    //DONE
+    public function getVerClientes()
     {
         $query = "SELECT idCliente, nombre, apellido1, apellido2, telefono, imagen, domicilio, idProvincia, idCanton, idDistrito, correo FROM cliente";
         $stmt = $this->db->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }*/
-
+    }
+    //DONE
     public function getRoles()
     {
         $query = "SELECT idRol, nombreRol FROM rol";
         $stmt = $this->db->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    //DONE
     public function insertCliente($nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo, $contrasena)
     {
         $query = "INSERT INTO cliente (nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito, idRol, correo, contrasena)
@@ -96,7 +96,7 @@ class Cliente
 
         return $stmt->execute();
     }
-
+    //DONE
     public function updateCliente($idCliente, $nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo)
     {
         $query = "UPDATE cliente SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, telefono = :telefono, domicilio = :domicilio, idProvincia = :idProvincia, idCanton = :idCanton, idDistrito = :idDistrito, idRol = :idRol, correo = :correo WHERE idCliente = :idCliente";
@@ -115,7 +115,7 @@ class Cliente
 
         return $stmt->execute();
     }
-
+    //DONE
     public function updateClienteNuevo($idCliente, $nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $imagen)
     {
         $query = "UPDATE cliente SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, telefono = :telefono, domicilio = :domicilio, idProvincia = :idProvincia, idCanton = :idCanton, idDistrito = :idDistrito, imagen = :imagen WHERE idCliente = :idCliente";
@@ -134,7 +134,7 @@ class Cliente
         return $stmt->execute();
     }
 
-
+    //DONE
     public function deleteCliente($idCliente)
     {
         $query = "DELETE FROM cliente WHERE idCliente = :idCliente";
@@ -143,21 +143,8 @@ class Cliente
         return $stmt->execute();
     }
 
+    //DONE
     public function buscarClientes($searchTerm)
-    {
-        $query = "SELECT c.*, p.nombre as provincia, cn.nombre as canton, d.nombre as distrito, r.nombre as rol FROM cliente c
-                INNER JOIN provincia p ON c.idProvincia = p.idProvincia
-                INNER JOIN canton cn ON c.idCanton = cn.idCanton
-                INNER JOIN distrito d ON c.idDistrito = d.idDistrito
-                INNER JOIN rol r ON c.idRol = r.idRol
-                WHERE c.nombre LIKE :searchTerm OR c.apellido1 LIKE :searchTerm OR c.apellido2 LIKE :searchTerm";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function buscarClientess($searchTerm)
     {
         $query = "SELECT idCliente, nombre, apellido1, apellido2, correo, imagen, telefono FROM cliente
             WHERE nombre LIKE :searchTerm OR apellido1 LIKE :searchTerm OR apellido2 LIKE :searchTerm OR correo LIKE :searchTerm";
