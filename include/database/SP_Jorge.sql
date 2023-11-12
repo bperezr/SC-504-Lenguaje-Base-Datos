@@ -42,7 +42,7 @@ END;
                                                                         --TEST
 --******************************************************************************
 DECLARE
-    v_idCliente NUMBER := 1;
+    v_idCliente NUMBER := '55';
     v_nombre VARCHAR2(30);
     v_apellido1 VARCHAR2(30);
     v_apellido2 VARCHAR2(30);
@@ -83,9 +83,8 @@ END;
 --******************************************************************************************
                                                                                 --getClientes x
 --******************************************************************************************
-
 CREATE OR REPLACE PROCEDURE getClientes(
-p_cursor OUT SYS_REFCURSOR,
+p_cursor OUT SYS_REFCURSOR, 
 p_resultado OUT NUMBER
 ) AS
 BEGIN
@@ -114,7 +113,6 @@ EXCEPTION
         p_resultado := 9; -- Error
         DBMS_OUTPUT.PUT_LINE('Error en updateCliente: ' || SQLERRM);
 END;
-
 
 
 --******************************************************************************
@@ -610,27 +608,6 @@ BEGIN
 END;
 
 --******************************************************************************************
-                                                                                --????
---******************************************************************************************
-
-CREATE OR REPLACE PROCEDURE buscarClientess(
-    p_searchTerm IN VARCHAR2,
-    c_cursor OUT SYS_REFCURSOR
-) AS
-BEGIN
-    OPEN c_cursor FOR
-        SELECT c.*, p.nombre as provincia, cn.nombre as canton, d.nombre as distrito, r.nombrerol as rol
-        FROM cliente c
-        INNER JOIN provincia p ON c.idProvincia = p.idProvincia
-        INNER JOIN canton cn ON c.idCanton = cn.idCanton
-        INNER JOIN distrito d ON c.idDistrito = d.idDistrito
-        INNER JOIN rol r ON c.idRol = r.idRol
-        WHERE LOWER(c.nombre) LIKE LOWER(p_searchTerm)
-            OR LOWER(c.apellido1) LIKE LOWER(p_searchTerm)
-            OR LOWER(c.apellido2) LIKE LOWER(p_searchTerm);
-END;
-
---******************************************************************************************
                                                                                 --buscarclientess
 --******************************************************************************************
 
@@ -673,8 +650,8 @@ DECLARE
     v_telefono cliente.telefono%TYPE;
     v_resultado NUMBER;
 BEGIN
-    v_searchTerm := '12345678'; -- 'Término de búsqueda'
-    buscarclientess(v_searchTerm, cur, v_resultado);
+    v_searchTerm := '@email'; -- 'Término de búsqueda'
+    buscarclientes(v_searchTerm, cur, v_resultado);
 
     CASE v_resultado
         WHEN 0 THEN
@@ -699,158 +676,215 @@ BEGIN
     CLOSE cur;
 END;
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                                                                                                    --COLABORADOR
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 --******************************************************************************************
-                                                                                --getColaborador
+                                                                                --verificarCorreoCliente
 --******************************************************************************************
-CREATE OR REPLACE PROCEDURE getColaborador(
-    p_idColaborador IN colaborador.idColaborador%TYPE,
-    p_nombre OUT colaborador.nombre%TYPE,
-    p_apellido1 OUT colaborador.apellido1%TYPE,
-    p_apellido2 OUT colaborador.apellido2%TYPE,
-    p_idCargo OUT colaborador.idCargo%TYPE,
-    p_idEspecialidad OUT colaborador.idEspecialidad%TYPE,
-    p_imagen OUT colaborador.imagen%TYPE,
-    p_idRol OUT colaborador.idRol%TYPE,
-    p_correo OUT colaborador.correo%TYPE,
-    p_resultado OUT NUMBER
+CREATE OR REPLACE PROCEDURE verificarCorreoCliente(
+    p_correo IN cliente.correo%TYPE,
+    p_existe OUT NUMBER
 ) AS
 BEGIN
-    SELECT nombre, apellido1, apellido2, idCargo, idEspecialidad, imagen, idRol, correo
-    INTO p_nombre, p_apellido1, p_apellido2, p_idCargo, p_idEspecialidad, p_imagen, p_idRol, p_correo
-    FROM colaborador
-    WHERE idColaborador = p_idColaborador;
-
-    p_resultado := 1; -- Encontrado
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_resultado := 0; -- No se encontró
-        DBMS_OUTPUT.PUT_LINE('No encontrado en getColaborador: ' || SQLERRM);
-    WHEN OTHERS THEN
-        p_resultado := 9; -- Error
-        DBMS_OUTPUT.PUT_LINE('Error en getColaborador: ' || SQLERRM);
-END;
-
-
---******************************************************************************
-                                                                        --TEST
---******************************************************************************
-DECLARE
-    v_idColaborador NUMBER := 1;
-    v_nombre VARCHAR2(30);
-    v_apellido1 VARCHAR2(30);
-    v_apellido2 VARCHAR2(30);
-    v_idCargo NUMBER;
-    v_idEspecialidad NUMBER;
-    v_imagen VARCHAR2(400);
-    v_idRol NUMBER;
-    v_correo VARCHAR2(100);
-    v_resultado NUMBER;
-BEGIN
-    getColaborador(v_idColaborador,v_nombre,v_apellido1,v_apellido2,v_idCargo,v_idEspecialidad,v_imagen,v_idRol,v_correo,v_resultado);
-
-    IF v_resultado = 1 THEN
-        DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
-        DBMS_OUTPUT.PUT_LINE(' ');
-        DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_nombre);
-        DBMS_OUTPUT.PUT_LINE('Primer apellido: ' || v_apellido1);
-        DBMS_OUTPUT.PUT_LINE('Segundo apellido: ' || v_apellido2);
-        DBMS_OUTPUT.PUT_LINE('ID Cargo: ' || TO_CHAR(v_idCargo));
-        DBMS_OUTPUT.PUT_LINE('ID Especialidad: ' || TO_CHAR(v_idEspecialidad));
-        DBMS_OUTPUT.PUT_LINE('Imagen: ' || v_imagen);
-        DBMS_OUTPUT.PUT_LINE('ID Rol: ' || TO_CHAR(v_idRol));
-        DBMS_OUTPUT.PUT_LINE('Correo: ' || v_correo);
-    ELSIF v_resultado = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
+    SELECT COUNT(*) INTO p_existe
+    FROM cliente
+    WHERE correo = p_correo;
+    
+    IF p_existe > 0 THEN
+        p_existe := 1; -- El correo existe
     ELSE
-        DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
+        p_existe := 0; -- El correo no existe
     END IF;
-END;
-
-
---******************************************************************************************
-                                                                                --getColaboradores
---******************************************************************************************
-CREATE OR REPLACE PROCEDURE getColaboradores(
-    p_cursor OUT SYS_REFCURSOR,
-    p_resultado OUT NUMBER
-) AS
-BEGIN
-    p_resultado := 0;
-
-    OPEN p_cursor FOR
-        SELECT c.idColaborador, c.nombre, c.apellido1, c.apellido2, c.idCargo, c.idEspecialidad, c.imagen, c.idRol, c.correo,
-            e.especialidad AS nombre_especialidad, cg.cargo AS nombre_cargo
-        FROM colaborador c
-        JOIN especialidad e ON c.idEspecialidad = e.idEspecialidad
-        JOIN cargo cg ON c.idCargo = cg.idCargo;
-
-    p_resultado := 1; -- Encontrado
+    
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        p_resultado := 0; -- No se encontró
-        DBMS_OUTPUT.PUT_LINE('Error en getColaboradores: ' || SQLERRM);
     WHEN OTHERS THEN
-        p_resultado := 9; -- Error
-        DBMS_OUTPUT.PUT_LINE('Error en getColaboradores: ' || SQLERRM);
+        p_existe := 9; -- Error
 END;
-
 
 --******************************************************************************
                                                                         --TEST
 --******************************************************************************
 DECLARE
-    cur SYS_REFCURSOR;
-    v_idColaborador colaborador.idColaborador%TYPE;
-    v_nombre colaborador.nombre%TYPE;
-    v_apellido1 colaborador.apellido1%TYPE;
-    v_apellido2 colaborador.apellido2%TYPE;
-    v_idCargo colaborador.idCargo%TYPE;
-    v_idEspecialidad colaborador.idEspecialidad%TYPE;
-    v_imagen colaborador.imagen%TYPE;
-    v_idRol colaborador.idRol%TYPE;
-    v_correo colaborador.correo%TYPE;
-    v_nombreEspecialidad especialidad.especialidad%TYPE;
-    v_nombreCargo cargo.cargo%TYPE;
+    v_correo cliente.correo%TYPE := 'jorge1@email.com';
+    v_existe NUMBER;
+
+BEGIN
+    verificarCorreoCliente(v_correo, v_existe);
+
+    CASE v_existe
+        WHEN 1 THEN
+            DBMS_OUTPUT.PUT_LINE('El correo ' || v_correo || ' existe en la base de datos.');
+        WHEN 0 THEN
+            DBMS_OUTPUT.PUT_LINE('El correo ' || v_correo || ' no existe en la base de datos.');
+        WHEN 9 THEN
+            DBMS_OUTPUT.PUT_LINE('Error al verificar el correo ' || v_correo);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Resultado inesperado: ' || v_existe);
+    END CASE;
+END;
+
+--******************************************************************************************
+                                                                                --validarcredencialesCliente
+--******************************************************************************************
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE validarcredencialesCliente (
+    v_correo     IN cliente.correo%TYPE,
+    v_contrasena IN VARCHAR2,
+    resultado    OUT NUMBER
+) AS
+    consult_correo     VARCHAR2(20);
+    consult_contrasena VARCHAR2(250);
+BEGIN
+    DECLARE
+        passhash RAW(128);
+    BEGIN
+        passhash := dbms_crypto.hash(src => utl_raw.cast_to_raw(v_contrasena), typ => dbms_crypto.hash_sh256);
+
+        SELECT correo, contrasena
+        INTO consult_correo, consult_contrasena
+        FROM cliente
+        WHERE correo = v_correo
+            AND contrasena = passhash;
+
+        resultado := 1; -- Si se encuentra el registro
+        
+    EXCEPTION
+        WHEN OTHERS THEN
+            resultado := 0; -- No se encontraron coincidencias.
+    END;
+END;
+--******************************************************************************
+                                                                        --TEST
+--******************************************************************************
+DECLARE
+    v_correo_cliente cliente.correo%TYPE := 'test@test.com';
+    v_contrasena VARCHAR2(250) := 'admin01';
     v_resultado NUMBER;
 
 BEGIN
-    getColaboradores(cur, v_resultado);
+    validarcredencialesCliente(v_correo_cliente, v_contrasena, v_resultado);
 
     CASE v_resultado
         WHEN 1 THEN
-            DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
-            DBMS_OUTPUT.PUT_LINE(' ');
+            DBMS_OUTPUT.PUT_LINE('Credenciales válidas');
         WHEN 0 THEN
-            DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
-        WHEN 9 THEN
-            DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
+            DBMS_OUTPUT.PUT_LINE('Credenciales inválidas');
         ELSE
-            DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_resultado);
+            DBMS_OUTPUT.PUT_LINE('Resultado inesperado: ' || v_resultado);
     END CASE;
+END;
 
-    LOOP
-        FETCH cur INTO v_idColaborador, v_nombre, v_apellido1, v_apellido2, v_idCargo, v_idEspecialidad, v_imagen,
-                    v_idRol, v_correo, v_nombreEspecialidad, v_nombreCargo;
-        EXIT WHEN cur%NOTFOUND;
+--******************************************************************************************
+                                                                                --insertClienteNuevo
+--******************************************************************************************
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE insertClienteNuevo (
+    p_correo IN cliente.correo%TYPE,
+    p_contrasena IN cliente.contrasena%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN    
+    DECLARE
+        passHash RAW(128);
+    BEGIN
+        passHash := DBMS_CRYPTO.HASH(
+            src => UTL_RAW.CAST_TO_RAW(p_contrasena),
+            typ => DBMS_CRYPTO.HASH_SH256
+        );
 
-        DBMS_OUTPUT.PUT_LINE('ID Colaborador: ' || v_idColaborador);
-        DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_nombre);
-        DBMS_OUTPUT.PUT_LINE('Apellido 1: ' || v_apellido1);
-        DBMS_OUTPUT.PUT_LINE('Apellido 2: ' || v_apellido2);
-        DBMS_OUTPUT.PUT_LINE('ID Cargo: ' || v_idCargo);
-        DBMS_OUTPUT.PUT_LINE('ID Especialidad: ' || v_idEspecialidad);
-        DBMS_OUTPUT.PUT_LINE('Imagen: ' || v_imagen);
-        DBMS_OUTPUT.PUT_LINE('ID Rol: ' || v_idRol);
-        DBMS_OUTPUT.PUT_LINE('Correo: ' || v_correo);
-        DBMS_OUTPUT.PUT_LINE('Nombre Especialidad: ' || v_nombreEspecialidad);
-        DBMS_OUTPUT.PUT_LINE('Nombre Cargo: ' || v_nombreCargo);
-        DBMS_OUTPUT.PUT_LINE('--------------------------------');
-    END LOOP;
+        INSERT INTO cliente (correo, contrasena) VALUES (p_correo, passHash);
 
-    CLOSE cur;
+        p_resultado := 1; -- Éxito
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            p_resultado := 0; -- Correo duplicado
+        WHEN OTHERS THEN
+            p_resultado := 9; -- Error
+    END; 
+END;
+
+--******************************************************************************
+                                                                        --TEST
+--******************************************************************************
+DECLARE
+    v_correo cliente.correo%TYPE := 'test@test.com';
+    v_contrasena cliente.contrasena%TYPE := 'contrasena123';
+    v_resultado NUMBER;
+
+BEGIN
+    insertClienteNuevo(v_correo, v_contrasena, v_resultado);
+
+    CASE v_resultado
+        WHEN 1 THEN
+            DBMS_OUTPUT.PUT_LINE('Cliente insertado correctamente.');
+        WHEN 0 THEN
+            DBMS_OUTPUT.PUT_LINE('El correo ya existe en la base de datos.');
+        WHEN 9 THEN
+            DBMS_OUTPUT.PUT_LINE('Error al intentar insertar el cliente.');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Resultado inesperado: ' || v_resultado);
+    END CASE;
+END;
+
+--******************************************************************************************
+                                                                                --obtenerClientePorCorreo
+--******************************************************************************************
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE obtenerClientePorCorreo(
+    p_correo IN cliente.correo%TYPE,
+    p_idCliente OUT cliente.idCliente%TYPE,
+    p_idRol OUT cliente.idRol%TYPE,
+    p_nombre OUT cliente.nombre%TYPE,
+    p_apellido1 OUT cliente.apellido1%TYPE,
+    p_apellido2 OUT cliente.apellido2%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    SELECT idCliente, idRol, nombre, apellido1, apellido2 
+    INTO p_idCliente, p_idRol, p_nombre, p_apellido1, p_apellido2
+    FROM cliente
+    WHERE correo = p_correo;
+
+    p_resultado := 1; -- Éxito
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontró el cliente
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+END;
+
+--******************************************************************************
+                                                                        --TEST
+--******************************************************************************
+DECLARE
+    v_correo cliente.correo%TYPE := 'jorge@email.com';
+    v_idCliente cliente.idCliente%TYPE;
+    v_idRol cliente.idRol%TYPE;
+    v_nombre cliente.nombre%TYPE;
+    v_apellido1 cliente.apellido1%TYPE;
+    v_apellido2 cliente.apellido2%TYPE;
+    v_resultado NUMBER;
+
+BEGIN
+    obtenerClientePorCorreo(
+        p_correo => v_correo,
+        p_idCliente => v_idCliente,
+        p_idRol => v_idRol,
+        p_nombre => v_nombre,
+        p_apellido1 => v_apellido1,
+        p_apellido2 => v_apellido2,
+        p_resultado => v_resultado
+    );
+
+    CASE v_resultado
+        WHEN 1 THEN
+            DBMS_OUTPUT.PUT_LINE('Cliente encontrado:');
+            DBMS_OUTPUT.PUT_LINE('ID Cliente: ' || v_idCliente);
+            DBMS_OUTPUT.PUT_LINE('ID Rol: ' || v_idRol);
+            DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_nombre);
+            DBMS_OUTPUT.PUT_LINE('Apellido 1: ' || v_apellido1);
+            DBMS_OUTPUT.PUT_LINE('Apellido 2: ' || v_apellido2);
+        WHEN 0 THEN
+            DBMS_OUTPUT.PUT_LINE('No se encontró el cliente.');
+        WHEN 9 THEN
+            DBMS_OUTPUT.PUT_LINE('Error al buscar el cliente.');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Resultado inesperado: ' || v_resultado);
+    END CASE;
 END;
