@@ -3,7 +3,7 @@
 --DB_Cargo-- PRIMER INTENTO EN LA BD--
 
 ---SP  para obtener un cargo por su ID--
-CREATE OR REPLACE FUNCTION GetCargoById(p_idCargo IN NUMBER)
+CREATE OR REPLACE FUNCTION GetCargo(p_idCargo IN NUMBER)
 RETURN cargo%ROWTYPE
 IS
     v_cargo cargo%ROWTYPE;
@@ -19,10 +19,12 @@ EXCEPTION
 END;
 /
 
+
+
 DECLARE
     v_result cargo%ROWTYPE;
 BEGIN
-    v_result := GetCargoById(1); -- Reemplaza 1 con el ID que deseas comprobar
+    v_result := GetCargo(1); -- Reemplaza 1 con el ID que deseas comprobar
 
     IF v_result.idCargo IS NOT NULL THEN
         DBMS_OUTPUT.PUT_LINE('ID Cargo: ' || v_result.idCargo || ', Cargo: ' || v_result.cargo);
@@ -77,7 +79,7 @@ END;
 
 --SP PARA INSERTAR UN NUEVO CARGO--  LISTO
 
-CREATE OR REPLACE PROCEDURE InsertNuevoCargo(
+CREATE OR REPLACE PROCEDURE insertCargo(
     p_cargo IN VARCHAR2,
     p_resultado OUT NUMBER
 )
@@ -93,14 +95,14 @@ EXCEPTION
     WHEN OTHERS THEN
         p_resultado := 0; -- Indicar que hubo un error en la inserción
         DBMS_OUTPUT.PUT_LINE('Error en InsertarNuevoCargo: ' || SQLERRM);
-END InsertNuevoCargo;
+END insertCargo;
 /
 
 DECLARE
     v_nuevoCargo VARCHAR2(30) := 'Estetica'; -- Reemplaza con el nuevo cargo que deseas insertar
     v_resultado NUMBER := 0; -- 0: Error, 1: Éxito
 BEGIN
-    InsertNuevoCargo(v_nuevoCargo, v_resultado);
+    insertCargo(v_nuevoCargo, v_resultado);
 
     IF v_resultado = 1 THEN
         DBMS_OUTPUT.PUT_LINE('Nuevo cargo insertado exitosamente: ' || v_nuevoCargo);
@@ -234,7 +236,7 @@ END;
 
 ---SP  para obtener un servicio por su ID--
 
-CREATE OR REPLACE PROCEDURE GetServicioPorID(
+CREATE OR REPLACE PROCEDURE getServicio(
     p_idServicio IN NUMBER,
     p_nombre OUT VARCHAR2,
     p_descripcion OUT VARCHAR2,
@@ -258,7 +260,7 @@ EXCEPTION
         p_nombre := NULL;
         p_descripcion := NULL;
         DBMS_OUTPUT.PUT_LINE('Error en GetServicioPorID: ' || SQLERRM);
-END GetServicioPorID;
+END getServicio;
 /
 DECLARE
     v_idServicio NUMBER := 2; -- Reemplaza con el ID del servicio que deseas buscar
@@ -266,7 +268,7 @@ DECLARE
     v_descripcionServicio VARCHAR2(100);
     v_resultado NUMBER := 0; -- 0: No se encontró, 1: Éxito, 9: Error
 BEGIN
-    GetServicioPorID(v_idServicio, v_nombreServicio, v_descripcionServicio, v_resultado);
+    getServicio(v_idServicio, v_nombreServicio, v_descripcionServicio, v_resultado);
 
     IF v_resultado = 1 THEN
         DBMS_OUTPUT.PUT_LINE('Servicio encontrado exitosamente: ' || v_nombreServicio || ', Descripción: ' || v_descripcionServicio);
@@ -284,7 +286,6 @@ BEGIN
     END IF;
 END;
 /
-
 
 
 -- SP para obtener todos los servicios--
@@ -334,7 +335,7 @@ END;
 
 --SP para insertar un nuevo servicio--  
 
-CREATE OR REPLACE PROCEDURE InsertarNuevoServicio(
+CREATE OR REPLACE PROCEDURE insertServicio(
     p_servicio IN VARCHAR2,
     p_descripcion IN VARCHAR2,
     p_resultado OUT VARCHAR2
@@ -353,27 +354,29 @@ BEGIN
     ELSE
         ROLLBACK;
         p_resultado := 'Error: No se pudo insertar el servicio.';
-        DBMS_OUTPUT.PUT_LINE('Error en InsertarNuevoServicio: No se pudo insertar el servicio.');
+        DBMS_OUTPUT.PUT_LINE('Error en InsertNuevoServicio: No se pudo insertar el servicio.');
     END IF;
 EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
         p_resultado := 'Error: ' || SQLERRM;
-        DBMS_OUTPUT.PUT_LINE('Error en InsertarNuevoServicio: ' || SQLERRM);
-END InsertarNuevoServicio;
+        DBMS_OUTPUT.PUT_LINE('Error en insertServicio: ' || SQLERRM);
+END insertServicio;
 /
 
+--DROP PROCEDURE insertServicio;
 
 DECLARE
-    v_nombreServicio VARCHAR2(30) := 'Adoptación'; -- Reemplaza con el nombre del nuevo servicio
-    v_descripcionServicio VARCHAR2(100) := 'Adoptar una mascota'; -- Reemplaza con la descripción del nuevo servicio
+    v_nombreServicio VARCHAR2(30) := 'peluqueria'; -- Reemplaza con el nombre del nuevo servicio
+    v_descripcionServicio VARCHAR2(100) := 'peinar  una mascota'; -- Reemplaza con la descripción del nuevo servicio
     v_resultado VARCHAR2(100); -- Mensaje de resultado
 BEGIN
-    InsertarNuevoServicio(v_nombreServicio, v_descripcionServicio, v_resultado);
+   insertServicio(v_nombreServicio, v_descripcionServicio, v_resultado);
 
     DBMS_OUTPUT.PUT_LINE(v_resultado);
 END;
 /
+
 
 
 
