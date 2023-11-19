@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['usuario'])) {
+/*if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
@@ -12,7 +12,7 @@ if (isset($_SESSION['usuario'])) {
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
-}
+}*/
 
 /*  */
 require_once '../include/database/db_especialidad.php';
@@ -23,11 +23,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $especialidadNombre = $_POST['especialidad'];
     $descripcion = $_POST['descripcion'];
 
-    $especialidad->insertEspecialidad($especialidadNombre, $descripcion);
+    $resultadoSP = $especialidad->insertEspecialidad($especialidadNombre, $descripcion);
 
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "Éxito en la inserción.";
+    } else {
+        $_SESSION['mensaje'] = "Ocurrió un error durante la inserción.";
+    }
     header('Location: admin_especialidad.php');
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
