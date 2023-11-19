@@ -36,7 +36,7 @@ class Servicio
 }
 
    
-
+// Función para obtener un servicio por su ID
    public function getServicio($id)
     {
         $query = "SELECT * FROM servicios WHERE idServicio = :id";
@@ -52,6 +52,7 @@ class Servicio
 
 
 
+    // Función para obtener todos los servicios
     public function getServicios()
     {
         $query = "SELECT * FROM servicios";
@@ -61,6 +62,7 @@ class Servicio
 
 
 
+    // Función para insertar un nuevo servicio
     public function insertServicio($servicio, $descripcion)
     {
         $query = "INSERT INTO servicios (servicio, descripcion) VALUES (:servicio, :descripcion)";
@@ -75,7 +77,7 @@ class Servicio
 
 
 
-
+// Función para actualizar un servicio
    public function updateServicio($id, $servicio, $descripcion)
     {
         $query = "UPDATE servicios SET servicio = :servicio, descripcion = :descripcion WHERE idServicio = :id";
@@ -89,7 +91,7 @@ class Servicio
 
 
 
-
+// Función para eliminar un servicio por su ID
     public function deleteServicio($id)
     {
         $query = "DELETE FROM servicios WHERE idServicio = :id";
@@ -102,6 +104,7 @@ class Servicio
 
 
 
+// Función para buscar un servicio por su ID
 public function buscarServicios($searchTerm)
     {
         $query = "SELECT * FROM servicios WHERE servicio LIKE :searchTerm OR descripcion LIKE :searchTerm";

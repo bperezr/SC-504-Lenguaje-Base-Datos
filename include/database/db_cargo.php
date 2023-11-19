@@ -59,13 +59,8 @@ class Cargo
     }
 
 
- 
-
-
-
     // Función para insertar un nuevo cargo
     
- 
     public function insertCargo($cargo)
     {
         $query = "INSERT INTO cargo (cargo) VALUES (:cargo)";
@@ -78,7 +73,6 @@ class Cargo
 
 
     // Función para actualizar un cargo
-
 
     public function updateCargo($id, $cargo)
     {
@@ -105,7 +99,7 @@ class Cargo
 
 
 
-
+// Función para buscar un cargo por su ID
     public function buscarCargos($searchTerm)
     {
         $query = "SELECT c.*
