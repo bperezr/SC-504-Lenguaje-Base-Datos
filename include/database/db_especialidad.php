@@ -15,7 +15,7 @@ class Especialidad
         global $host, $user, $pass, $port, $sid;
 
         $connection_string = "//" . $host . ":" . $port . "/" . $sid;
-        $this->db = oci_connect($user, $pass, $connection_string);
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
 
         if (!$this->db) {
             $e = oci_error();
