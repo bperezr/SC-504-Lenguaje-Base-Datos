@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['usuario'])) {
+/*if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
@@ -12,28 +12,38 @@ if (isset($_SESSION['usuario'])) {
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: acceso_denegado.php");
     exit();
-}
+}*/
 
 /*  */
 require_once '../include/database/db_especialidad.php';
 
 $especialidad = new Especialidad();
+$mensajeAlerta = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
     $especialidadNombre = $_POST['especialidad'];
     $descripcion = $_POST['descripcion'];
 
-    $especialidad->updateEspecialidad($id, $especialidadNombre, $descripcion);
+    $resultadoSP = $especialidad->updateEspecialidad($id, $especialidadNombre, $descripcion);
 
+
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "¡Actualización exitosa!";
+    } elseif ($resultadoSP == 0) {
+        $_SESSION['mensaje'] = "No se encontró ninguna fila para actualizar.";
+    } else {
+        $_SESSION['mensaje'] = "Ocurrió un error durante la actualización.";
+    }
     header('Location: admin_especialidad.php');
     exit;
-} else {
 
+} else {
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
         $especialidadData = $especialidad->getEspecialidad($id);
-        if (!$especialidadData) {
+
+        if (!$especialidadData['datos']) {
             header('Location: admin_especialidades.php');
             exit;
         }
@@ -42,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -54,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_especialidad';
     include '../include/template/nav.php'; ?>
@@ -68,16 +80,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="evento__detalle">
                 <h2 class="centrar-texto">Editar Especialidad</h2>
                 <form id="formularioEvento" class="formulario-evento" method="POST">
+
                     <div class="campo">
                         <label for="especialidad">Especialidad:</label>
                         <input type="text" id="especialidad" name="especialidad"
-                            value="<?php echo $especialidadData['especialidad']; ?>" required>
+                            value="<?php echo $especialidadData['datos']['especialidad']; ?>" required>
                     </div>
                     <div class="campo">
                         <label for="descripcion">Descripción:</label>
                         <input type="text" id="descripcion" name="descripcion"
-                            value="<?php echo $especialidadData['descripcion']; ?>" required>
+                            value="<?php echo $especialidadData['datos']['descripcion']; ?>" required>
                     </div>
+
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Guardar Cambios</button>
                         <a class="cancelar" href="admin_especialidad.php">Cancelar</a>
