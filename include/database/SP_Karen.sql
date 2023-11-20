@@ -316,7 +316,6 @@ BEGIN
 
     CLOSE v_resultado;
 
-    -- Comprobación adicional para verificar el resultado
     IF SQL%FOUND THEN
         DBMS_OUTPUT.PUT_LINE('Obtención de servicios realizada correctamente.');
     ELSE
@@ -364,7 +363,6 @@ EXCEPTION
 END insertServicio;
 /
 
---DROP PROCEDURE insertServicio;
 
 DECLARE
     v_nombreServicio VARCHAR2(30) := 'peluqueria'; -- Reemplaza con el nombre del nuevo servicio
