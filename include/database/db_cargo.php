@@ -37,33 +37,20 @@ class Cargo
 
 
     // Función para obtener un cargo por su ID
-
-    public function getEspecialidades()
-{
-    $especialidades = array();
-    $conn = $this->db;
-    $stmt = oci_parse($conn, "BEGIN getEspecialidades(:p_cursor, :p_resultado); END;");
-    
-    $p_cursor = oci_new_cursor($conn);
-    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
-	
-    $p_resultado = 0;
-    oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
-    oci_execute($stmt);
-
-    if ($p_resultado == 1) {
-        oci_execute($p_cursor);
-        while ($row = oci_fetch_assoc($p_cursor)) {
-            array_push($especialidades, $row);
-        }
+    public function getCargo($p_idCargo)
+    {
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN :result := GetCargo(:p_idCargo); END;");       
+        $result = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":result", $result, -1, OCI_B_CURSOR);
+        oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo);
+        oci_execute($stmt);  
+        oci_execute($result); 
+        oci_free_statement($stmt);
+        $cargo = oci_fetch_assoc($result);  
+        oci_free_statement($result);
+        return $cargo;
     }
-    oci_free_statement($p_cursor);
-    oci_free_statement($stmt);
-
-    return array('datos' => $especialidades, 'resultado' => $p_resultado);
-}
-
-
 
     // Función para obtener todos los cargos
 
@@ -115,8 +102,7 @@ public function getCargos()
 public function updateCargo($p_idCargo, $p_nuevoCargo)
     {
         $conn = $this->db;
-        $stmt = oci_parse($conn, "BEGIN updateCargo(:p_idCargo, :p_nuevoCargo, :p_resultado); END;");
-        
+        $stmt = oci_parse($conn, "BEGIN updateCargo(:p_idCargo, :p_nuevoCargo, :p_resultado); END;");   
         oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo);
         oci_bind_by_name($stmt, ":p_nuevoCargo", $p_nuevoCargo);  
         $p_resultado = 0;
