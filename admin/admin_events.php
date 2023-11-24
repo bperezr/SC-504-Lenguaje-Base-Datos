@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['usuario'])) {
+/*if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
@@ -12,37 +12,76 @@ if (isset($_SESSION['usuario'])) {
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
+}*/
+
+require_once '../include/database/db_eventos.php';
+$evento = new Evento();
+
+$respuesta = $evento->getEventos();
+$resultadoSP = $respuesta['resultado'];
+$eventos = $respuesta['datos'];
+
+if ($resultadoSP == 1) {
+    $hayResultados = true;
+} elseif ($resultadoSP == 0) {
+    $mensajeError = "No se encontraron eventos.";
+    $hayResultados = false;
+} else {
+    $mensajeError = "Ocurrió un error al recuperar los eventos.";
+    $hayResultados = false;
 }
 
-/*  */
-require '../include/connections/connect.php';
-$db = ConectarDB();
-$queryEventos = "SELECT * FROM eventos";
-$result = mysqli_query($db, $queryEventos);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idEvento = $_POST['idEvento'];
+
+    // Obtener información del evento para la imagen
+    $eventoInfo = $evento->getEvento($idEvento);
+    if ($eventoInfo['resultado'] == 1 && !empty($eventoInfo['datos'])) {
+        $nombreImagen = $eventoInfo['datos']['imagen'];
+
+        // Eliminar imagen del servidor
+        if ($evento->deleteImagen($nombreImagen)) {
+            // Proceder a eliminar el evento
+            $resultadoSP = $evento->deleteEvento($idEvento);
+
+            if ($resultadoSP == 1) {
+                $_SESSION['mensaje'] = "Evento eliminado con éxito.";
+            } elseif ($resultadoSP == 0) {
+                $_SESSION['mensaje'] = "No se encontró el evento para eliminar.";
+            } else {
+                $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el evento.";
+            }
+        } else {
+            $_SESSION['mensaje'] = "Error al eliminar la imagen del evento.";
+        }
+    } else {
+        $_SESSION['mensaje'] = "No se encontró información del evento para eliminar.";
+    }
+
+    header('Location: admin_events.php');
+    exit;
+}
+
 
 $hayResultados = true;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['idEvento'];
-    $id = filter_var($id, FILTER_VALIDATE_INT);
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $respuesta = $evento->buscarEventos($searchTerm);
+    $eventos = $respuesta['datos']; // Asume que 'datos' contiene los eventos
 
-    if ($id) {
-        //Eliminar imagen
-        $queryImagen = "SELECT imagen FROM eventos WHERE idEvento = ${id}";
-        $resultImg = mysqli_query($db, $queryImagen);
-        $eventoImagen = mysqli_fetch_assoc($resultImg);
-
-        unlink('../img/images/' . $eventoImagen['imagen']);
-
-        //Eliminar evento
-        $queryDelete = "DELETE FROM eventos WHERE idEvento = ${id}";
-        $result = mysqli_query($db, $queryDelete);
-
-        if ($result) {
-            header('Location: admin_events.php');
-        }
+    // Comprobar si hay eventos encontrados
+    if (empty($eventos)) {
+        $hayResultados = false;
+    } else {
+        $hayResultados = true;
     }
 }
+
+
+echo "<pre>";
+var_dump($eventos);
+echo "</pre>";
 
 ?>
 
@@ -56,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+
     <!-- Nav template -->
     <?php $enlaceActivo = 'admin_events';
     include '../include/template/nav.php'; ?>
@@ -64,22 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <h1 class="centrar-texto">Administrar Eventos</h1>
 
-        <!-- Buscador -->
-        <?php
-        $db = ConectarDB();
-
-        if (isset($_GET['search'])) {
-            $searchTerm = $_GET['search'];
-
-            $query = "SELECT * FROM eventos WHERE nombreEvento LIKE '%$searchTerm%' ORDER BY fecha DESC";
-            $result = mysqli_query($db, $query);
-
-            // Verificar si hay resultados de búsqueda
-            if (mysqli_num_rows($result) === 0) {
-                $hayResultados = false;
-            }
-        }
-        ?>
         <form action="" method="get">
             <div class="contenedor_buscar">
                 <div class="buscador buscador_buscar">
@@ -109,51 +133,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($hayResultados): ?>
             <section class="event__tarjetas">
-                <?php while ($eventos = mysqli_fetch_assoc($result)): ?>
+                <?php foreach ($eventos as $evento): ?>
                     <!-- Evento -->
                     <div class="tarjeta">
+                        <!-- Imangen -->
                         <div class="tarjeta__imagen">
-                            <?php if (file_exists("../img/images/" . $eventos['imagen'])): ?>
-                                <img src="../img/images/<?php echo $eventos['imagen']; ?>" alt="Evento 1">
+                            <?php if (file_exists("../img/images_events/" . $evento['IMAGEN'])): ?>
+                                <img src="../img/images_events/<?php echo $evento['IMAGEN']; ?>" alt="Evento imagen">
                             <?php else: ?>
-                                <img src="../img/no_disponible.webp" alt="Imagen no disponible">
+                                <img src="../img/images_events/no_disponible.webp" alt="Imagen no disponible">
                             <?php endif; ?>
                         </div>
+                        <!-- Detalle Evento -->
                         <div class="tarjeta__detalle">
                             <h2>
-                                <?php echo $eventos['nombreEvento']; ?>
+                                <!-- Nombre -->
+                                <?php echo $evento['NOMBREEVENTO']; ?>
                             </h2>
                             <ul class="detalle-evento">
                                 <li><strong>Fecha:</strong>
-                                    <?php echo $eventos['fecha']; ?>
+                                    <!-- Fecha -->
+                                    <?php echo $evento['FECHA']; ?>
                                 </li>
+                                <!-- Horas -->
                                 <li><strong>Hora:</strong>
-                                    <?php echo $eventos['hora_inicio']; ?> -
-                                    <?php echo $eventos['hora_fin'] ?>
+                                    <?php
+                                    $horaInicioFormato = date('H:i', strtotime($evento['HORA_INICIO']));
+                                    $horaFinFormato = date('H:i', strtotime($evento['HORA_FIN']));
+                                    echo "{$horaInicioFormato} - {$horaFinFormato}";
+                                    ?>
                                 </li>
                             </ul>
                         </div>
 
                         <!-- Botones -->
                         <div class="tarjeta__btn">
-                            <a href="admin_events_edit.php?id=<?php echo $eventos['idEvento']; ?>" class="editar">
+                            <!-- Editar -->
+                            <a href="admin_events_edit.php?id=<?php echo $evento['IDEVENTO']; ?>" class="editar">
                                 <ion-icon name="create-sharp"></ion-icon>Editar
                             </a>
-
+                            <!-- Eliminar -->
                             <form class="tarjeta__btn" method="POST"
                                 onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?');">
-                                <input type="hidden" name="idEvento" value="<?php echo $eventos['idEvento'] ?>">
+                                <input type="hidden" name="idEvento" value="<?php echo $evento['IDEVENTO'] ?>">
                                 <button type="submit" class="eliminar">
                                     <ion-icon name="trash-sharp"></ion-icon>Eliminar
                                 </button>
                             </form>
                         </div>
                     </div>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </section>
         <?php else: ?>
             <div class="err_busqueda">
-                <h2 class="brincar">No se encontraron eventos que coincidan con la búsqueda.</h2>
+                <h2 class="brincar">No se encontraron especialidades que coincidan con la búsqueda.</h2>
                 <img class="" src="../img/dog1.webp" alt="">
             </div>
         <?php endif; ?>
@@ -162,6 +195,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Footer -->
     <?php include '../include/template/footer.php'; ?>
+    <!-- Mensaje -->
+    <?php if (isset($_SESSION['mensaje'])): ?>
+        <script>
+            window.onload = function () {
+                alert("<?php echo $_SESSION['mensaje']; ?>");
+                <?php unset($_SESSION['mensaje']); ?>
+            };
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>

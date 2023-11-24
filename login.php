@@ -34,12 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($resultadoSP == 1) {
                     $mensajeError = "¡Registro exitoso!";
-                } elseif ($resultadoSP == 2) {
+                } elseif ($resultadoSP == 0) {
                     $mensajeError = "El correo digitado ya se encuentra registrado";
                 } else {
                     $mensajeError = "¡Error al registrar el usuario!";
-                }     
-
+                }
             }
         }
     }if (isset($_POST['loginForm'])) {
@@ -77,11 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // El correo no tiene el dominio @happypaws.com, buscar en clientes
             $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena,$resultadoSP);
 
-                 if($resultadoSP=1){
+                if($resultadoSP=1){
                     $clienteAutenticado = true;
-                 } else{
+                } else{
                     $clienteAutenticado = false;
-                 }
+                }
 
             if ($clienteAutenticado) {
                 $idCliente = 0;
@@ -93,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
                 $nombre = "Perfil no ingresado";
-                 if($resultadoObtenerCorreo=1){
+                if($resultadoObtenerCorreo=1){
                     $_SESSION['usuario'] = array(
                         'rol' => 'cliente',
                         'id' => $idCliente,
@@ -103,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'apellido1' => $apellido1,
                         'apellido2' => $apellido2
                     );
-                 }
+                }
 
                 if ($nombre = "Perfil no ingresado") {
                     header("Location: profile_client_new.php");
