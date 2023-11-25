@@ -1,24 +1,33 @@
 <?php
-require_once 'include/database/db_cliente.php';
+require_once 'include/database/db_lugar.php';
+$lugar = new Lugar();
 
-$cliente = new Cliente();
+//$respuesta1 = $lugar->getNombreProvinciaPorID(7);
+//$respuesta2 = $lugar->getNombreCantonPorID(410);
+//$respuesta3 = $lugar->getNombreDistritoPorID(10101);
 
-$mensajeError = '';
+//$respuesta4 = $lugar->getCantonesPorProvincia(7);
+//$respuesta5 = $lugar->getDistritosPorCanton(101);
 
-$nombre = null;
-$apellido1 = null;
-$apellido2 = null;
-$telefono = null;
-$imagen = null;
-$domicilio = null;
-$idProvincia = null;
-$idCanton = null;
-$idDistrito = null;
-$idRol = null;
-$correo = null;
-$resultado = null;
+$respuesta6 = $lugar->getProvincias();
+//$respuesta7 = $lugar->getCantones();
+//$respuesta8 = $lugar->getDistritos();
 
-$cliente->getCliente(5, $nombre, $apellido1, $apellido2, $telefono, $imagen, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo, $resultado);
+
+/* $resultadoSP = $respuesta1['resultado'];
+$lugar = $respuesta1['datos'];
+
+$mensaje = "";
+if ($resultadoSP == 1) {
+    $mensaje = "Se encontraron resultados.";
+} elseif ($resultadoSP == 0) {
+    $mensaje = "No se encontraron resultados.";
+    $hayResultados = false;
+} else {
+    $mensaje = "Ocurrió un error al recuperar el resultados.";
+    $hayResultados = false;
+} */
+
 
 ?>
 
@@ -39,41 +48,15 @@ $cliente->getCliente(5, $nombre, $apellido1, $apellido2, $telefono, $imagen, $do
     ?>
 
     <main class="contenedor">
-
-        <h1 class="centrar-texto">Perfil de Usuario</h1>
-
+        <h1 class="centrar-texto">TEST</h1>
         <section class="perfil">
-            <!-- Encabezado -->
-            <div class="perfil__head">
-                <div class="perfil__head-sec1">
-                    <div class="imagen">
-                        <img src="img/images_clients/<?php echo $imagen; ?>" alt="">
-                    </div>
-                    <div class="head-sec2">
-                        <p class="nombre">
-                            <?php echo $nombre; ?>
-                        </p>
-                        <p class="apellido">
-                            <?php echo $apellido1; ?>
-                            <?php echo $apellido2; ?>
-                        </p>
-                        <div class="detalle">
-                            <p>Telefono:
-                                <?php echo $telefono; ?>
-                            </p>
-                            <p>Correo:
-                                <?php echo $correo; ?>
-                            </p>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="perfil__bnt">
-                <a href="profile_client_edit.php" class="btn-1">Editar Perfil</a>
-                <a href="cita.php" class="btn-2">Agendar cita</a>
-            </div>
+            <h2>getCantones</h2>
+            <?php
+            echo "<pre>";
+            var_dump($respuesta6);
+            echo "</pre>";
+            ?>
 
         </section>
     </main>
