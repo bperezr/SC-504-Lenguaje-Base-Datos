@@ -27,7 +27,7 @@ class Especialidad
     public function getEspecialidad($id)
     {
         $conn = $this->db;
-        $stmt = oci_parse($conn, "BEGIN getEspecialidad(:p_idEspecialidad, :p_Especialidad, :p_Descripcion, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN  P_ESPECIALIDAD.getEspecialidad(:p_idEspecialidad, :p_Especialidad, :p_Descripcion, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_idEspecialidad", $id);
 
@@ -59,7 +59,7 @@ class Especialidad
         $especialidades = array();
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN getEspecialidades(:p_cursor, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN  P_ESPECIALIDAD.getEspecialidades(:p_cursor, :p_resultado); END;");
         $p_cursor = oci_new_cursor($conn);
         oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
         $p_resultado = 0;
@@ -86,7 +86,7 @@ class Especialidad
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN insertEspecialidad(:p_Especialidad, :p_Descripcion, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_ESPECIALIDAD.insertEspecialidad(:p_Especialidad, :p_Descripcion, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_Especialidad", $especialidad);
         oci_bind_by_name($stmt, ":p_Descripcion", $descripcion);
@@ -105,7 +105,7 @@ class Especialidad
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN updateEspecialidad(:p_idEspecialidad, :p_Especialidad, :p_Descripcion, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_ESPECIALIDAD.updateEspecialidad(:p_idEspecialidad, :p_Especialidad, :p_Descripcion, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_idEspecialidad", $id);
         oci_bind_by_name($stmt, ":p_Especialidad", $especialidad);
@@ -125,7 +125,7 @@ class Especialidad
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN deleteEspecialidad(:p_idEspecialidad, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_ESPECIALIDAD.deleteEspecialidad(:p_idEspecialidad, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_idEspecialidad", $id);
         $p_resultado = 0;
@@ -141,7 +141,7 @@ class Especialidad
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN buscarEspecialidades(:p_searchTerm, :p_cursor, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_ESPECIALIDAD.buscarEspecialidades(:p_searchTerm, :p_cursor, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_searchTerm", $searchTerm);
         $p_cursor = oci_new_cursor($conn);
