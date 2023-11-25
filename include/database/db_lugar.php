@@ -10,117 +10,223 @@ class Lugar
         $this->connectDB();
     }
 
-    /*public function connectDB()
-    {
-        global $host, $port, $user, $pass, $dbname;
-
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-        try {
-            $this->db = new PDO($dsn, $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos: ' . $e->getMessage());
-        }
-    } */
-
     public function connectDB()
     {
-        global $host, $user, $pass , $port, $sid;
+        global $host, $user, $pass, $port, $sid;
 
-        try {
-            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
-        }
-}
+        $connection_string = "//" . $host . ":" . $port . "/" . $sid;
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
 
-
-    public function obtenerNombreProvinciaPorID($idProvincia)
-    {
-        $query = "SELECT nombre FROM provincia WHERE idProvincia = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $idProvincia, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($result) {
-            return $result['nombre'];
-        } else {
-            return "Desconocido";
+        if (!$this->db) {
+            $e = oci_error();
+            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
     }
-
-    public function obtenerNombreCantonPorID($idCanton)
+    //done
+    public function getNombreProvinciaPorID($idProvincia)
     {
-        $query = "SELECT nombre FROM canton WHERE idCanton = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $idCanton, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getNombreProvinciaPorID(:p_idProvincia, :p_nombreProvincia, :p_resultado); END;");
 
-        if ($result) {
-            return $result['nombre'];
-        } else {
-            return "Desconocido";
+        oci_bind_by_name($stmt, ":p_idProvincia", $idProvincia, -1, SQLT_INT);
+
+        $p_nombreProvincia = "";
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_nombreProvincia", $p_nombreProvincia, 100);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $nombreProvincia = null;
+        if ($p_resultado == 1) {
+            $nombreProvincia = $p_nombreProvincia;
         }
+
+        return array('datos' => $nombreProvincia, 'resultado' => $p_resultado);
     }
 
-    public function obtenerNombreDistritoPorID($idDistrito)
+    //done
+    public function getNombreCantonPorID($idCanton)
     {
-        $query = "SELECT nombre FROM distrito WHERE idDistrito = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $idDistrito, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getNombreCantonPorID(:p_idCanton, :p_nombreCanton, :p_resultado); END;");
 
-        if ($result) {
-            return $result['nombre'];
-        } else {
-            return "Desconocido";
+        oci_bind_by_name($stmt, ":p_idCanton", $idCanton, -1, SQLT_INT);
+
+        $p_nombreCanton = "";
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_nombreCanton", $p_nombreCanton, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $nombreCanton = null;
+        if ($p_resultado == 1) {
+            $nombreCanton = $p_nombreCanton;
         }
+
+        return array('datos' => $nombreCanton, 'resultado' => $p_resultado);
+    }
+
+    //done
+    public function getNombreDistritoPorID($idDistrito)
+    {
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getNombreDistritoPorID(:p_idDistrito, :p_nombreDistrito, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idDistrito", $idDistrito, -1, SQLT_INT);
+
+        $p_nombreDistrito = "";
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_nombreDistrito", $p_nombreDistrito, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $nombreDistrito = null;
+        if ($p_resultado == 1) {
+            $nombreDistrito = $p_nombreDistrito;
+        }
+
+        return array('datos' => $nombreDistrito, 'resultado' => $p_resultado);
+    }
+
+    //done
+    public function getCantonesPorProvincia($idProvincia)
+    {
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getCantonesPorProvincia(:p_idProvincia, :p_cursor, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idProvincia", $idProvincia, -1, SQLT_INT);
+        $p_cursor = oci_new_cursor($conn);
+
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        oci_execute($p_cursor);
+
+        $cantones = [];
+        while (($row = oci_fetch_assoc($p_cursor)) != false) {
+            $cantones[] = $row;
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $cantones, 'resultado' => $p_resultado);
+    }
+    //done
+    public function getDistritosPorCanton($idCanton)
+    {
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getDistritosPorCanton(:p_idCanton, :p_cursor, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idCanton", $idCanton);
+        $p_cursor = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $distritos = [];
+        if ($p_resultado == 1) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($distritos, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $distritos, 'resultado' => $p_resultado);
     }
 
     public function getProvincias()
     {
-        $query = "SELECT idProvincia, nombre FROM provincia";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+        $conn = $this->db;
 
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getProvincias(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($conn);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        oci_execute($p_cursor);
+
+        $provincias = [];
+        while (($row = oci_fetch_assoc($p_cursor)) != false) {
+            $provincias[] = $row;
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $provincias, 'resultado' => $p_resultado);
+    }
     public function getCantones()
     {
-        $query = "SELECT idCanton, nombre FROM canton";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getCantones(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($conn);
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+        oci_execute($p_cursor);
+
+        $cantones = [];
+        while (($row = oci_fetch_assoc($p_cursor)) != false) {
+            $cantones[] = $row;
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $cantones, 'resultado' => $p_resultado);
     }
 
     public function getDistritos()
     {
-        $query = "SELECT idDistrito, nombre FROM distrito";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getDistritos(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($conn);
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+        oci_execute($p_cursor);
+
+        $distritos = [];
+        while (($row = oci_fetch_assoc($p_cursor)) != false) {
+            $distritos[] = $row;
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $distritos, 'resultado' => $p_resultado);
     }
 
-    public function getCantonesPorProvincia($idProvincia)
-    {
-        $query = "SELECT idCanton, nombre FROM canton WHERE idProvincia = :idProvincia";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idProvincia', $idProvincia, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function getDistritosPorCanton($idCanton)
-    {
-        $query = "SELECT idDistrito, nombre FROM distrito WHERE idCanton = :idCanton";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idCanton', $idCanton, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 }
 ?>
