@@ -78,11 +78,6 @@ if (isset($_GET['search'])) {
     }
 }
 
-
-echo "<pre>";
-var_dump($eventos);
-echo "</pre>";
-
 ?>
 
 <!DOCTYPE html>

@@ -23,12 +23,11 @@ class Evento
         }
     }
 
-
     // Función para obtener una evento por su ID
     public function getEvento($id)
     {
         $conn = $this->db;
-        $stmt = oci_parse($conn, "BEGIN getEvento(:p_idEvento, :p_Lugar, :p_Fecha, :p_HoraInicio, :p_HoraFin, :p_Descripcion, :p_Imagen, :p_IdProvincia, :p_IdCanton, :p_IdDistrito, :p_NombreEvento, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_EVENTO.getEvento(:p_idEvento, :p_Lugar, :p_Fecha, :p_HoraInicio, :p_HoraFin, :p_Descripcion, :p_Imagen, :p_IdProvincia, :p_IdCanton, :p_IdDistrito, :p_NombreEvento, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_idEvento", $id);
 
@@ -85,7 +84,7 @@ class Evento
         $eventos = array();
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN getEventos(:p_cursor, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_EVENTO.getEventos(:p_cursor, :p_resultado); END;");
         $p_cursor = oci_new_cursor($conn);
         oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
         $p_resultado = 0;
@@ -113,7 +112,7 @@ class Evento
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN insertEvento(:p_Lugar, :p_Fecha, :p_HoraInicio, :p_HoraFin, :p_Descripcion, :p_Imagen, :p_IdProvincia, :p_IdCanton, :p_IdDistrito, :p_NombreEvento, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_EVENTO.insertEvento(:p_Lugar, :p_Fecha, :p_HoraInicio, :p_HoraFin, :p_Descripcion, :p_Imagen, :p_IdProvincia, :p_IdCanton, :p_IdDistrito, :p_NombreEvento, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_Lugar", $lugar);
         oci_bind_by_name($stmt, ":p_Fecha", $fecha);
@@ -137,17 +136,19 @@ class Evento
 
 
     // Función para actualizar un evento
-    public function updateEvento($id, $lugar, $fecha, $horaInicio, $horaFin, $descripcion, $imagen, $idProvincia, $idCanton, $idDistrito, $nombreEvento)
+    public function updateEvento($id, $lugar, $fechaFormat, $horaInicioFormat, $horaFinFormat, $descripcion, $imagen, $idProvincia, $idCanton, $idDistrito, $nombreEvento)
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN updateEvento(:p_idEvento, :p_Lugar, :p_Fecha, :p_HoraInicio, :p_HoraFin, :p_Descripcion, :p_Imagen, :p_IdProvincia, :p_IdCanton, :p_IdDistrito, :p_NombreEvento, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_EVENTO.updateEvento(:p_idEvento, :p_Lugar, :p_Fecha, :p_HoraInicio, :p_HoraFin, :p_Descripcion, :p_Imagen, :p_IdProvincia, :p_IdCanton, :p_IdDistrito, :p_NombreEvento, :p_resultado ); END;");
 
         oci_bind_by_name($stmt, ":p_idEvento", $id);
         oci_bind_by_name($stmt, ":p_Lugar", $lugar);
-        oci_bind_by_name($stmt, ":p_Fecha", $fecha);
-        oci_bind_by_name($stmt, ":p_HoraInicio", $horaInicio);
-        oci_bind_by_name($stmt, ":p_HoraFin", $horaFin);
+
+        oci_bind_by_name($stmt, ":p_Fecha", $fechaFormat);
+        oci_bind_by_name($stmt, ":p_HoraInicio", $horaInicioFormat);
+        oci_bind_by_name($stmt, ":p_HoraFin", $horaFinFormat);
+
         oci_bind_by_name($stmt, ":p_Descripcion", $descripcion);
         oci_bind_by_name($stmt, ":p_Imagen", $imagen);
         oci_bind_by_name($stmt, ":p_IdProvincia", $idProvincia);
@@ -168,7 +169,7 @@ class Evento
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN deleteEvento(:p_idEvento, :p_resultado); END;");
+        $stmt = oci_parse($conn, "BEGIN P_EVENTO.deleteEvento(:p_idEvento, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_idEvento", $id);
         $p_resultado = 0;
@@ -185,7 +186,7 @@ class Evento
     {
         $conn = $this->db;
 
-        $stmt = oci_parse($conn, "BEGIN buscarEventos(:p_searchTerm, :p_cursor, :p_resultado, :p_numFilas); END;");
+        $stmt = oci_parse($conn, "BEGIN P_EVENTO.buscarEventos(:p_searchTerm, :p_cursor, :p_resultado, :p_numFilas); END;");
 
         oci_bind_by_name($stmt, ":p_searchTerm", $searchTerm);
         $p_cursor = oci_new_cursor($conn);

@@ -23,4 +23,3 @@ function previewImage() {
 }
 
 document.getElementById("imagen").addEventListener("change", previewImage);
-

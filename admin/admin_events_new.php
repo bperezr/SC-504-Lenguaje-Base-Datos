@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['usuario'])) {
+/*if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
@@ -12,107 +12,10 @@ if (isset($_SESSION['usuario'])) {
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
-}
+}*/
 
-
-/*  */
 require '../include/connections/connect.php';
-$db = ConectarDB();
 
-echo ($_SERVER['REQUEST_METHOD']);
-
-$requeridos = [];
-$nombreEvento = '';
-$lugar = '';
-$fecha = '';
-$horaInicio = '';
-$horaFin = '';
-$descripcion = '';
-$provincia = '';
-$canton = '';
-$distrito = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombreEvento = $_POST['nombreEvento'];
-    $lugar = $_POST['lugar'];
-    $fecha = $_POST['fecha'];
-    $horaInicio = $_POST['hora_inicio'];
-    $horaFin = $_POST['hora_fin'];
-    $descripcion = $_POST['descripcion'];
-    $provincia = $_POST['idProvincia'];
-    $canton = $_POST['idCanton'];
-    $distrito = $_POST['idDistrito'];
-    $imagen = $_FILES['imagen'];
-
-    if (!$nombreEvento) {
-        $requeridos[] = "El nombre del evento es requerido";
-    }
-
-    if (!$lugar) {
-        $requeridos[] = "Favor inserte el nombre del lugar";
-    }
-
-    if (!$fecha) {
-        $requeridos[] = "Favor inserte la fecha del evento";
-    }
-
-    if (!$horaInicio) {
-        $requeridos[] = "Favor inserte la hora de inicio";
-    }
-
-    if (!$horaFin) {
-        $requeridos[] = "Favor inserte la hora Fin";
-    }
-
-    if (!$provincia) {
-        $requeridos[] = "Favor seleccione la provincia";
-    }
-
-    if (!$canton) {
-        $requeridos[] = "Favor seleccione el cantón";
-    }
-
-    if (!$distrito) {
-        $requeridos[] = "Favor seleccione el distrito";
-    }
-
-    if (!$imagen['name'] || $imagen['error']) {
-        $requeridos[] = "La imagen es obligatoria";
-    }
-
-
-    if (empty($requeridos)) {
-
-        $carpetaImagenes = '../img/images/';
-
-        //Genera un nombre unico para las imagenes
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-
-        //Mueve la imagen hacia el servidor.
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
-
-
-        $sqlInsert = "insert into eventos (nombreEvento,lugar,fecha,hora_inicio,hora_fin,descripcion,imagen,idProvincia,idCanton,idDistrito) values
-        ('$nombreEvento','$lugar', '$fecha', '$horaInicio','$horaFin', '$descripcion','$nombreImagen','$provincia','$canton','$distrito')";
-
-        $insertResult = mysqli_query($db, $sqlInsert);
-
-        if ($insertResult) {
-            header('Location: admin_events.php');
-        }
-    }
-}
-
-$queryProvincia = "SELECT idProvincia, nombre FROM provincia ORDER BY idProvincia";
-$result = mysqli_query($db, $queryProvincia);
-
-$queryCanton = "SELECT idCanton, nombre FROM canton ORDER BY idCanton";
-$resultCanton = mysqli_query($db, $queryCanton);
-
-$queryDistrito = "SELECT idDistrito, nombre FROM distrito ORDER BY idDistrito";
-$resultDistrito = mysqli_query($db, $queryDistrito);
-
-$db->close();
 ?>
 
 <!DOCTYPE html>

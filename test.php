@@ -1,18 +1,22 @@
 <?php
 require_once 'include/database/db_lugar.php';
+require_once 'include/database/db_eventos.php';
+$evento = new Evento();
 $lugar = new Lugar();
 
-//$respuesta1 = $lugar->getNombreProvinciaPorID(7);
-//$respuesta2 = $lugar->getNombreCantonPorID(410);
-//$respuesta3 = $lugar->getNombreDistritoPorID(10101);
+//$respuesta = $lugar->getNombreProvinciaPorID(7);
+//$respuesta = $lugar->getNombreCantonPorID(410);
+//$respuesta = $lugar->getNombreDistritoPorID(10101);
 
-//$respuesta4 = $lugar->getCantonesPorProvincia(7);
-//$respuesta5 = $lugar->getDistritosPorCanton(101);
+//$respuesta = $lugar->getCantonesPorProvincia(7);
+$respuesta = $lugar->getDistritosPorCanton(212);
 
-$respuesta6 = $lugar->getProvincias();
-//$respuesta7 = $lugar->getCantones();
-//$respuesta8 = $lugar->getDistritos();
+//$respuesta = $lugar->getProvincias();
+//$respuesta = $lugar->getCantones();
+//$respuesta = $lugar->getDistritos();
 
+//$respuesta = $evento->getEvento(1);
+//$respuesta = $evento->getEventos();
 
 /* $resultadoSP = $respuesta1['resultado'];
 $lugar = $respuesta1['datos'];
@@ -27,7 +31,6 @@ if ($resultadoSP == 1) {
     $mensaje = "Ocurrió un error al recuperar el resultados.";
     $hayResultados = false;
 } */
-
 
 ?>
 
@@ -51,10 +54,10 @@ if ($resultadoSP == 1) {
         <h1 class="centrar-texto">TEST</h1>
         <section class="perfil">
 
-            <h2>getCantones</h2>
+            <h2>Respuesta</h2>
             <?php
             echo "<pre>";
-            var_dump($respuesta6);
+            var_dump($respuesta);
             echo "</pre>";
             ?>
 
