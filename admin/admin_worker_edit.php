@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+/*
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
 }
-
+*/
 /*  */
 require_once '../include/database/db_colaborador.php';
 require_once '../include/database/db_cargo.php';

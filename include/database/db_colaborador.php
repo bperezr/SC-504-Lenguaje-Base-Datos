@@ -1,5 +1,6 @@
 <?php
 require_once 'db_config.php';
+
 class Colaborador
 {
     protected $db;
@@ -9,57 +10,98 @@ class Colaborador
         $this->connectDB();
     }
 
-   /* public function connectDB()
-    {
-        global $host, $port, $user, $pass, $dbname;
-
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-        try {
-            $this->db = new PDO($dsn, $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos: ' . $e->getMessage());
-        }
-    } */
-
-
     public function connectDB()
     {
-        global $host, $user, $pass , $port, $sid;
-
-        try {
-            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        global $host, $user, $pass, $port, $sid;
+ 
+        $connection_string = "//" . $host . ":" . $port . "/" . $sid;
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
+        
+ 
+        if (!$this->db) {
+            $e = oci_error();
+            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
-}
-
-
-
-
-
+    }
     // Función para obtener un solo colaborador por su ID
     public function getColaborador($id)
     {
-        $query = "SELECT * FROM colaborador WHERE idColaborador = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN  PAQUETE_COLABORADORES.getColaborador(:p_idColaborador, :p_nombre, :p_apellido1, :p_apellido2, :p_idCargo, :p_idEspecialidad, :p_imagen, :p_correo, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idColaborador", $id);
+
+        $p_idColaborador="";
+        $p_nombre="";
+        $p_apellido1="";
+        $p_apellido2="";
+        $p_idCargo="";
+        $p_idEspecialidad="";
+        $p_imagen="";
+        $p_correo="";
+        $p_resultado=0;
+
+        oci_bind_by_name($stmt, ":p_idColaborador", $p_idColaborador, 200);
+        oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
+        oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 200);
+        oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo, 200);
+        oci_bind_by_name($stmt, ":p_idEspecialidad", $p_idEspecialidad, 200);
+        oci_bind_by_name($stmt, ":p_imagen", $p_imagen, 200);
+        oci_bind_by_name($stmt, ":p_correo", $p_correo, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $colaborador = null;
+        if ($p_resultado == 1) {
+            $especialidad = array(
+                'idColaborador' => $id,
+                'nombre' => $p_nombre,
+                'apellido1' => $p_apellido1
+            );
+        }
+
+        return array('datos' => $colaborador, 'resultado' => $p_resultado);
     }
 
-    // Función para obtener todos los colaboradores
+    
+
     public function getColaboradores()
-    {
-        $query = "SELECT c.*, e.especialidad, cg.cargo FROM colaborador as c
-        JOIN especialidad as e ON c.idEspecialidad = e.idEspecialidad
-        JOIN cargo as cg ON c.idCargo = cg.idCargo";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+{
+    $colaboradores = array();
+    $conn = $this->db;
+
+    $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.getColaboradores(:p_cursor, :p_resultado); END;");
+
+    $p_cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+    $p_resultado = 0;
+    oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+    oci_execute($stmt);
+
+    if ($p_resultado == 1) {
+        oci_execute($p_cursor);
+        while ($row = oci_fetch_assoc($p_cursor)) {
+            array_push($colaboradores, $row);
+        }
     }
 
-    public function getRoles()
+    oci_free_statement($p_cursor);
+    oci_free_statement($stmt);
+
+    return array('datos' => $colaboradores, 'resultado' => $p_resultado);
+}
+
+    
+
+
+
+
+
+    
+        public function getRoles()
     {
         $query = "SELECT idRol, nombreRol FROM rol";
         $stmt = $this->db->query($query);
@@ -86,6 +128,8 @@ class Colaborador
     }
 
     // Función para insertar un nuevo colaborador
+
+    //PENDIENTE
     public function insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
     {
         // Genera el hash
@@ -145,23 +189,22 @@ class Colaborador
         return $stmt->execute();
     }
 
-    public function deleteColaborador($id)
+    public function deleteColaborador($idColaborador)
     {
-        $query = "SELECT imagen FROM colaborador WHERE idColaborador = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($row) {
-            $nombreImagen = $row['imagen'];
-            $this->deleteImagen($nombreImagen);
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADOR.deleteColaborador(:p_idColaborador, :p_resultado); END;");
+    
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+    
+        oci_execute($stmt);
+    
+        oci_free_statement($stmt);
+    
+        // Asegúrate de manejar el resultado según tus necesidades
+        if ($p_resultado != 1) {
+            // Manejar el error, si es necesario
         }
-
-        $query = "DELETE FROM colaborador WHERE idColaborador = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
     }
 
     public function buscarColaboradores($searchTerm)
@@ -177,6 +220,7 @@ class Colaborador
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //PENDIENTE
     public function uploadImagen($imagen)
     {
         $carpetaImagenes = '../img/images_workers/';
@@ -185,6 +229,7 @@ class Colaborador
         return $nombreImagen;
     }
 
+    //PENDIENTE
     public function deleteImagen($nombreImagen)
     {
         $rutaImagen = "../img/images_workers/" . $nombreImagen;

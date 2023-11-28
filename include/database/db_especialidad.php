@@ -10,16 +10,16 @@ class Especialidad
         $this->connectDB();
     }
 
-   /* public function connectDB()
+    public function connectDB()
     {
-        global $host, $port, $user, $pass, $dbname;
-
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-        try {
-            $this->db = new PDO($dsn, $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos: ' . $e->getMessage());
+        global $host, $user, $pass, $port, $sid;
+ 
+        $connection_string = "//" . $host . ":" . $port . "/" . $sid;
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
+ 
+        if (!$this->db) {
+            $e = oci_error();
+            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
     }
     //fgff
