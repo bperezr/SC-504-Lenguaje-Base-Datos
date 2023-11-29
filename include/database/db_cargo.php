@@ -25,16 +25,17 @@ class Cargo
     }
 
     // Función para obtener un cargo por su ID    
-    public function getCargo()
+    public function getCargo($id)
     {
         $conn = $this->db;
         $stmt = oci_parse($conn, "BEGIN P_CARGO.getCargo (:p_idCargo, :p_Cargo, :p_resultado); END;");
     
         oci_bind_by_name($stmt, ":p_idCargo", $id);
-        
+        $p_idCargo = "";
         $p_cargo = "";
         $p_resultado = 0;
-        
+
+        oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo, 200);
         oci_bind_by_name($stmt, ":p_Cargo", $p_cargo, 30);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         
@@ -73,9 +74,9 @@ class Cargo
             while ($row = oci_fetch_assoc($p_cursor)) {
                 array_push($cargos, $row);
             }
-            oci_free_statement($p_cursor);
+            
         }
-    
+        oci_free_statement($p_cursor);
         oci_free_statement($stmt);
     
         return array('datos' => $cargos, 'resultado' => $p_resultado);
@@ -86,7 +87,7 @@ class Cargo
 
     // Función para insertar un nuevo cargo
     
- public function insertCargo($cargos)
+ public function insertCargo($cargo)
     {
         $conn = $this->db;
         $stmt = oci_parse($conn, "BEGIN P_CARGO.insertCargo(:p_cargo, :p_resultado); END;");    
@@ -94,13 +95,8 @@ class Cargo
         $p_resultado = 0;
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         oci_execute($stmt);
-        oci_free_statement($stmt);
-    
-        if ($p_resultado == 1) {
-            return array('resultado' => 1, 'mensaje' => 'Nuevo cargo insertado exitosamente: ' . $p_cargo);
-        } else {
-            return array('resultado' => 0, 'mensaje' => 'Error en la inserción del nuevo cargo.');
-        }
+        
+        return $p_resultado;
 }
     
     
@@ -109,72 +105,68 @@ class Cargo
 
     // Función para actualizar un cargo
 
-public function updateCargo($p_idCargo, $p_nuevoCargo)
+public function updateCargo($id, $cargo)
     {
         $conn = $this->db;
-        $stmt = oci_parse($conn, "BEGIN P_CARGO.updateCargo(:p_idCargo, :p_nuevoCargo, :p_resultado); END;");   
-        oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo);
-        oci_bind_by_name($stmt, ":p_nuevoCargo", $p_nuevoCargo);  
+        $stmt = oci_parse($conn, "BEGIN P_CARGO.updateCargo(:p_idCargo, :p_Cargo, :p_resultado); END;");   
+        
+        oci_bind_by_name($stmt, ":p_idCargo", $p_id);
+        oci_bind_by_name($stmt, ":p_Cargo", $p_Cargo);  
+
         $p_resultado = 0;
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+        
         oci_execute($stmt);
-        oci_free_statement($stmt);
-        if ($p_resultado > 0) {
-            return array('resultado' => 1, 'mensaje' => 'Cargo actualizado exitosamente: ' . $p_nuevoCargo);
-        } else {
-            return array('resultado' => 0, 'mensaje' => 'Error al actualizar el cargo.');
-        }
+       return $p_resultado;
     }
     
     
 
  // Función para eliminar un cargo por su ID
- public function deleteCargo($p_idCargo)
+ public function deleteCargo($id)
  {
      $conn = $this->db;
      $stmt = oci_parse($conn, "BEGIN P_CARGO.deleteCargo(:p_idCargo, :p_resultado); END;");    
-     oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo);    
+     oci_bind_by_name($stmt, ":p_idCargo", $p_id);    
      $p_resultado = 0;
      oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+     
      oci_execute($stmt);
-     oci_free_statement($stmt);
-     if ($p_resultado > 0) {
-         return array('resultado' => 1, 'mensaje' => 'Cargo eliminado exitosamente.');
-     } else {
-         return array('resultado' => 0, 'mensaje' => 'Error en la eliminación del cargo o el cargo no existe.');
-     }
+     
+     return $p_resultado;
  }
  
  
 
-// Función para buscar un cargo por su ID
-public function buscarCargos($p_idCargo)
+// Función para buscar cargos
+public function buscarCargos($searchTerm)
 {
     $conn = $this->db;
-    $stmt = oci_parse($conn, "BEGIN P_CARGO.buscarCargos(:p_idCargo, :p_nombreCargo, :p_resultado); END;");
+    $stmt = oci_parse($conn, "BEGIN P_CARGO.buscarCargos(:p_searchTerm, :p_cursor, :p_resultado); END;");
 
-    oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo);
-    $p_nombreCargo = null;
-    oci_bind_by_name($stmt, ":p_nombreCargo", $p_nombreCargo, 30); 
+    oci_bind_by_name($stmt, ":p_searchTerm", $searchTerm);
+    $p_cursor = oci_new_cursor($conn);
+
+    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR); 
     $p_resultado = 0;
+    
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
     oci_execute($stmt);
 
-    $error = oci_error($stmt);
-    if ($error) {
-        return array('resultado' => 9, 'nombreCargo' => null, 'mensaje' => 'Error en la búsqueda del cargo: ' . $error['message']);
+    $cargos =[];
+    if ($p_resultado == 1) {
+        oci_execute($p_cursor);
+        while ($row = oci_fetch_assoc($p_cursor)) {
+            array_push($cargos, $row);
+        }
     }
 
+    oci_free_statement($p_cursor);
     oci_free_statement($stmt);
 
-    if ($p_resultado == 1) {
-        return array('resultado' => 1, 'nombreCargo' => $p_nombreCargo, 'mensaje' => 'Cargo encontrado exitosamente: ' . $p_nombreCargo);
-    } elseif ($p_resultado == 0) {
-        return array('resultado' => 0, 'nombreCargo' => null, 'mensaje' => 'Cargo no encontrado.');
-    } else {
-        return array('resultado' => 9, 'nombreCargo' => null, 'mensaje' => 'Error en la búsqueda del cargo.');
-    }
+    return $cargos;
+
 }
 
 }
