@@ -127,7 +127,7 @@ if (isset($_GET['search'])) {
                         <!-- Botones -->
                         <div class="tarjeta__btn">
                             <!-- Editar -->
-                            <a href="admin_services_edit.php?id=<?php echo $servicio['IDSERVICIO']; ?>"
+                            <a href="admin_service_edit.php?id=<?php echo $servicio['IDSERVICIO']; ?>"
                                 class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
                             <!-- Eliminar -->
                             <form action="" method="post" style="display: inline;">

@@ -14,7 +14,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }*/
 
-/*  */
 require_once '../include/database/db_servicio.php';
 
 $servicio = new Servicio();
@@ -23,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $servicioNombre = $_POST['servicio'];
     $descripcion = $_POST['descripcion'];
 
-    $resultadoSP = $servicio->insertservicio($servicioNombre, $descripcion);
+    $resultadoSP = $servicio->insertServicio($servicioNombre, $descripcion);
 
     if ($resultadoSP == 1) {
         $_SESSION['mensaje'] = "Éxito en la inserción.";

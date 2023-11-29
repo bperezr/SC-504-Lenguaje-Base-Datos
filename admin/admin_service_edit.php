@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_servicio.php" class="boton input-text">Atrás</a>
+            <a href="admin_services.php" class="boton input-text">Atrás</a>
         </div>
 
         <section class="evento">
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Guardar Cambios</button>
-                        <a class="cancelar" href="admin_servicio.php">Cancelar</a>
+                        <a class="cancelar" href="admin_services.php">Cancelar</a>
                     </div>
                 </form>
             </div>

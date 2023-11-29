@@ -95,7 +95,7 @@ public function getServicio($p_id)
 
         $stmt = oci_parse($conn, "BEGIN P_SERVICIOS.insertServicio(:p_Servicio, :p_Descripcion, :p_resultado); END;");
         
-        oci_bind_by_name($stmt, ":p_Especialidad", $servicio);
+        oci_bind_by_name($stmt, ":p_Servicio", $servicio);
         oci_bind_by_name($stmt, ":p_Descripcion", $descripcion);
 
         $p_resultado = 0;
@@ -163,7 +163,7 @@ public function buscarServicios($p_searchTerm)
     $p_resultado = 0;
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT); 
 
-    oci_execute($p_resultado);
+    oci_execute($stmt);
 
     $servicios = [];
     if ($p_resultado == 1) {
