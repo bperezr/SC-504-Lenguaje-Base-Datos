@@ -15,23 +15,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }*/
 
 require_once '../include/database/db_cargo.php';
-<<<<<<< Updated upstream
-
-$cargo = new Cargo();
-$hayResultados = false;
-$idCargo = null;
-$resultados = $cargo->getCargos();
-$cargosData = $resultados['datos'];
-/*echo '<pre>';
-print_r($resultados);
-echo '</pre>';*/
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idCargo = $_POST['id'];
-    $hayResultados = true;
-    
-    $cargo->deleteCargo($idCargo);
-=======
 $cargo = new cargo();
 
 
@@ -62,14 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el cargo.";
     }
 
->>>>>>> Stashed changes
     header('Location: admin_cargo.php');
     exit;
 }
 
-<<<<<<< Updated upstream
 // Obtener los cargos después de verificar la solicitud POST
-$resultados = $cargo->getCargos($idCargo);
+$resultados = $cargo->getCargos();
 $cargoData = $resultados['datos'];
 
 if (isset($_GET['search'])) {
@@ -83,20 +64,6 @@ if (isset($_GET['search'])) {
 }
 ?>
 
-=======
-$hayResultados = true;
-
-if (isset($_GET['search'])) {
-    $searchTerm = $_GET['search'];
-    $cargo = $cargo->buscarCargos($searchTerm);
-
-    if (empty($cargo)) {
-        $hayResultados = false;
-    }
-}
-
-?>
->>>>>>> Stashed changes
 
 <!DOCTYPE html>
 <html lang="es">
@@ -147,13 +114,12 @@ if (isset($_GET['search'])) {
 
         <?php if ($hayResultados): ?>
             <section class="event__tarjetas">
-<<<<<<< Updated upstream
-            <?php foreach ($resultados as $resultados): ?>
+            <?php foreach ($resultados as $cargo): ?>
     <!-- Tarjeta de cada cargo -->
     <div class="tarjeta">
         <div class="tarjeta__imagen">
-            <?php if (isset($resultados['IMAGEN']) && file_exists("../img/images_workers/" . $resultados['IMAGEN'])): ?>
-                <img src="../img/images_workers/<?php echo $resultados['IMAGEN']; ?>" alt="Evento 1">
+            <?php if (isset($cargo['IMAGEN']) && file_exists("../img/images_workers/" . $cargo['IMAGEN'])): ?>
+                <img src="../img/images_workers/<?php echo $cargo['IMAGEN']; ?>" alt="Evento 1">
             <?php else: ?>
                 <img src="../img/no_disponible.webp" alt="Imagen no disponible">
             <?php endif; ?>
@@ -161,21 +127,21 @@ if (isset($_GET['search'])) {
         <div class="tarjeta__detalle">
             <h2>
                 <?php
-                 echo $resultados['IDCARGO'] . ' ' . $resultados['CARGO ']; 
+                 echo $cargo['IDCARGO'] . ' ' . $cargo['CARGO ']; 
                 ?>
             </h2>
             <ul class="detalle-evento">
                 <li><strong>Cargo:</strong>
-                    <?php echo isset($resultados['IDCARGO']) ? $resultados['IDCARGO'] : ''; ?>
+                    <?php echo isset($cargo['IDCARGO']) ? $cargo['IDCARGO'] : ''; ?>
                 </li>
                 <li><strong>Especialidad:</strong>
-                    <?php echo isset($resultados['IDCARGO']) ? $resultados['IDCARGO'] : ''; ?>
+                    <?php echo isset($cargo['IDCARGO']) ? $cargo['IDCARGO'] : ''; ?>
                 </li>
             </ul>
         </div>
         <!-- Botones -->
         <div class="tarjeta__btn">
-            <a href="admin_worker_edit.php?id=<?php echo $resultados['IDCARGO']; ?>"
+            <a href="admin_worker_edit.php?id=<?php echo $cargo['IDCARGO']; ?>"
                 class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
             <form action="" method="post" style="display: inline;">
                 <input type="hidden" name="id" value="<?php echo $cargo['IDCARGO']; ?>">
@@ -187,34 +153,6 @@ if (isset($_GET['search'])) {
         </div>
     </div>
 <?php endforeach; ?>
-=======
-                <?php foreach ($cargo as $cargo): ?>
-                    <!-- Tarjeta de cada cargo -->
-                    <div class="tarjeta">
-                        <div class="tarjeta__detalle">
-                            <ul class="detalle-evento">
-                                <li><strong>cargo:</strong>
-                                    <?php echo $cargo['cargo']; ?>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Botones -->
-                        <div class="tarjeta__btn">
-                            <!-- Editar -->
-                            <a href="admin_cargo_edit.php?id=<?php echo $cargo['idCargo']; ?>"
-                                class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-                            <!-- Eliminar -->
-                            <form action="" method="post" style="display: inline;">
-                                <input type="hidden" name="id" value="<?php echo $cargo['idCargo']; ?>">
-                                <button type="submit" class="eliminar"
-                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este cargo?')">
-                                    <ion-icon name="trash-sharp"></ion-icon>Eliminar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
->>>>>>> Stashed changes
             </section>
         <?php else: ?>
             <div class="err_busqueda">
