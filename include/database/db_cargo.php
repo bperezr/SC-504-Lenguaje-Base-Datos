@@ -90,8 +90,11 @@ class Cargo
  public function insertCargo($cargo)
     {
         $conn = $this->db;
+
         $stmt = oci_parse($conn, "BEGIN P_CARGO.insertCargo(:p_cargo, :p_resultado); END;");    
-        oci_bind_by_name($stmt, ":p_cargo", $p_cargo);    
+
+        oci_bind_by_name($stmt, ":p_cargo", $cargo);    
+        
         $p_resultado = 0;
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         oci_execute($stmt);
@@ -110,13 +113,14 @@ public function updateCargo($id, $cargo)
         $conn = $this->db;
         $stmt = oci_parse($conn, "BEGIN P_CARGO.updateCargo(:p_idCargo, :p_Cargo, :p_resultado); END;");   
         
-        oci_bind_by_name($stmt, ":p_idCargo", $p_id);
-        oci_bind_by_name($stmt, ":p_Cargo", $p_Cargo);  
+        oci_bind_by_name($stmt, ":p_idCargo", $id);
+        oci_bind_by_name($stmt, ":p_Cargo", $cargo);  
 
         $p_resultado = 0;
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         
         oci_execute($stmt);
+        
        return $p_resultado;
     }
     

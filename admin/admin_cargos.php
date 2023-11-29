@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el cargo.";
     }
 
-    header('Location: admin_cargo.php');
+    header('Location: admin_cargos.php');
     exit;
 }
 
@@ -94,13 +94,13 @@ if (isset($_GET['search'])) {
                     </div>
                     <!-- Recargar -->
                     <div class="recargar">
-                        <a href="admin_cargo.php"><ion-icon name="refresh-circle"></ion-icon></a>
+                        <a href="admin_cargos.php"><ion-icon name="refresh-circle"></ion-icon></a>
                     </div>
                 </div>
                 <div class="buscador buscador_agregar">
                     <!---Agregar-->
                     <div class="agregar">
-                        <a href="admin_cargo_new.php" class="btn_agregar"><ion-icon
+                        <a href="admin_cargos_new.php" class="btn_agregar"><ion-icon
                                 name="add-circle-outline"></ion-icon>
                             Agregar</a>
                     </div>
@@ -125,8 +125,10 @@ if (isset($_GET['search'])) {
                         </div>
         <!-- Botones -->
         <div class="tarjeta__btn">
+            <!-- Editar -->
             <a href="admin_cargos_edit.php?id=<?php echo $cargo['IDCARGO']; ?>"
                 class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+        <!-- Eliminar -->
             <form action="" method="post" style="display: inline;">
                 <input type="hidden" name="id" value="<?php echo $cargo['IDCARGO']; ?>">
                 <button type="submit" class="eliminar"

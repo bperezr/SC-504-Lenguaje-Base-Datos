@@ -14,7 +14,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }*/
 
-/*  */
 require_once '../include/database/db_cargo.php';
 
 $cargo = new cargo();
@@ -35,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['mensaje'] = "Ocurrió un error durante la actualización.";
     }
-    header('Location: admin_cargo.php');
+    header('Location: admin_cargos.php');
     exit;
 
 } else {
@@ -44,11 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cargoData = $cargo->getCargo($id);
 
         if (!$cargoData['datos']) {
-            header('Location: admin_cargo.php');
+            header('Location: admin_cargos.php');
             exit;
         }
     } else {
-        header('Location: admin_cargo.php');
+        header('Location: admin_cargos.php');
         exit;
     }
 }
@@ -73,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_cargo.php" class="boton input-text">Atrás</a>
+            <a href="admin_cargos.php" class="boton input-text">Atrás</a>
         </div>
 
         <section class="evento">
@@ -89,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Guardar Cambios</button>
-                        <a class="cancelar" href="admin_cargo.php">Cancelar</a>
+                        <a class="cancelar" href="admin_cargos.php">Cancelar</a>
                     </div>
                 </form>
             </div>

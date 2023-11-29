@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['mensaje'] = "Ocurrió un error durante la inserción.";
     }
-    header('Location: admin_cargo.php');
+    header('Location: admin_cargos.php');
     exit;
 }
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_cargo.php" class="boton input-text">Atrás</a>
+            <a href="admin_cargos.php" class="boton input-text">Atrás</a>
         </div>
 
         <section class="evento">
