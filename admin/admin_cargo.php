@@ -15,6 +15,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }*/
 
 require_once '../include/database/db_cargo.php';
+<<<<<<< Updated upstream
 
 $cargo = new Cargo();
 $hayResultados = false;
@@ -30,10 +31,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hayResultados = true;
     
     $cargo->deleteCargo($idCargo);
+=======
+$cargo = new cargo();
+
+
+$respuesta = $cargo->getCargo();
+$resultadoSP = $respuesta['resultado'];
+$cargoes = $respuesta['datos'];
+
+if ($resultadoSP == 1) {
+    $hayResultados = true;
+} elseif ($resultadoSP == 0) {
+    $mensajeError = "No se encontraron cargos.";
+    $hayResultados = false;
+} else {
+    $mensajeError = "Ocurrió un error al recuperar los cargos.";
+    $hayResultados = false;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idcargo = $_POST['id'];
+
+    $resultadoSP = $cargo->deleteCargo($idcargo);
+
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "cargo eliminado con éxito.";
+    } elseif ($resultadoSP == 0) {
+        $_SESSION['mensaje'] = "No se encontró el cargo para eliminar.";
+    } else {
+        $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el cargo.";
+    }
+
+>>>>>>> Stashed changes
     header('Location: admin_cargo.php');
     exit;
 }
 
+<<<<<<< Updated upstream
 // Obtener los cargos después de verificar la solicitud POST
 $resultados = $cargo->getCargos($idCargo);
 $cargoData = $resultados['datos'];
@@ -49,6 +83,20 @@ if (isset($_GET['search'])) {
 }
 ?>
 
+=======
+$hayResultados = true;
+
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $cargo = $cargo->buscarCargos($searchTerm);
+
+    if (empty($cargo)) {
+        $hayResultados = false;
+    }
+}
+
+?>
+>>>>>>> Stashed changes
 
 <!DOCTYPE html>
 <html lang="es">
@@ -99,6 +147,7 @@ if (isset($_GET['search'])) {
 
         <?php if ($hayResultados): ?>
             <section class="event__tarjetas">
+<<<<<<< Updated upstream
             <?php foreach ($resultados as $resultados): ?>
     <!-- Tarjeta de cada cargo -->
     <div class="tarjeta">
@@ -138,6 +187,34 @@ if (isset($_GET['search'])) {
         </div>
     </div>
 <?php endforeach; ?>
+=======
+                <?php foreach ($cargo as $cargo): ?>
+                    <!-- Tarjeta de cada cargo -->
+                    <div class="tarjeta">
+                        <div class="tarjeta__detalle">
+                            <ul class="detalle-evento">
+                                <li><strong>cargo:</strong>
+                                    <?php echo $cargo['cargo']; ?>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Botones -->
+                        <div class="tarjeta__btn">
+                            <!-- Editar -->
+                            <a href="admin_cargo_edit.php?id=<?php echo $cargo['idCargo']; ?>"
+                                class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                            <!-- Eliminar -->
+                            <form action="" method="post" style="display: inline;">
+                                <input type="hidden" name="id" value="<?php echo $cargo['idCargo']; ?>">
+                                <button type="submit" class="eliminar"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este cargo?')">
+                                    <ion-icon name="trash-sharp"></ion-icon>Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+>>>>>>> Stashed changes
             </section>
         <?php else: ?>
             <div class="err_busqueda">

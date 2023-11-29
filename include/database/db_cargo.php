@@ -24,6 +24,7 @@ class Cargo
         }
     }
 
+<<<<<<< Updated upstream
     // Función para obtener un cargo por su ID    
     public function getCargo($id)
     {
@@ -43,17 +44,44 @@ class Cargo
         $cargo = null;
         if ($p_resultado == 1) {
             $cargo = array(
+=======
+    // Función para obtener un cargo por su ID
+    public function getCargo($id)
+    {
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_CARGO.getCargo (:p_idCargo, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idCargo", $id);
+        
+        $p_cargo ="";
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_Cargo", $p_cargo,30);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQL_INT);
+        
+        oci_execute($stmt);  
+
+        $cargos = null;
+        if ($p_resultado == 1) {
+            $cargos = array(
+>>>>>>> Stashed changes
                 'idCargo' => $id,
                 'cargo' => $p_cargo,
             );
         }
+<<<<<<< Updated upstream
     
         return array('datos' => $cargo, 'resultado' => $p_resultado);
+=======
+
+        return array('datos' => $cargos, 'resultado' => $p_resultado);
+>>>>>>> Stashed changes
     }
     
 
     // Función para obtener todos los cargos
 
+<<<<<<< Updated upstream
     public function getCargos()
     {
         $cargos = array();
@@ -81,6 +109,30 @@ class Cargo
         return array('datos' => $cargos, 'resultado' => $p_resultado);
     }
     
+=======
+public function getCargos()
+{
+    $cargos = array();
+    $conn = $this->db;
+    $stmt = oci_parse($conn, "BEGIN P_CARGO.getCargos(:p_cursor, :p_resultado); END;");
+    $p_cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+    $p_resultado = 0;
+    oci_bind_by_name($stmt, ":p_resultado", $p_resultdo, -1, SQLT_INT);
+
+    oci_execute($stmt);
+    if($p_resultado == 1){
+        oci_execute($p_cursor);
+    while ($row = oci_fetch_assoc($p_cursor)) {
+        array_push($cargos, $row);
+    }
+}
+    oci_free_statement($p_cursor);
+    oci_free_statement($stmt);
+
+    return array('datos' => $cargos, 'resultado' => $p_resultado);
+}
+>>>>>>> Stashed changes
 
 
 
