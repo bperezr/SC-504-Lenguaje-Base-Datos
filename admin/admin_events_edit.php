@@ -40,8 +40,6 @@ $lugares = $lugares->getLugares();
 $lugaresDatos = $lugares['datos'];
 $lugaresResultado = $lugares['resultado'];
 
-$lugaresDatos = $lugares['datos'];
-
 $provincias = [];
 foreach ($lugaresDatos as $lugar) {
     $idProvincia = $lugar['IDPROVINCIA'];

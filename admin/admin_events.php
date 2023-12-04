@@ -39,20 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($eventoInfo['resultado'] == 1 && !empty($eventoInfo['datos'])) {
         $nombreImagen = $eventoInfo['datos']['imagen'];
 
-        // Eliminar imagen del servidor
-        if ($evento->deleteImagen($nombreImagen)) {
-            // Proceder a eliminar el evento
-            $resultadoSP = $evento->deleteEvento($idEvento);
+        // Primero, intentar eliminar el evento
+        $resultadoSP = $evento->deleteEvento($idEvento);
 
-            if ($resultadoSP == 1) {
-                $_SESSION['mensaje'] = "Evento eliminado con éxito.";
-            } elseif ($resultadoSP == 0) {
-                $_SESSION['mensaje'] = "No se encontró el evento para eliminar.";
+        if ($resultadoSP == 1) {
+            // Si el evento se elimina con éxito, proceder a eliminar la imagen del servidor
+            if ($evento->deleteImagen($nombreImagen)) {
+                $_SESSION['mensaje'] = "Evento e imagen eliminados con éxito.";
             } else {
-                $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el evento.";
+                $_SESSION['mensaje'] = "Evento eliminado, pero ocurrió un error al eliminar la imagen.";
             }
+        } elseif ($resultadoSP == 0) {
+            $_SESSION['mensaje'] = "No se encontró el evento para eliminar.";
         } else {
-            $_SESSION['mensaje'] = "Error al eliminar la imagen del evento.";
+            $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el evento.";
         }
     } else {
         $_SESSION['mensaje'] = "No se encontró información del evento para eliminar.";
@@ -61,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: admin_events.php');
     exit;
 }
-
 
 $hayResultados = true;
 
@@ -168,10 +167,10 @@ if (isset($_GET['search'])) {
                                 <ion-icon name="create-sharp"></ion-icon>Editar
                             </a>
                             <!-- Eliminar -->
-                            <form class="tarjeta__btn" method="POST"
-                                onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?');">
+                            <form class="tarjeta__btn" method="POST">
                                 <input type="hidden" name="idEvento" value="<?php echo $evento['IDEVENTO'] ?>">
-                                <button type="submit" class="eliminar">
+                                <button type="submit" class="eliminar"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar el evento?')">
                                     <ion-icon name="trash-sharp"></ion-icon>Eliminar
                                 </button>
                             </form>
