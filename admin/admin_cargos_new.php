@@ -1,8 +1,7 @@
 <?php
- /*session_start();
+session_start();
 
-
-if (isset($_SESSION['usuario'])) {
+/*if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
@@ -14,20 +13,28 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
 }*/
- 
+
+/*  */
 require_once '../include/database/db_cargo.php';
-$cargo = new Cargo();
+
+$cargo = new cargo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nuevoCargo = $_POST['nuevo_cargo'];
-    $cargo->insertCargo($nuevoCargo);
+    $cargoNombre = $_POST['cargo'];
+  
+    $resultadoSP = $cargo->insertCargo($cargoNombre);
+
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "Éxito en la inserción.";
+    } else {
+        $_SESSION['mensaje'] = "Ocurrió un error durante la inserción.";
+    }
     header('Location: admin_cargos.php');
     exit;
 }
+
 ?>
 
-
-/* */
 <!DOCTYPE html>
 <html lang="es">
 
@@ -39,26 +46,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_workers';
+    <?php $enlaceActivo = 'admin_cargos';
     include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_cargos.php" class="boton input-text">Atras</a>
+            <a href="admin_cargos.php" class="boton input-text">Atrás</a>
         </div>
 
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Agregar Cargo</h2>
+                <h2 class="centrar-texto">Agregar cargo</h2>
                 <form id="formularioEvento" class="formulario-evento" method="POST">
                     <div class="campo">
-                        <label for="nuevo_cargo">Nuevo Cargo:</label>
-                        <input type="text" id="nuevo_cargo" name="nuevo_cargo" required>
+                        <label for="cargo">Cargo:</label>
+                        <input type="text" id="cargo" name="cargo" required>
                     </div>
+                    
                     <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Agregar Cargo</button>
-                        <a class="cancelar" href="admin_cargos.php">Cancelar</a>
+                        <button class="enviar" type="submit">Agregar cargo</button>
+                        <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
                 </form>
             </div>
