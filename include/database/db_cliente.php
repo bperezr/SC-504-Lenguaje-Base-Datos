@@ -14,272 +14,393 @@ class Cliente
     {
         global $host, $user, $pass, $port, $sid;
 
-        try {
-            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        $connection_string = "//" . $host . ":" . $port . "/" . $sid;
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
+
+        if (!$this->db) {
+            $e = oci_error();
+            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
     }
 
-    /*public function getCliente($id)
+    public function getCliente($id)
     {
-        $query = "SELECT * FROM cliente WHERE idCliente = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }*/
-    public function getCliente($id, &$nombre, &$apellido1, &$apellido2, &$telefono, &$imagen, &$domicilio, &$idProvincia, &$idCanton, &$idDistrito, &$idRol, &$correo, &$resultado)
-    {
-        $sql = "BEGIN getCliente(:p_idCliente, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_imagen, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_idRol, :p_correo, :p_resultado); END;";
-        $stmt = $this->db->prepare($sql);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.getCliente(:p_idCliente, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_imagen, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_idRol, :p_correo, :p_resultado); END;");
 
-        $stmt->bindParam(':p_idCliente', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':p_nombre', $nombre, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':p_apellido1', $apellido1, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':p_apellido2', $apellido2, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':p_telefono', $telefono, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':p_imagen', $imagen, PDO::PARAM_STR, 400);
-        $stmt->bindParam(':p_domicilio', $domicilio, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':p_idProvincia', $idProvincia, PDO::PARAM_INT, 1);
-        $stmt->bindParam(':p_idCanton', $idCanton, PDO::PARAM_INT, 3);
-        $stmt->bindParam(':p_idDistrito', $idDistrito, PDO::PARAM_INT, 4);
-        $stmt->bindParam(':p_idRol', $idRol, PDO::PARAM_INT, 1);
-        $stmt->bindParam(':p_correo', $correo, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':p_resultado', $resultado, PDO::PARAM_INT, 1);
+        oci_bind_by_name($stmt, ":p_idCliente", $id);
 
-        $stmt->execute();
+        $p_nombre = '';
+        $p_apellido1 = '';
+        $p_apellido2 = '';
+        $p_telefono = '';
+        $p_imagen = '';
+        $p_domicilio = '';
+        $p_idProvincia = -1;
+        $p_idCanton = -1;
+        $p_idDistrito = -1;
+        $p_idRol = -1;
+        $p_correo = '';
+        $p_resultado = -1;
+
+        oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
+        oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 200);
+        oci_bind_by_name($stmt, ":p_telefono", $p_telefono, 200);
+        oci_bind_by_name($stmt, ":p_imagen", $p_imagen, 400);
+        oci_bind_by_name($stmt, ":p_domicilio", $p_domicilio, 200);
+        oci_bind_by_name($stmt, ":p_idProvincia", $p_idProvincia);
+        oci_bind_by_name($stmt, ":p_idCanton", $p_idCanton);
+        oci_bind_by_name($stmt, ":p_idDistrito", $p_idDistrito);
+        oci_bind_by_name($stmt, ":p_idRol", $p_idRol);
+        oci_bind_by_name($stmt, ":p_correo", $p_correo, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $cliente = null;
+        if ($p_resultado == 0) {
+            $cliente = array(
+                'idCliente' => $id,
+                'nombre' => $p_nombre,
+                'apellido1' => $p_apellido1,
+                'apellido2' => $p_apellido2,
+                'telefono' => $p_telefono,
+                'imagen' => $p_imagen,
+                'domicilio' => $p_domicilio,
+                'idProvincia' => $p_idProvincia,
+                'idCanton' => $p_idCanton,
+                'idDistrito' => $p_idDistrito,
+                'idRol' => $p_idRol,
+                'correo' => $p_correo
+            );
+        }
+
+        return array('datos' => $cliente, 'resultado' => $p_resultado);
     }
+
     //DONE
     public function getClientes()
     {
-        $query = "SELECT c.*, p.nombre as provincia, cn.nombre as canton, d.nombre as distrito, r.nombre as rol FROM cliente as c
-        JOIN provincia as p ON c.idProvincia = p.idProvincia
-        JOIN canton as cn ON c.idCanton = cn.idCanton
-        JOIN distrito as d ON c.idDistrito = d.idDistrito
-        JOIN rol as r ON c.idRol = r.idRol";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.getClientes(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $clientes = array();
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($clientes, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $clientes, 'resultado' => $p_resultado);
     }
+
     //DONE
     public function getVerClientes()
     {
-        $query = "SELECT idCliente, nombre, apellido1, apellido2, telefono, imagen, domicilio, idProvincia, idCanton, idDistrito, correo FROM cliente";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.getVerClientes(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $clientes = array();
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($clientes, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $clientes, 'resultado' => $p_resultado);
     }
-    //DONE
-    public function getRoles()
-    {
-        $query = "SELECT idRol, nombreRol FROM rol";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+
+
     //DONE
     public function insertCliente($nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo, $contrasena)
     {
-        $query = "INSERT INTO cliente (nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito, idRol, correo, contrasena)
-        VALUES (:nombre, :apellido1, :apellido2, :telefono, :domicilio, :idProvincia, :idCanton, :idDistrito, :idRol, :correo, :contrasena)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellido1', $apellido1);
-        $stmt->bindParam(':apellido2', $apellido2);
-        $stmt->bindParam(':telefono', $telefono);
-        $stmt->bindParam(':domicilio', $domicilio);
-        $stmt->bindParam(':idProvincia', $idProvincia);
-        $stmt->bindParam(':idCanton', $idCanton);
-        $stmt->bindParam(':idDistrito', $idDistrito);
-        $stmt->bindParam(':idRol', $idRol);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.insertClienteNuevo(:p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_idRol, :p_correo, :p_contrasena, :p_resultado); END;");
 
-        return $stmt->execute();
+        oci_bind_by_name($stmt, ":p_nombre", $nombre);
+        oci_bind_by_name($stmt, ":p_apellido1", $apellido1);
+        oci_bind_by_name($stmt, ":p_apellido2", $apellido2);
+        oci_bind_by_name($stmt, ":p_telefono", $telefono);
+        oci_bind_by_name($stmt, ":p_domicilio", $domicilio);
+        oci_bind_by_name($stmt, ":p_idProvincia", $idProvincia);
+        oci_bind_by_name($stmt, ":p_idCanton", $idCanton);
+        oci_bind_by_name($stmt, ":p_idDistrito", $idDistrito);
+        oci_bind_by_name($stmt, ":p_idRol", $idRol);
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+        oci_bind_by_name($stmt, ":p_contrasena", $contrasena);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
+
     //DONE
     public function updateCliente($idCliente, $nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $idRol, $correo)
     {
-        $query = "UPDATE cliente SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, telefono = :telefono, domicilio = :domicilio, idProvincia = :idProvincia, idCanton = :idCanton, idDistrito = :idDistrito, idRol = :idRol, correo = :correo WHERE idCliente = :idCliente";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellido1', $apellido1);
-        $stmt->bindParam(':apellido2', $apellido2);
-        $stmt->bindParam(':telefono', $telefono);
-        $stmt->bindParam(':domicilio', $domicilio);
-        $stmt->bindParam(':idProvincia', $idProvincia);
-        $stmt->bindParam(':idCanton', $idCanton);
-        $stmt->bindParam(':idDistrito', $idDistrito);
-        $stmt->bindParam(':idRol', $idRol);
-        $stmt->bindParam(':correo', $correo);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.updateCliente(:p_idCliente, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_imagen, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_idRol, :p_correo, :p_resultado); END;");
 
-        return $stmt->execute();
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
+        oci_bind_by_name($stmt, ":p_nombre", $nombre);
+        oci_bind_by_name($stmt, ":p_apellido1", $apellido1);
+        oci_bind_by_name($stmt, ":p_apellido2", $apellido2);
+        oci_bind_by_name($stmt, ":p_telefono", $telefono);
+        oci_bind_by_name($stmt, ":p_domicilio", $domicilio);
+        oci_bind_by_name($stmt, ":p_idProvincia", $idProvincia);
+        oci_bind_by_name($stmt, ":p_idCanton", $idCanton);
+        oci_bind_by_name($stmt, ":p_idDistrito", $idDistrito);
+        oci_bind_by_name($stmt, ":p_idRol", $idRol);
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
+
+
     //DONE
     public function updateClienteNuevo($idCliente, $nombre, $apellido1, $apellido2, $telefono, $domicilio, $idProvincia, $idCanton, $idDistrito, $imagen)
     {
-        $query = "UPDATE cliente SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, telefono = :telefono, domicilio = :domicilio, idProvincia = :idProvincia, idCanton = :idCanton, idDistrito = :idDistrito, imagen = :imagen WHERE idCliente = :idCliente";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellido1', $apellido1);
-        $stmt->bindParam(':apellido2', $apellido2);
-        $stmt->bindParam(':telefono', $telefono);
-        $stmt->bindParam(':domicilio', $domicilio);
-        $stmt->bindParam(':idProvincia', $idProvincia);
-        $stmt->bindParam(':idCanton', $idCanton);
-        $stmt->bindParam(':idDistrito', $idDistrito);
-        $stmt->bindParam(':imagen', $imagen);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.updateClienteNuevo(:p_idCliente, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_imagen, :p_resultado); END;");
 
-        return $stmt->execute();
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
+        oci_bind_by_name($stmt, ":p_nombre", $nombre);
+        oci_bind_by_name($stmt, ":p_apellido1", $apellido1);
+        oci_bind_by_name($stmt, ":p_apellido2", $apellido2);
+        oci_bind_by_name($stmt, ":p_telefono", $telefono);
+        oci_bind_by_name($stmt, ":p_domicilio", $domicilio);
+        oci_bind_by_name($stmt, ":p_idProvincia", $idProvincia);
+        oci_bind_by_name($stmt, ":p_idCanton", $idCanton);
+        oci_bind_by_name($stmt, ":p_idDistrito", $idDistrito);
+        oci_bind_by_name($stmt, ":p_imagen", $imagen);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
 
     //DONE
     public function deleteCliente($idCliente)
     {
-        $query = "DELETE FROM cliente WHERE idCliente = :idCliente";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT);
-        return $stmt->execute();
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.deleteCliente(:p_idCliente, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
+
 
     //DONE
     public function buscarClientes($searchTerm)
     {
-        $query = "SELECT idCliente, nombre, apellido1, apellido2, correo, imagen, telefono FROM cliente
-            WHERE nombre LIKE :searchTerm OR apellido1 LIKE :searchTerm OR apellido2 LIKE :searchTerm OR correo LIKE :searchTerm";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
-        $stmt->execute();
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.buscarClientes(:p_searchTerm, :p_cursor, :p_resultado, :p_numFilas); END;");
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        oci_bind_by_name($stmt, ":p_searchTerm", $searchTerm);
+
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+        $p_numFilas = 0;
+        oci_bind_by_name($stmt, ":p_numFilas", $p_numFilas, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $clientes = [];
+        if ($p_resultado == 0 && $p_numFilas > 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                $clientes[] = $row;
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return $clientes;
     }
 
 
     /* -----------------Login Cliente ----------------- */
+
+    public function getRoles()
+    {
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.getRoles(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $roles = [];
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                $roles[] = $row;
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return $roles;
+    }
+
+
+    //DONE
     public function verificarCorreoExistente($correo)
     {
-        $query = "SELECT idCliente FROM cliente WHERE correo = :correo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->execute();
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.verificarCorreoExistente(:p_correo, :p_resultado); END;");
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+        $p_resultado = null;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
 
-    /*  public function validarCredenciales($correo, $contrasena)
+    //DONE
+    public function validarCredenciales($correo, $contrasena)
     {
-        $query = "SELECT idCliente, contrasena FROM cliente WHERE correo = :correo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->execute();
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.validarCredenciales(:p_Correo, :p_Contrasena, :p_resultado); END;");
 
-        $result= $stmt->fetch(PDO::FETCH_ASSOC);
+        oci_bind_by_name($stmt, ":p_Correo", $correo);
+        oci_bind_by_name($stmt, ":p_Contrasena", $contrasena);
 
-        $hash = password_hash($contrasena, PASSWORD_DEFAULT, array("cost" => 10));
+        $p_resultado = null;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
-        if ($result && password_verify($contrasena, $hash)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-  */
-    public function validarCredenciales($correo, $contrasena, &$resultado)
-    {
-        $sql = "BEGIN validarcredenciales(:correo, :contrasena, :resultado); END;";
-        $stmt = $this->db->prepare($sql);
+        oci_execute($stmt);
 
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasena);
-        $stmt->bindParam(':resultado', $resultado, PDO::PARAM_INT, 1);
-
-        $stmt->execute();
+        return $p_resultado;
     }
 
-
-    /*   public function insertClienteNuevo($correo, $contrasena)
+    public function obtenerClientePorCorreo($correo)
     {
-        $hashedContrasena = password_hash($contrasena, PASSWORD_DEFAULT);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.obtenerClientePorCorreo(:p_Correo, :p_idCliente, :p_idRol, :p_nombre, :p_apellido1, :p_apellido2, :p_resultado); END;");
 
-        $query = "INSERT INTO cliente (correo, contrasena) VALUES (:correo, :contrasena)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $hashedContrasena);
+        oci_bind_by_name($stmt, ":p_Correo", $correo);
 
-        return $stmt->execute();
-       } */
+        $idCliente = -1;
+        $idRol = -1;
+        $nombre = '';
+        $apellido1 = '';
+        $apellido2 = '';
+        $resultado = -1;
 
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idRol", $idRol, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_nombre", $nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $apellido1, 200);
+        oci_bind_by_name($stmt, ":p_apellido2", $apellido2, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $cliente = array(
+            'idCliente' => $idCliente,
+            'idRol' => $idRol,
+            'nombre' => $nombre,
+            'apellido1' => $apellido1,
+            'apellido2' => $apellido2
+        );
+
+        return array('datos' => $cliente, 'resultado' => $resultado);
+    }
+
+    //DONE
     public function insertClienteNuevo($correo, $contrasena, &$resultado)
     {
-        $sql = "BEGIN insertClienteNuevo(:correo, :contrasena, :resultado); END;";
-        $stmt = $this->db->prepare($sql);
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.insertClienteNuevo(:p_correo, :p_contrasena, :p_resultado); END;");
 
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasena);
-        $stmt->bindParam(':resultado', $resultado, PDO::PARAM_INT, 1);
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+        oci_bind_by_name($stmt, ":p_contrasena", $contrasena);
 
-        $stmt->execute();
+        $p_resultado = null;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $resultado = $p_resultado;
     }
 
     public function camposNull($correo)
     {
-        $query = "SELECT nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito FROM cliente WHERE correo = :correo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            return false;
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.camposNull(:p_correo, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+
+        $p_nombre = '';
+        $p_apellido1 = '';
+        $p_apellido2 = '';
+        $p_telefono = '';
+        $p_domicilio = '';
+        $p_idProvincia = -1;
+        $p_idCanton = -1;
+        $p_idDistrito = -1;
+        $p_resultado = -1;
+
+        oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
+        oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 200);
+        oci_bind_by_name($stmt, ":p_telefono", $p_telefono, 200);
+        oci_bind_by_name($stmt, ":p_domicilio", $p_domicilio, 200);
+        oci_bind_by_name($stmt, ":p_idProvincia", $p_idProvincia);
+        oci_bind_by_name($stmt, ":p_idCanton", $p_idCanton);
+        oci_bind_by_name($stmt, ":p_idDistrito", $p_idDistrito);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        if ($p_nombre == '' || $p_apellido1 == '' || $p_apellido2 == '' || $p_telefono == '' || $p_domicilio == '' || $p_idProvincia == -1 || $p_idCanton == -1 || $p_idDistrito == -1) {
+            return 0;
+        } else {
+            return 1;
         }
-        $camposObligatorios = array('nombre', 'apellido1', 'apellido2', 'telefono', 'domicilio', 'idProvincia', 'idCanton', 'idDistrito');
-        foreach ($camposObligatorios as $campo) {
-            if ($result[$campo] === null) {
-                return true;
-            }
-        }
-        return false;
     }
 
-    /*  public function obtenerClientePorCorreo($correo)
-    {
-        $sql = "SELECT idCliente, idRol, correo, nombre, apellido1, apellido2 FROM cliente WHERE correo = :correo";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $cliente;
-      } */
-
-    public function obtenerClientePorCorreo($correo, &$idCliente, &$idRol, &$nombre, &$apellido1, &$apellido2, &$resultado)
-    {
-
-        $sql = "BEGIN obtenerClientePorCorreo(:correo, :idCliente, :idRol, :nombre, :apellido1, :apellido2, :resultado); END;";
-        $stmt = $this->db->prepare($sql);
-
-        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT, 11);
-        $stmt->bindParam(':idRol', $idRol, PDO::PARAM_INT, 1);
-        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':apellido1', $apellido1, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':apellido2', $apellido2, PDO::PARAM_STR, 255);
-        $stmt->bindParam(':resultado', $resultado, PDO::PARAM_INT, 1);
-
-        $stmt->execute();
-    }
-
-
+    /* -----------------Images Cliente ----------------- */
     public function uploadImagen($imagen)
     {
         $carpetaImagenes = 'img/images_clients/';

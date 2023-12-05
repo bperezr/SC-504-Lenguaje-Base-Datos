@@ -9,35 +9,18 @@ class Colaborador
         $this->connectDB();
     }
 
-   /* public function connectDB()
-    {
-        global $host, $port, $user, $pass, $dbname;
-
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-        try {
-            $this->db = new PDO($dsn, $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos: ' . $e->getMessage());
-        }
-    } */
-
-
     public function connectDB()
     {
-        global $host, $user, $pass , $port, $sid;
+        global $host, $user, $pass, $port, $sid;
 
-        try {
-            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        $connection_string = "//" . $host . ":" . $port . "/" . $sid;
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
+
+        if (!$this->db) {
+            $e = oci_error();
+            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
-}
-
-
-
-
+    }
 
     // Función para obtener un solo colaborador por su ID
     public function getColaborador($id)
@@ -106,7 +89,6 @@ class Colaborador
 
         return $stmt->execute();
     }
-
 
     // Función para actualizar un colaborador
     public function updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
@@ -209,32 +191,57 @@ class Colaborador
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /* -----------------Login Cliente ----------------- */
+    /* -----------------Login  ----------------- */
     public function validarCredenciales($correo, $contrasena)
     {
-        $query = "SELECT contrasena FROM colaborador WHERE correo = :correo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = oci_parse($this->db, "BEGIN P_COLABORADOR.validarCredenciales(:p_Correo, :p_Contrasena, :p_resultado); END;");
 
-        if ($result && password_verify($contrasena, $result['contrasena'])) {
-            return true;
-        } else {
-            return false;
-        }
+        oci_bind_by_name($stmt, ":p_Correo", $correo);
+        oci_bind_by_name($stmt, ":p_Contrasena", $contrasena);
+
+        $p_resultado = null;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
+
+
 
     public function obtenerColaboradorPorCorreo($correo)
     {
-        $sql = "SELECT idColaborador, idRol, correo FROM colaborador WHERE correo = :correo";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-        $stmt->execute();
+        $stmt = oci_parse($this->db, "BEGIN P_COLABORADOR.obtenerColaboradorPorCorreo(:p_Correo, :p_idColaborador, :p_idRol, :p_nombre, :p_apellido1, :p_apellido2, :p_resultado); END;");
 
-        $colaborador = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $colaborador;
+        oci_bind_by_name($stmt, ":p_Correo", $correo);
+
+        $idColaborador = -1;
+        $idRol = -1;
+        $nombre = '';
+        $apellido1 = '';
+        $apellido2 = '';
+        $resultado = null;
+
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idRol", $idRol, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_nombre", $nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $apellido1, 200);
+        oci_bind_by_name($stmt, ":p_apellido2", $apellido2, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $colaborador = array(
+            'idColaborador' => $idColaborador,
+            'idRol' => $idRol,
+            'nombre' => $nombre,
+            'apellido1' => $apellido1,
+            'apellido2' => $apellido2
+        );
+
+        return array('datos' => $colaborador, 'resultado' => $resultado);
     }
+
 
 }
 ?>

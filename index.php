@@ -8,6 +8,10 @@ if (isset($_SESSION['usuario'])) {
     $rol = $usuario['rol'];
     $id = $usuario['id'];
 }
+
+/*echo "<pre>";
+print_r($_SESSION['usuario']);
+echo "</pre>";*/
 ?>
 
 <!DOCTYPE html>
