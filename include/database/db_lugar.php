@@ -228,5 +228,32 @@ class Lugar
         return array('datos' => $distritos, 'resultado' => $p_resultado);
     }
 
+    public function getLugares()
+    {
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_LUGAR.getLugares(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($conn);
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+        oci_execute($p_cursor);
+
+        $lugares = [];
+        while (($row = oci_fetch_assoc($p_cursor)) != false) {
+            $lugares[] = $row;
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $lugares, 'resultado' => $p_resultado);
+    }
+
+
 }
 ?>

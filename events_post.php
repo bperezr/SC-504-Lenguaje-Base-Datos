@@ -15,7 +15,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }*/
 
 require_once 'include/database/db_eventos.php';
+require_once 'include/database/db_lugar.php';
 $evento = new Evento();
+$lugar = new Lugar();
 
 $idEvento = isset($_GET['id']) ? $_GET['id'] : null;
 $detalleEvento = null;
@@ -28,6 +30,13 @@ if ($idEvento) {
         $detalleEvento = $respuesta['datos'];
     }
 }
+
+// Obtener los nombres de provincia, cantón y distrito
+
+$nombreProvincia = $lugar->getNombreProvinciaPorID($detalleEvento['idProvincia']);
+$nombreCanton = $lugar->getNombreCantonPorID($detalleEvento['idCanton']);
+$nombreDistrito = $lugar->getNombreDistritoPorID($detalleEvento['idDistrito']);
+
 
 ?>
 
@@ -70,14 +79,14 @@ if ($idEvento) {
                         <li><strong>Lugar: </strong>
                             <?php echo $detalleEvento['lugar']; ?>
                         </li>
-                        <li><strong>Distrito: </strong>
-                            <?php echo $detalleEvento['idDistrito']; ?>
-                        </li>
                         <li><strong>Provincia: </strong>
-                            <?php echo $detalleEvento['idProvincia']; ?>
+                            <?php echo $nombreProvincia['datos']; ?>
+                        </li>
+                        <li><strong>Distrito: </strong>
+                            <?php echo $nombreDistrito['datos']; ?>
                         </li>
                         <li><strong>Canton: </strong>
-                            <?php echo $detalleEvento['idCanton']; ?>
+                            <?php echo $nombreCanton['datos']; ?>
                         </li>
                     </ul>
                     <p class="justificar-texto">

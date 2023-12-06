@@ -1,22 +1,7 @@
 <?php
-require_once 'include/database/db_lugar.php';
-require_once 'include/database/db_eventos.php';
-$evento = new Evento();
-$lugar = new Lugar();
-
-//$respuesta = $lugar->getNombreProvinciaPorID(7);
-//$respuesta = $lugar->getNombreCantonPorID(410);
-//$respuesta = $lugar->getNombreDistritoPorID(10101);
-
-//$respuesta = $lugar->getCantonesPorProvincia(7);
-$respuesta = $lugar->getDistritosPorCanton(212);
-
-//$respuesta = $lugar->getProvincias();
-//$respuesta = $lugar->getCantones();
-//$respuesta = $lugar->getDistritos();
-
-//$respuesta = $evento->getEvento(1);
-//$respuesta = $evento->getEventos();
+require_once 'include/database/db_cargo.php';
+$cargo = new Cargo();
+$respuesta = $cargo->getCargos(3);
 
 /* $resultadoSP = $respuesta1['resultado'];
 $lugar = $respuesta1['datos'];
@@ -46,6 +31,9 @@ if ($resultadoSP == 1) {
 <body>
     <!-- Nav template -->
     <?php
+    echo '<pre>';
+    print_r($cargo);
+    echo '</pre>';
     $enlaceActivo = 'perfil';
     include 'include/template/nav.php';
     ?>

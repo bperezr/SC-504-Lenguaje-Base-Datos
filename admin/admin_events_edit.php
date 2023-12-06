@@ -14,116 +14,131 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }
 
-/*  */
-$id = $_GET['id'];
-require '../include/connections/connect.php';
-$db = ConectarDB();
+require_once '../include/database/db_eventos.php';
+require_once '../include/database/db_lugar.php';
+$evento = new Evento();
+$lugares = new Lugar();
 
-$queryEventos = "SELECT
-                e.*,
-                p.nombre as NombreProvincia,
-                c.nombre as NombreCanton,
-                d.nombre as NombreDistrito
-                FROM eventos as e
-                join provincia as p on e.idProvincia = p.idProvincia
-                join canton as c on e.idCanton =  c.idCanton
-                join distrito as d on e.idDistrito = d.idDistrito
-                where idEvento = ${id}";
-$resultEventos = mysqli_query($db, $queryEventos);
-$evento = mysqli_fetch_assoc($resultEventos);
+$datosEvento = null;
+$mensajeAlerta = "";
 
-$queryProvincia = "SELECT idProvincia, nombre FROM provincia ORDER BY idProvincia";
-$result = mysqli_query($db, $queryProvincia);
+// Verificar si estamos obteniendo un evento para editar
+if (isset($_GET['id'])) {
+    $idEvento = $_GET['id'];
+    $respuesta = $evento->getEvento($idEvento);
+    if ($respuesta['resultado'] == 1) {
+        $datosEvento = $respuesta['datos'];
+    } else {
+        // Redireccionar si no se encuentra el evento
+        header('Location: admin_events.php');
+        $_SESSION['mensaje'] = "No se encontro el evento.";
+        exit;
+    }
+}
 
-$queryCanton = "SELECT idCanton, nombre FROM canton ORDER BY idCanton";
-$resultCanton = mysqli_query($db, $queryCanton);
+$lugares = $lugares->getLugares();
+$lugaresDatos = $lugares['datos'];
+$lugaresResultado = $lugares['resultado'];
 
-$queryDistrito = "SELECT idDistrito, nombre FROM distrito ORDER BY idDistrito";
-$resultDistrito = mysqli_query($db, $queryDistrito);
+$provincias = [];
+foreach ($lugaresDatos as $lugar) {
+    $idProvincia = $lugar['IDPROVINCIA'];
+    $idCanton = $lugar['IDCANTON'];
+    $idDistrito = $lugar['IDDISTRITO'];
 
-$requeridos = [];
-$nombreEvento = $evento['nombreEvento'];
-$lugar = $evento['Lugar'];
-$fecha = $evento['fecha'];
-$horaInicio = $evento['hora_inicio'];
-$horaFin = $evento['hora_fin'];
-$descripcion = $evento['descripcion'];
-$provincia = $evento['idProvincia'];
-$canton = $evento['idCanton'];
-$distrito = $evento['idDistrito'];
-$imagen = $evento['imagen'];
+    // Si la provincia no existe en el arreglo, la añadimos
+    if (!isset($provincias[$idProvincia])) {
+        $provincias[$idProvincia] = [
+            'nombre' => $lugar['NOMBREPROVINCIA'],
+            'cantones' => []
+        ];
+    }
 
+    // Si el cantón no existe en la provincia, lo añadimos
+    if (!isset($provincias[$idProvincia]['cantones'][$idCanton])) {
+        $provincias[$idProvincia]['cantones'][$idCanton] = [
+            'nombre' => $lugar['NOMBRECANTON'],
+            'distritos' => []
+        ];
+    }
+
+    // Añadir el distrito al cantón
+    $provincias[$idProvincia]['cantones'][$idCanton]['distritos'][$idDistrito] = [
+        'nombre' => $lugar['NOMBREDISTRITO']
+    ];
+}
+
+// Obtener los IDs actuales de provincia, cantón y distrito del evento
+$idProvinciaActual = $datosEvento['idProvincia'];
+$idCantonActual = $datosEvento['idCanton'];
+$idDistritoActual = $datosEvento['idDistrito'];
+
+//Formato ver fecha
+$fechaOriginal = $datosEvento['fecha'];
+$partes = explode("/", $fechaOriginal);
+
+if (count($partes) === 3) {
+    $anio = strlen($partes[2]) === 2 ? '20' . $partes[2] : $partes[2];
+
+    $fechaFormato = $anio . "-" . $partes[1] . "-" . $partes[0];
+} else {
+    $fechaFormato = "";
+}
+
+// Parsear la fecha y hora de inicio
+$fechaHoraInicio = DateTime::createFromFormat('d/m/y H:i:s.u', $datosEvento['horaInicio']);
+$horaInicioFormato = $fechaHoraInicio ? $fechaHoraInicio->format('H:i') : 'Formato no válido';
+
+// Parsear la fecha y hora de fin
+$fechaHoraFin = DateTime::createFromFormat('d/m/y H:i:s.u', $datosEvento['horaFin']);
+$horaFinFormato = $fechaHoraFin ? $fechaHoraFin->format('H:i') : 'Formato no válido';
+
+
+//POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombreEvento = $_POST['nombreEvento'];
-    $lugar = $_POST['lugar'];
     $fecha = $_POST['fecha'];
     $horaInicio = $_POST['hora_inicio'];
     $horaFin = $_POST['hora_fin'];
     $descripcion = $_POST['descripcion'];
-    $provincia = $_POST['idProvincia'];
-    $canton = $_POST['idCanton'];
-    $distrito = $_POST['idDistrito'];
-    $imagen = $_FILES['imagen'];
+    $lugar = $_POST['lugar'];
+    $idProvincia = $_POST['provincia'];
+    $idCanton = $_POST['canton'];
+    $idDistrito = $_POST['distrito'];
 
-    if (!$nombreEvento) {
-        $requeridos[] = "El nombre del evento es requerido";
-    }
 
-    if (!$lugar) {
-        $requeridos[] = "Favor inserte el nombre del lugar";
-    }
+    // Convertir la fecha y la hora al formato de Oracle
+    $fechaFormat = date('Y-m-d', strtotime($fecha));
+    $horaInicioFormat = date('Y-m-d H:i:s', strtotime($fechaFormat . ' ' . $horaInicio));
+    $horaFinFormat = date('Y-m-d H:i:s', strtotime($fechaFormat . ' ' . $horaFin));
 
-    if (!$fecha) {
-        $requeridos[] = "Favor inserte la fecha del evento";
-    }
 
-    if (!$horaInicio) {
-        $requeridos[] = "Favor inserte la hora de inicio";
-    }
+    // Validación de la imagen
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+        $imagen = $_FILES['imagen'];
+        $nombreImagen = $evento->uploadImagen($imagen);
 
-    if (!$horaFin) {
-        $requeridos[] = "Favor inserte la hora Fin";
-    }
-
-    if (!$provincia) {
-        $requeridos[] = "Favor seleccione la provincia";
-    }
-
-    if (!$canton) {
-        $requeridos[] = "Favor seleccione el cantón";
-    }
-
-    if (!$distrito) {
-        $requeridos[] = "Favor seleccione el distrito";
-    }
-
-    if (empty($requeridos)) {
-
-        $carpetaImagenes = '../img/images/';
-
-        $nombreImagen = '';
-
-        if ($imagen['name']) {
-            unlink($carpetaImagenes . $evento['imagen']);
-
-            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
-        } else {
-            $nombreImagen = $evento["imagen"];
+        // Eliminar imagen anterior si existe
+        if ($datosEvento && file_exists("../img/images_events/" . $datosEvento['imagen'])) {
+            unlink("../img/images_events/" . $datosEvento['imagen']);
         }
-
-        $sqlUpdate = "Update eventos set nombreEvento = '${nombreEvento}', lugar = '${lugar}',fecha = '${fecha}',hora_inicio = '${horaInicio}'
-        ,hora_fin = '${horaFin}',descripcion = '${descripcion}', imagen = '${nombreImagen}',idProvincia = ${provincia}, idCanton = ${canton},idDistrito = ${distrito}
-        where idEvento = ${id}";
-
-        $insertResult = mysqli_query($db, $sqlUpdate);
-
-        if ($insertResult) {
-            header('Location: admin_events.php');
-        }
+    } else {
+        $nombreImagen = $datosEvento['imagen'];
     }
+
+    // Llamada al método para actualizar el evento
+    $resultadoSP = $evento->updateEvento($idEvento, $lugar, $fechaFormat, $horaInicioFormat, $horaFinFormat, $descripcion, $nombreImagen, $idProvincia, $idCanton, $idDistrito, $nombreEvento);
+
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "Evento actualizado con éxito.";
+    } else {
+        $_SESSION['mensaje'] = "Error al actualizar el evento.";
+    }
+
+    header('Location: admin_events.php');
+    exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -142,12 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main class="contenedor">
 
-        <?php foreach ($requeridos as $requerido): ?>
-            <div class="campos-requeridos">
-                <?php echo $requerido; ?>
-            </div>
-        <?php endforeach ?>
-
         <div class="btn_atras">
             <a href="admin_events.php" class="boton input-text">Atras</a>
         </div>
@@ -156,93 +165,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <section class="evento">
                 <div class="evento__detalle">
                     <h2 class="centrar-texto">Editar evento</h2>
+                    <!-- nombreEvento -->
                     <div class="campo">
                         <label for="nombreEvento">Nombre de evento:</label>
-                        <input type="text" id="nombreEvento" name="nombreEvento" value="<?php echo $nombreEvento; ?>">
+                        <input type="text" id="nombreEvento" name="nombreEvento"
+                            value="<?php echo $datosEvento['nombreEvento']; ?>">
                     </div>
+                    <!-- lugar -->
                     <div class="campo">
                         <label for="lugar">Lugar:</label>
-                        <input type="text" id="lugar" name="lugar" value="<?php echo $lugar; ?>">
+                        <input type="text" id="lugar" name="lugar" value="<?php echo $respuesta['datos']['lugar']; ?>">
                     </div>
+                    <!-- fecha -->
                     <div class="campo">
                         <label for="fecha">Fecha:</label>
-                        <input type="date" id="fecha" name="fecha" value="<?php echo $fecha; ?>">
+                        <input type="date" id="fecha" name="fecha"
+                            value="<?php echo htmlspecialchars($fechaFormato); ?>">
                     </div>
+
+                    <!-- Hora inicio -->
                     <div class="campo">
                         <label for="hora_inicio">Hora de inicio:</label>
-                        <input type="time" id="hora_inicio" name="hora_inicio" value="<?php echo $horaInicio; ?>">
+                        <input type="time" id="hora_inicio" name="hora_inicio"
+                            value="<?php echo htmlspecialchars($horaInicioFormato); ?>">
                     </div>
+
+                    <!-- Hora fin -->
                     <div class="campo">
                         <label for="hora_fin">Hora de fin:</label>
-                        <input type="time" id="hora_fin" name="hora_fin" value="<?php echo $horaFin; ?>">
+                        <input type="time" id="hora_fin" name="hora_fin"
+                            value="<?php echo htmlspecialchars($horaFinFormato); ?>">
                     </div>
+
+                    <!-- descripcion -->
                     <div class="campo">
                         <label for="descripcion">Descripción:</label>
-                        <textarea id="descripcion" name="descripcion" rows="4"><?php echo $descripcion; ?></textarea>
+                        <textarea id="descripcion" name="descripcion"
+                            rows="4"><?php echo $datosEvento['descripcion']; ?></textarea>
                     </div>
+
+                    <!-- Provincia -->
                     <div class="campo">
-                        <label for="provincia">Provincia</label>
-                        <!-- Se deja por defecto la opcion seleccionada por el usuario cuando se registro el evento en la base de datos,
-                                    si deseea cambiar la provincia se pueden escoger las opciones que estan dentro del while -->
-                        <select type="number" name="idProvincia" id="provincia">
-                            <option value="<?php echo $evento['idProvincia']; ?>"><?php echo $evento['NombreProvincia']; ?></option>
-                            <?php
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    if ($row["idProvincia"] != $evento['idProvincia']) {
-                                        echo '<option  value="' . $row["idProvincia"] . '">' . $row["nombre"] . '</option>';
-                                    }
-                                }
-                            }
-                            ?>
+                        <label for="provincia">Provincia:</label>
+                        <select id="provincia" name="provincia">
+                            <?php foreach ($provincias as $idProvincia => $provincia): ?>
+                                <option value="<?php echo $idProvincia; ?>" <?php echo $idProvinciaActual == $idProvincia ? 'selected' : ''; ?>>
+                                    <?php echo $provincia['nombre']; ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
+
+                    <!-- Cantón -->
                     <div class="campo">
-                        <label for="canton">Cantón</label>
-                        <select type="number" name="idCanton" id="idCanton">
-                            <option value="<?php echo $evento['idCanton']; ?>"><?php echo $evento['NombreCanton']; ?>
-                            </option>
-                            <?php
-                            if ($resultCanton->num_rows > 0) {
-                                while ($row = $resultCanton->fetch_assoc()) {
-                                    if ($row["idCanton"] != $evento['idCanton']) {
-                                        echo '<option value="' . $row["idCanton"] . '">' . $row["nombre"] . '</option>';
-                                    }
-                                }
-                            }
-                            ?>
+                        <label for="canton">Cantón:</label>
+                        <select id="canton" name="canton">
+                            <!-- Las opciones de cantón se cargarán mediante JS basadas en la provincia seleccionada -->
                         </select>
                     </div>
+
+                    <!-- Distrito -->
                     <div class="campo">
-                        <label for="distrito">Distrito</label>
-                        <select type="number" name="idDistrito" id="idDistrito">
-                            <option value="<?php echo $evento['idDistrito']; ?>"><?php echo $evento['NombreDistrito']; ?></option>
-                            <?php
-                            if ($resultDistrito->num_rows > 0) {
-                                while ($row = $resultDistrito->fetch_assoc()) {
-                                    if ($row["idDistrito"] != $evento['idDistrito']) {
-                                        echo '<option value="' . $row["idDistrito"] . '">' . $row["nombre"] . '</option>';
-                                    }
-                                }
-                            }
-                            ?>
+                        <label for="distrito">Distrito:</label>
+                        <select id="distrito" name="distrito">
+                            <!-- Las opciones de distrito se cargarán mediante JS basadas en el cantón seleccionado -->
                         </select>
                     </div>
+
                     <!-- Imagen -->
                     <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
 
                         <!-- Lógica condicional para mostrar la imagen -->
-                        <?php if (file_exists("../img/images/" . $imagen)): ?>
-                            <img id="preview" src="../img/images/<?php echo $imagen; ?>" alt="">
+                        <?php if (file_exists("../img/images_events/" . $datosEvento['imagen'])): ?>
+                            <img id="preview" src="../img/images_events/<?php echo $datosEvento['imagen']; ?>" alt="">
                         <?php else: ?>
                             <!-- Si la imagen no existe, muestra una imagen alternativa -->
-                            <img id="preview" src="../img/no_disponible.webp" alt="Imagen no disponible">
+                            <img id="preview" src="../img/images_events/no_disponible.webp" alt="Imagen no disponible">
                         <?php endif; ?>
 
                         <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
-
 
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Actualizar evento</button>
@@ -256,6 +259,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../include/template/footer.php'; ?>
     <!-- JS -->
     <script src="../js/evento.js"></script>
+    <script>
+    // variables
+    var provincias = <?php echo json_encode($provincias); ?>;
+    var provinciaActual = "<?php echo $idProvinciaActual; ?>";
+    var cantonActual = "<?php echo $idCantonActual; ?>";
+    var distritoActual = "<?php echo $idDistritoActual; ?>";
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectProvincia = document.getElementById('provincia');
+        var selectCanton = document.getElementById('canton');
+        var selectDistrito = document.getElementById('distrito');
+
+        // Cantones provincia seleccionada
+        function actualizarCantones() {
+            var cantones = provincias[selectProvincia.value]['cantones'];
+            selectCanton.innerHTML = '';
+
+            for (var idCanton in cantones) {
+                var opcionCanton = document.createElement('option');
+                opcionCanton.value = idCanton;
+                opcionCanton.textContent = cantones[idCanton]['nombre'];
+                selectCanton.appendChild(opcionCanton);
+            }
+
+            // cantón actual si está disponible
+            if (cantonActual) {
+                selectCanton.value = cantonActual;
+            }
+
+            actualizarDistritos();
+        }
+
+        // Cantón seleccionado
+        function actualizarDistritos() {
+            var distritos = provincias[selectProvincia.value]['cantones'][selectCanton.value]['distritos'];
+            selectDistrito.innerHTML = '';
+
+            for (var idDistrito in distritos) {
+                var opcionDistrito = document.createElement('option');
+                opcionDistrito.value = idDistrito;
+                opcionDistrito.textContent = distritos[idDistrito]['nombre'];
+                selectDistrito.appendChild(opcionDistrito);
+            }
+
+            // distrito actual si está disponible
+            if (distritoActual) {
+                selectDistrito.value = distritoActual;
+            }
+        }
+
+        selectProvincia.addEventListener('change', actualizarCantones);
+        selectCanton.addEventListener('change', actualizarDistritos);
+
+        // selects con los valores actuales al cargar la página
+        if (provinciaActual) {
+            selectProvincia.value = provinciaActual;
+            actualizarCantones();
+        } else {
+            actualizarCantones();
+        }
+    });
+</script>
+
 </body>
 
 </html>

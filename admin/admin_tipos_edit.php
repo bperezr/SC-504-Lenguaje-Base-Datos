@@ -14,17 +14,17 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }*/
 
-require_once '../include/database/db_cargo.php';
+require_once '../include/database/db_tipomascota.php';
 
-$cargo = new cargo();
+$tipo = new TipoMascota();
 $mensajeAlerta = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
-    $cargoNombre = $_POST['cargo'];
+    $tipoMascota = $_POST['tipo'];
   
 
-    $resultadoSP = $cargo->updateCargo($id, $cargoNombre);
+    $resultadoSP = $tipo->updateTipoMascota($id, $tipoMascota);
 
 
     if ($resultadoSP == 1) {
@@ -34,20 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['mensaje'] = "Ocurrió un error durante la actualización.";
     }
-    header('Location: admin_cargos.php');
+    header('Location: admin_tipos.php');
     exit;
 
 } else {
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
-        $cargoData = $cargo->getCargo($id);
+        $tipoData = $tipo->getTipoMascota($id);
 
-        if (!$cargoData['datos']) {
-            header('Location: admin_cargos.php');
+        if (!$tipoData['datos']) {
+            header('Location: admin_tipos.php');
             exit;
         }
     } else {
-        header('Location: admin_cargos.php');
+        header('Location: admin_tipos.php');
         exit;
     }
 }
@@ -66,29 +66,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_cargos';
+    <?php $enlaceActivo = 'admin_tipos';
     include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_cargos.php" class="boton input-text">Atrás</a>
+            <a href="admin_tipos.php" class="boton input-text">Atrás</a>
         </div>
 
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Editar cargo</h2>
+                <h2 class="centrar-texto">Editar tipo de mascota</h2>
                 <form id="formularioEvento" class="formulario-evento" method="POST">
 
                     <div class="campo">
-                        <label for="cargo">Cargo:</label>
-                        <input type="text" id="cargo" name="cargo"
-                            value="<?php echo $cargoData['datos']['cargo']; ?>" required>
+                        <label for="tipo">Tipo de mascota:</label>
+                        <input type="text" id="tipo" name="tipo"
+                            value="<?php echo $tipoData['datos']['tipo']; ?>" required>
                     </div>
                     
                     <div class="campo centrar-texto botones_evento">
                         <button class="enviar" type="submit">Guardar Cambios</button>
-                        <a class="cancelar" href="admin_cargos.php">Cancelar</a>
+                        <a class="cancelar" href="admin_tipos.php">Cancelar</a>
                     </div>
                 </form>
             </div>

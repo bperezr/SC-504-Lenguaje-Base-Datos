@@ -49,6 +49,11 @@ PROCEDURE getDistritos(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
 );
+--SP9
+    PROCEDURE getLugares(
+        p_cursor OUT SYS_REFCURSOR,
+        p_resultado OUT NUMBER
+    );
 END P_LUGAR;
 
 --#########################################################################################################
@@ -238,6 +243,44 @@ EXCEPTION
         p_resultado := 9; -- Error
         DBMS_OUTPUT.PUT_LINE('Error en getDistritos: ' || SQLERRM);
 END;
+--SP8----------------------------------------------------------------------------
+PROCEDURE getLugares(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0;
+
+    BEGIN
+        -- Abrir el cursor para seleccionar todas las provincias, cantones y distritos
+        -- Aquí solo seleccionamos los IDs y nombres para cada nivel
+        OPEN p_cursor FOR
+            SELECT 
+                p.idProvincia, 
+                p.nombre AS nombreProvincia, 
+                c.idCanton, 
+                c.nombre AS nombreCanton, 
+                d.idDistrito, 
+                d.nombre AS nombreDistrito
+            FROM provincia p
+            LEFT JOIN canton c ON p.idProvincia = c.idProvincia
+            LEFT JOIN distrito d ON c.idCanton = d.idCanton
+            ORDER BY p.idProvincia, c.idCanton, d.idDistrito;
+
+        -- Establecer resultado como encontrado si la consulta se ejecuta correctamente
+        p_resultado := 1;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            -- Establecer resultado como no encontrado si no hay datos
+            p_resultado := 0;
+            DBMS_OUTPUT.PUT_LINE('Error en getLugaresJerarquia: No se encontraron datos.');
+        WHEN OTHERS THEN
+            -- Establecer resultado como error en caso de un error inesperado
+            p_resultado := 9;
+            DBMS_OUTPUT.PUT_LINE('Error en getLugaresJerarquia: ' || SQLERRM);
+    END;
+END;
+
 --FIN SP------------------------------------------------------------------------
 END P_LUGAR;
 --#########################################################################################################

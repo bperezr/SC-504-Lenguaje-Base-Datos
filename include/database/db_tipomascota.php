@@ -1,5 +1,6 @@
 <?php
 require_once 'db_config.php';
+define('SQL_INT', OCI_B_INT); 
 
 class TipoMascota
 {
@@ -94,39 +95,79 @@ public function getTipoMascotas()
     // Función para insertar un nuevo tipo de mascota
     public function insertTipoMascota($tipo)
     {
-        $query = "INSERT INTO tipomascota (tipo) VALUES (:tipo)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':tipo', $tipo);
-        return $stmt->execute();
-    }
+        $conn = $this->db;
 
+        $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.insertTipoMascota(:p_Tipo, :p_resultado); END;");    
+
+        oci_bind_by_name($stmt, ":p_Tipo", $tipo);    
+        
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+        oci_execute($stmt);
+        
+        return $p_resultado;
+    }
+    
     // Función para actualizar un tipo de mascota
     public function updateTipoMascota($id, $tipo)
     {
-        $query = "UPDATE tipomascota SET tipo = :tipo WHERE idTipoMascota = :idTipoMascota";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idTipoMascota', $id);
-        $stmt->bindParam(':tipo', $tipo);
-        return $stmt->execute();
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.updateTipoMascota(:p_idTipoMascota, :p_Tipo, :p_resultado); END;");   
+        
+        oci_bind_by_name($stmt, ":p_idTipoMascota", $id);
+        oci_bind_by_name($stmt, ":p_Tipo", $tipo);  
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+        
+        oci_execute($stmt);
+        
+       return $p_resultado;
     }
 
     // Función para eliminar un tipo de mascota por su ID
     public function deleteTipoMascota($id)
     {
-        $query = "DELETE FROM tipomascota WHERE idTipoMascota = :idTipoMascota";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idTipoMascota', $id);
-        return $stmt->execute();
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.deleteTipoMascota(:p_idTipoMascota, :p_resultado); END;");    
+        oci_bind_by_name($stmt, ":p_idTipoMascota", $p_id);    
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+        
+        oci_execute($stmt);
+        
+        return $p_resultado;
     }
 
-    public function buscarTipoMascota($searchTerm)
+    // Función para buscar tipos de mascota
+    public function buscarTipoMascotas($searchTerm)
     {
-        $query = "SELECT tp.* FROM tipomascota tp
-                WHERE tp.tipo LIKE :searchTerm";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.buscarTipoMascotas(:p_searchTerm, :p_cursor, :p_resultado); END;");
+    
+        oci_bind_by_name($stmt, ":p_searchTerm", $searchTerm);
+        $p_cursor = oci_new_cursor($conn);
+    
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR); 
+        $p_resultado = 0;
+        
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+    
+        oci_execute($stmt);
+    
+        $tipoMascotas =[];
+        if ($p_resultado == 1) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($tipoMascotas, $row);
+            }
+        }
+    
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+    
+        return $tipoMascotas;
+    
     }
 }
 

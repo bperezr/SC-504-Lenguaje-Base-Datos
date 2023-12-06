@@ -22,50 +22,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $contrasena = $_POST['contrasena'];
         $contrasena2 = $_POST['contrasena2'];
 
-        if ($contrasena !== $contrasena2) {
+        // Verificar que el correo no tiene el dominio @happypaws.com
+        if (strpos($correo, '@happypaws.com') !== false) {
+            $mensajeError = "Error - No puedes registrarte como cliente con este correo.";
+        } elseif ($contrasena !== $contrasena2) {
             $mensajeError = "Error - Las contraseñas no coinciden. Por favor, inténtalo de nuevo.";
         } else {
             $correoExiste = $cliente->verificarCorreoExistente($correo);
 
-            if ($correoExiste) {
-                $mensajeError = "Error - El correo ya existe. Por favor, usa otro correo.";
-            } else {
-                $cliente->insertClienteNuevo($correo, $contrasena,$resultadoSP);
+            if ($correoExiste != 0) {
+                $cliente->insertClienteNuevo($correo, $contrasena, $resultadoSP);
 
-                if ($resultadoSP == 1) {
+                if ($resultadoSP == 0) {
                     $mensajeError = "¡Registro exitoso!";
-                } elseif ($resultadoSP == 0) {
-                    $mensajeError = "El correo digitado ya se encuentra registrado";
                 } else {
-                    $mensajeError = "¡Error al registrar el usuario!";
+                    $mensajeError = "¡Error al registrar el usuario! SQLCODE: " . $resultadoSP;
                 }
+            } else {
+                $mensajeError = "El correo ya esta registrado. Por favor, usa otro correo.";
             }
         }
-    }if (isset($_POST['loginForm'])) {
+    }
+    if (isset($_POST['loginForm'])) {
         $correo = $_POST['email'];
         $contrasena = $_POST['pswd'];
 
-        $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
-        echo $colaboradorAutenticado;
-
         // Verificar si el correo tiene el dominio @happypaws.com
         if (strpos($correo, '@happypaws.com') !== false) {
-            $colaboradorAutenticado = $colaborador->validarCredenciales($correo, $contrasena);
+            // Es un colaborador
+            $resultadoColaborador = $colaborador->validarCredenciales($correo, $contrasena);
 
-            if ($colaboradorAutenticado) {
+            if ($resultadoColaborador === 0) {
                 $colaboradorInfo = $colaborador->obtenerColaboradorPorCorreo($correo);
 
-                $_SESSION['usuario'] = array(
-                    'rol' => 'colaborador',
-                    'id' => $colaboradorInfo['idColaborador'],
-                    'idRol' => $colaboradorInfo['idRol'],
-                    'correo' => $colaboradorInfo['correo']
-                );
 
-                if ($colaboradorInfo['idRol'] == 1) {
+                if ($colaboradorInfo['datos']['idRol'] === 1) {
+                    $_SESSION['usuario'] = array(
+                        'rol' => 'admin',
+                        'id' => $colaboradorInfo['datos']['idColaborador'],
+                        'idRol' => $colaboradorInfo['datos']['idRol'],
+                        'correo' => $correo
+                    );
+                } else {
+                    $_SESSION['usuario'] = array(
+                        'rol' => 'colaborador',
+                        'id' => $colaboradorInfo['datos']['idColaborador'],
+                        'idRol' => $colaboradorInfo['datos']['idRol'],
+                        'correo' => $correo
+                    );
+                }
+
+                echo "<pre>";
+                print_r($_SESSION['usuario']);
+                echo "</pre>";
+
+                if ($colaboradorInfo['datos']['idRol'] == 1) {
                     header("Location: admin/admin_index.php");
                     exit();
-                } elseif ($colaboradorInfo['idRol'] == 2) {
+                } elseif ($colaboradorInfo['datos']['idRol'] == 2) {
                     header("Location: medical/medical_index.php");
                     exit();
                 }
@@ -73,38 +87,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mensajeError = "Usuario o contraseña incorrecta.";
             }
         } else {
-            // El correo no tiene el dominio @happypaws.com, buscar en clientes
-            $clienteAutenticado = $cliente->validarCredenciales($correo, $contrasena,$resultadoSP);
+            // Es un clientes
+            $resultadoSP = $cliente->validarCredenciales($correo, $contrasena);
 
-                if($resultadoSP=1){
-                    $clienteAutenticado = true;
-                } else{
-                    $clienteAutenticado = false;
-                }
-
-            if ($clienteAutenticado) {
+            if ($resultadoSP === 0) {
                 $idCliente = 0;
                 $idRol = 0;
                 $nombre = "";
-                $apellido1 =  null;
+                $apellido1 = null;
                 $apellido2 = null;
-                $clienteInfo= $cliente->obtenerClientePorCorreo($correo,$idCliente,$idRol,$nombre,$apellido1,$apellido2,$resultadoObtenerCorreo);
+                $clienteInfo = $cliente->obtenerClientePorCorreo($correo);
 
+                $_SESSION['usuario'] = array(
+                    'rol' => 'cliente',
+                    'id' => $clienteInfo['datos']['idCliente'],
+                    'idRol' => $clienteInfo['datos']['idRol'],
+                    'correo' => $correo,
+                    'nombre' => $clienteInfo['datos']['nombre'],
+                    'apellido1' => $clienteInfo['datos']['apellido1'],
+                    'apellido2' => $clienteInfo['datos']['apellido2']
+                );
 
-                $nombre = "Perfil no ingresado";
-                if($resultadoObtenerCorreo=1){
-                    $_SESSION['usuario'] = array(
-                        'rol' => 'cliente',
-                        'id' => $idCliente,
-                        'idRol' => $idRol,
-                        'correo' => $correo,
-                        'nombre' => $nombre,
-                        'apellido1' => $apellido1,
-                        'apellido2' => $apellido2
-                    );
-                }
-
-                if ($nombre = "Perfil no ingresado") {
+                if ($nombre == "Perfil no ingresado") {
                     header("Location: profile_client_new.php");
                     exit();
                 } else {
@@ -118,12 +122,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-/* if (isset($_SESSION['usuario'])) {
-    echo "Rol: " . $_SESSION['usuario']['rol'] . "<br>";
-    echo "ID: " . $_SESSION['usuario']['id'] . "<br>";
-    echo "ID Rol: " . $_SESSION['usuario']['idRol'] . "<br>";
-    echo "Correo: " . $_SESSION['usuario']['correo'] . "<br>";
-} */
 ?>
 
 <!DOCTYPE html>
@@ -153,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="signup">
             <form id="signupForm" method="POST">
                 <label for="chk" aria-hidden="true">Registrarse</label>
-                <input type="correo" id="signupEmail" name="correo" placeholder="Correo" required>
+                <input type="text" id="signupEmail" name="correo" placeholder="Correo" required>
                 <input type="password" id="contrasena" name="contrasena" placeholder="Contraseña" required>
                 <input type="password" id="contrasena2" name="contrasena2" placeholder="Repita la contraseña" required>
                 <button type="submit" name="signupForm">Registrarse</button>
@@ -168,6 +166,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" name="loginForm">Iniciar</button>
             </form>
         </div>
+
+        </form>
+
+
+
     </div>
     <!-- JS -->
     <script src="js/singUp_login.js"></script>

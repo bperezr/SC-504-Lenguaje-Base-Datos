@@ -15,27 +15,51 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }
 
 require_once '../include/database/db_servicio.php';
-$servicio = new Servicio();
+$servicio = new servicio();
 
-$servicios = $servicio->getServicios();
-$hayResultados = true;
+
+$respuesta = $servicio->getServicios();
+$resultadoSP = $respuesta['resultado'];
+$servicios = $respuesta['datos'];
+
+if ($resultadoSP == 1) {
+    $hayResultados = true;
+} elseif ($resultadoSP == 0) {
+    $mensajeError = "No se encontraron servicios.";
+    $hayResultados = false;
+} else {
+    $mensajeError = "Ocurrió un error al recuperar los servicios.";
+    $hayResultados = false;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idServicio = $_POST['id'];
-    $servicio->deleteServicio($idServicio);
+
+    $resultadoSP = $servicio->deleteServicio($idServicio);
+
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "servicio eliminado con éxito.";
+    } elseif ($resultadoSP == 0) {
+        $_SESSION['mensaje'] = "No se encontró el servicio para eliminar.";
+    } else {
+        $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el servicio.";
+    }
+
     header('Location: admin_services.php');
     exit;
 }
 
+$hayResultados = true;
+
 if (isset($_GET['search'])) {
     $searchTerm = $_GET['search'];
     $servicios = $servicio->buscarServicios($searchTerm);
-    if (count($servicios) === 0) {
+
+    if (empty($servicios)) {
         $hayResultados = false;
-    } else {
-        $hayResultados = true;
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -48,13 +72,14 @@ if (isset($_GET['search'])) {
 </head>
 
 <body>
+
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_servicios';
+    <?php $enlaceActivo = 'admin_services';
     include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
-        <h1 class="centrar-texto">Administrar Servicios</h1>
+        <h1 class="centrar-texto">Administrar servicios</h1>
 
         <!-- Buscador -->
         <form action="" method="get">
@@ -84,28 +109,29 @@ if (isset($_GET['search'])) {
             </div>
         </form>
 
-
         <?php if ($hayResultados): ?>
             <section class="event__tarjetas">
                 <?php foreach ($servicios as $servicio): ?>
                     <!-- Tarjeta de cada servicio -->
                     <div class="tarjeta">
-                        <!-- Contenido de la tarjeta -->
                         <div class="tarjeta__detalle">
-                            <!-- Detalles del servicio -->
-                            <h2>
-                                <?php echo $servicio['servicio']; ?>
-                            </h2>
-                            <p>
-                                <?php echo $servicio['descripcion']; ?>
-                            </p>
+                            <ul class="detalle-evento">
+                                <li><strong>Servicio:</strong>
+                                    <?php echo $servicio['SERVICIO']; ?>
+                                </li>
+                                <li class="justificar-texto"><strong>Descripción:</strong>
+                                    <?php echo $servicio['DESCRIPCION']; ?>
+                                </li>
+                            </ul>
                         </div>
                         <!-- Botones -->
                         <div class="tarjeta__btn">
-                            <a href="admin_service_edit.php?id=<?php echo $servicio['idServicio']; ?>" class="editar"><ion-icon
-                                    name="create-sharp"></ion-icon>Editar</a>
+                            <!-- Editar -->
+                            <a href="admin_service_edit.php?id=<?php echo $servicio['IDSERVICIO']; ?>"
+                                class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
+                            <!-- Eliminar -->
                             <form action="" method="post" style="display: inline;">
-                                <input type="hidden" name="id" value="<?php echo $servicio['idServicio']; ?>">
+                                <input type="hidden" name="id" value="<?php echo $servicio['IDSERVICIO']; ?>">
                                 <button type="submit" class="eliminar"
                                     onclick="return confirm('¿Estás seguro de que deseas eliminar este servicio?')">
                                     <ion-icon name="trash-sharp"></ion-icon>Eliminar
@@ -118,7 +144,7 @@ if (isset($_GET['search'])) {
         <?php else: ?>
             <div class="err_busqueda">
                 <h2 class="brincar">No se encontraron servicios que coincidan con la búsqueda.</h2>
-                <img class="" src="../img/dog1.webp" alt="No encontrado">
+                <img class="" src="../img/dog1.webp" alt="">
             </div>
         <?php endif; ?>
 
@@ -126,7 +152,15 @@ if (isset($_GET['search'])) {
 
     <!-- Footer -->
     <?php include '../include/template/footer.php'; ?>
-    <!-- JS -->
+    <!-- Mensaje -->
+    <?php if (isset($_SESSION['mensaje'])): ?>
+        <script>
+            window.onload = function () {
+                alert("<?php echo $_SESSION['mensaje']; ?>");
+                <?php unset($_SESSION['mensaje']); ?>
+            };
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
