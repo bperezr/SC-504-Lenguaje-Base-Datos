@@ -14,22 +14,22 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }
 */
-/*  */
-require_once '../include/database/db_cargo.php';
 
-$cargo = new cargo();
+require_once '../include/database/db_tipomascota.php';
+
+$tipo = new TipoMascota();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $cargoNombre = $_POST['cargo'];
+    $tipoMascota = $_POST['tipo'];
   
-    $resultadoSP = $cargo->insertCargo($cargoNombre);
+    $resultadoSP = $tipo->insertTipoMascota($tipoMascota);
 
     if ($resultadoSP == 1) {
         $_SESSION['mensaje'] = "Éxito en la inserción.";
     } else {
         $_SESSION['mensaje'] = "Ocurrió un error durante la inserción.";
     }
-    header('Location: admin_cargos.php');
+    header('Location: admin_tipos.php');
     exit;
 }
 
@@ -46,26 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <!-- Nav template -->
-    <?php $enlaceActivo = 'admin_cargos';
+    <?php $enlaceActivo = 'admin_tipos';
     include '../include/template/nav.php'; ?>
 
     <main class="contenedor">
 
         <div class="btn_atras">
-            <a href="admin_cargos.php" class="boton input-text">Atrás</a>
+            <a href="admin_tipos.php" class="boton input-text">Atrás</a>
         </div>
 
         <section class="evento">
             <div class="evento__detalle">
-                <h2 class="centrar-texto">Agregar cargo</h2>
+                <h2 class="centrar-texto">Agregar tipo de mascota</h2>
                 <form id="formularioEvento" class="formulario-evento" method="POST">
                     <div class="campo">
-                        <label for="cargo">Cargo:</label>
-                        <input type="text" id="cargo" name="cargo" required>
+                        <label for="tipo">Tipo de mascota:</label>
+                        <input type="text" id="tipo" name="tipo" required>
                     </div>
                     
                     <div class="campo centrar-texto botones_evento">
-                        <button class="enviar" type="submit">Agregar cargo</button>
+                        <button class="enviar" type="submit">Agregar tipo de mascota</button>
                         <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
                 </form>
