@@ -15,6 +15,8 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }
 */
 /*  */
+
+
 require_once '../include/database/db_colaborador.php';
 require_once '../include/database/db_cargo.php';
 require_once '../include/database/db_especialidad.php';
@@ -25,6 +27,8 @@ $especialidad = new Especialidad();
 
 $cargos = $cargo->getCargos();
 $especialidades = $especialidad->getEspecialidades();
+
+$mensajeAlerta = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_GET['id'];
@@ -37,11 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasena = $_POST['contrasena'];
     $idRol = $_POST['rol'];
 
+    // Manejo de la imagen
     if ($_FILES['imagen']['tmp_name']) {
         $imagen = $_FILES['imagen'];
         $nombreImagen = $colaborador->uploadImagen($imagen);
         $colaboradorData = $colaborador->getColaborador($id);
 
+        // Eliminar imagen anterior
         if ($colaboradorData && file_exists("../img/images_workers/" . $colaboradorData['imagen'])) {
             unlink("../img/images_workers/" . $colaboradorData['imagen']);
         }
@@ -50,15 +56,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombreImagen = $colaboradorData['imagen'];
     }
 
+    // Actualizar colaborador
     $colaborador->updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
 
     header('Location: admin_workers.php');
     exit;
 } else {
-
+    // Obtener detalles del colaborador para editar
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
         $colaboradorData = $colaborador->getColaborador($id);
+        
+        echo '<pre>';
+print_r($colaboradorData['datos']);
+echo '</pre>';
+
         if (!$colaboradorData) {
             header('Location: admin_workers.php');
             exit;
@@ -68,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
 ?>
 
 
@@ -97,24 +110,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" value="<?php echo $colaboradorData['nombre']; ?>"
+                        <input type="text" id="nombre" name="nombre" value="<?php echo $colaboradorData['datos']['NOMBRE']; ?>"
                             required>
                     </div>
                     <div class="campo">
                         <label for="apellido1">Apellido 1:</label>
                         <input type="text" id="apellido1" name="apellido1"
-                            value="<?php echo $colaboradorData['apellido1']; ?>" required>
+                            value="<?php echo $colaboradorData['datos']['APELLIDO1']; ?>" required>
                     </div>
                     <div class="campo">
                         <label for="apellido2">Apellido 2:</label>
                         <input type="text" id="apellido2" name="apellido2"
-                            value="<?php echo $colaboradorData['apellido2']; ?>" required>
+                            value="<?php echo $colaboradorData['datos']['apellido2']; ?>" required>
                     </div>
                     <div class="campo">
                         <label for="cargo">Cargo:</label>
                         <select id="cargo" name="cargo" required>
                             <?php foreach ($cargos as $cargo): ?>
-                                <option value="<?php echo $cargo['idCargo']; ?>" <?php echo ($colaboradorData['idCargo'] == $cargo['idCargo']) ? 'selected' : ''; ?>>
+                                <option value="<?php echo $cargo['idCargo']; ?>" <?php echo ($colaboradorData['datos']['idCargo'] == $cargo['idCargo']) ? 'selected' : ''; ?>>
                                     <?php echo $cargo['cargo']; ?>
                                 </option>
                             <?php endforeach; ?>
@@ -125,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="especialidad">Especialidad:</label>
                         <select id="especialidad" name="especialidad" required>
                             <?php foreach ($especialidades as $especialidad): ?>
-                                <option value="<?php echo $especialidad['idEspecialidad']; ?>" <?php echo ($colaboradorData['idEspecialidad'] == $especialidad['idEspecialidad']) ? 'selected' : ''; ?>>
+                                <option value="<?php echo $especialidad['idEspecialidad']; ?>" <?php echo ($colaboradorData['datos']['idEspecialidad'] == $especialidad['idEspecialidad']) ? 'selected' : ''; ?>>
                                     <?php echo $especialidad['especialidad']; ?>
                                 </option>
                             <?php endforeach; ?>

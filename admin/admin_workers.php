@@ -24,14 +24,35 @@ print_r($resultados);
 echo '</pre>';*/
 $hayResultados = true;
 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if ($_POST['action'] === 'delete') {
+        $idColaborador = $_POST['id'];
+        $c->deleteColaborador($idColaborador);
+        
+        header('Location: admin_workers.php');
+        exit;
+    }
+}
+/*
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idColaborador = $_POST['id'];
-    
-    $c->deleteColaborador($idColaborador);
+
+    $resultados = $c->deleteColaborador($idColaborador);
+
+    if ($resultadoSP == 1) {
+        $_SESSION['mensaje'] = "Colaborador eliminado con éxito.";
+    } elseif ($resultadoSP == 0) {
+        $_SESSION['mensaje'] = "No se encontró el colaborador para eliminar.";
+    } else {
+        $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el colaborador.";
+    }
+
     header('Location: admin_workers.php');
     exit;
 }
-
+*/
 
 if (isset($_GET['search'])) {
     $searchTerm = $_GET['search'];
@@ -45,52 +66,6 @@ if (isset($_GET['search'])) {
 
 
 
-/*
-
-require_once '../include/database/db_colaborador.php';
-$c = new Colaborador();
-
-$respuesta = $c->getColaboradores();
-$resultadoSP = $respuesta['resultado'];
-$colaboradores = $respuesta['datos'];
-
-if ($resultadoSP == 1) {
-    $hayResultados = true;
-} elseif ($resultadoSP == 0) {
-    $mensajeError = "No se encontraron especialidades.";
-    $hayResultados = false;
-} else {
-    $mensajeError = "Ocurrió un error al recuperar las especialidades.";
-    $hayResultados = false;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idColaborador = $_POST['id'];
-
-    $resultadoSP = $c->deleteColaborador($idColaborador);
-
-    if ($resultadoSP == 1) {
-        $_SESSION['mensaje'] = "Colaborador eliminado con éxito.";
-    } elseif ($resultadoSP == 0) {
-        $_SESSION['mensaje'] = "No se encontró el colaborador para eliminar.";
-    } else {
-        $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el colaborador.";
-    }
-
-    header('Location: admin_workers.php');
-    exit;
-}
-
-$hayResultados = true;
-
-if (isset($_GET['search'])) {
-    $searchTerm = $_GET['search'];
-    $colaboradores = $c->buscarEspecialidades($searchTerm);
-
-    if (empty($colaboradores)) {
-        $hayResultados = false;
-    }
-}*/
 ?>
 
 
@@ -161,10 +136,10 @@ if (isset($_GET['search'])) {
             </h2>
             <ul class="detalle-evento">
                 <li><strong>Cargo:</strong>
-                    <?php echo isset($colaborador['IDCARGO']) ? $colaborador['IDCARGO'] : ''; ?>
+                    <?php echo isset($colaborador['NOMBRECARGO']) ? $colaborador['NOMBRECARGO'] : ''; ?>
                 </li>
                 <li><strong>Especialidad:</strong>
-                    <?php echo isset($colaborador['IDESPECIALIDAD']) ? $colaborador['IDESPECIALIDAD'] : ''; ?>
+                    <?php echo isset($colaborador['NOMBREESPECIALIDAD']) ? $colaborador['NOMBREESPECIALIDAD'] : ''; ?>
                 </li>
             </ul>
         </div>
@@ -172,13 +147,14 @@ if (isset($_GET['search'])) {
         <div class="tarjeta__btn">
             <a href="admin_worker_edit.php?id=<?php echo $colaborador['IDCOLABORADOR']; ?>"
                 class="editar"><ion-icon name="create-sharp"></ion-icon>Editar</a>
-            <form action="" method="post" style="display: inline;">
-                <input type="hidden" name="id" value="<?php echo $colaborador['IDCOLABORADOR']; ?>">
-                <button type="submit" class="eliminar"
-                    onclick="return confirm('¿Estás seguro de que deseas eliminar este colaborador?')">
-                    <ion-icon name="trash-sharp"></ion-icon>Eliminar
-                </button>
-            </form>
+                <form action="" method="post" style="display: inline;">
+    <input type="hidden" name="action" value="delete">
+    <input type="hidden" name="id" value="<?php echo $colaborador['IDCOLABORADOR']; ?>">
+    <button type="submit" class="eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este colaborador?')">
+        <ion-icon name="trash-sharp"></ion-icon>Eliminar
+    </button>
+</form>
+
         </div>
     </div>
 <?php endforeach; ?>

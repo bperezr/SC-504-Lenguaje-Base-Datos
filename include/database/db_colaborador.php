@@ -28,9 +28,9 @@ class Colaborador
     {
         $conn = $this->db;
         $stmt = oci_parse($conn, "BEGIN  PAQUETE_COLABORADORES.getColaborador(:p_idColaborador, :p_nombre, :p_apellido1, :p_apellido2, :p_idCargo, :p_idEspecialidad, :p_imagen, :p_correo, :p_resultado); END;");
-
-        oci_bind_by_name($stmt, ":p_idColaborador", $id);
-
+    
+        oci_bind_by_name($stmt, ":p_idColaborador", $id, 200);
+    
         $p_idColaborador="";
         $p_nombre="";
         $p_apellido1="";
@@ -40,7 +40,7 @@ class Colaborador
         $p_imagen="";
         $p_correo="";
         $p_resultado=0;
-
+    
         oci_bind_by_name($stmt, ":p_idColaborador", $p_idColaborador, 200);
         oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
         oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
@@ -50,21 +50,25 @@ class Colaborador
         oci_bind_by_name($stmt, ":p_imagen", $p_imagen, 200);
         oci_bind_by_name($stmt, ":p_correo", $p_correo, 200);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
-
+    
         oci_execute($stmt);
-
+    
         $colaborador = null;
         if ($p_resultado == 1) {
-            $especialidad = array(
+            $colaborador = array(
                 'idColaborador' => $id,
                 'nombre' => $p_nombre,
-                'apellido1' => $p_apellido1
+                'apellido1' => $p_apellido1,
+                'apellido2' => $p_apellido2,
+                'idCargo' => $p_idCargo,
+                'idEspecialidad' => $p_idEspecialidad,
+                'imagen' => $p_imagen,
+                'correo' => $p_correo
             );
         }
-
+    
         return array('datos' => $colaborador, 'resultado' => $p_resultado);
     }
-
     
 
     public function getColaboradores()
@@ -95,28 +99,49 @@ class Colaborador
 }
 
     
+public function getRoles()
+{
+    $roles = array();
+    $conn = $this->db;
 
+    $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.getRoles(:p_cursor, :p_resultado); END;");
 
+    $p_cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+    $p_resultado = 0;
+    oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
+    oci_execute($stmt);
 
-
-    
-        public function getRoles()
-    {
-        $query = "SELECT idRol, nombreRol FROM rol";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($p_resultado == 1) {
+        oci_execute($p_cursor);
+        while ($row = oci_fetch_assoc($p_cursor)) {
+            array_push($roles, $row);
+        }
     }
 
-    public function verificarCorreoExistente($correo)
-    {
-        $query = "SELECT idColaborador FROM colaborador WHERE correo = :correo";
+    oci_free_statement($p_cursor);
+    oci_free_statement($stmt);
+
+    return array('datos' => $roles, 'resultado' => $p_resultado);
+}
+
+public function verificarCorreoExistente($correo)
+{
+    if ($this->db instanceof PDO) {
+        $query = "SELECT COUNT(*) FROM colaborador WHERE correo = :correo";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+        $stmt->bindParam(':correo', $correo);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_COLUMN) !== false;
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
+    } else {
+        echo "Error: La conexión no es un objeto PDO.";
+        return false;
     }
+}
 
     public function getColaboradorPorCorreo($correo)
     {
@@ -129,27 +154,49 @@ class Colaborador
 
     // Función para insertar un nuevo colaborador
 
-    //PENDIENTE
+
     public function insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
-    {
-        // Genera el hash
-        $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
-
-        $query = "INSERT INTO colaborador (nombre, apellido1, apellido2, idCargo, idEspecialidad, imagen, correo, contrasena, idRol)
-        VALUES (:nombre, :apellido1, :apellido2, :idCargo, :idEspecialidad, :imagen, :correo, :contrasena, :idRol)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellido1', $apellido1);
-        $stmt->bindParam(':apellido2', $apellido2);
-        $stmt->bindParam(':idCargo', $idCargo);
-        $stmt->bindParam(':idEspecialidad', $idEspecialidad);
-        $stmt->bindParam(':imagen', $imagen);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasenaHash); // Almacenamos el hash
-        $stmt->bindParam(':idRol', $idRol);
-
-        return $stmt->execute();
+{
+    if (!is_resource($this->db)) {
+        die("Error: La conexión no es un recurso OCI8 válido.");
     }
+
+    // Crear un descriptor de BLOB
+    $blob = oci_new_descriptor($this->db, OCI_D_LOB);
+
+    $stmt = oci_parse($this->db, "BEGIN PAQUETE_COLABORADORES.insertColaborador(:p_nombre, :p_apellido1, :p_apellido2, :p_idCargo, :p_idEspecialidad, :p_imagen, :p_correo, :p_contrasena, :p_idRol, :p_resultado); END;");
+    
+    if (!is_resource($stmt)) {
+        $blob->free();
+        die("Error: La declaración no es un recurso OCI8 válido.");
+    }
+
+    oci_bind_by_name($stmt, ":p_nombre", $nombre);
+    oci_bind_by_name($stmt, ":p_apellido1", $apellido1);
+    oci_bind_by_name($stmt, ":p_apellido2", $apellido2);
+    oci_bind_by_name($stmt, ":p_idCargo", $idCargo);
+    oci_bind_by_name($stmt, ":p_idEspecialidad", $idEspecialidad);
+
+    // Asignar el descriptor de BLOB
+    oci_bind_by_name($stmt, ":p_imagen", $blob, -1, OCI_B_BLOB);
+    $blob->writeTemporary(file_get_contents($imagen), OCI_TEMP_BLOB);
+
+    oci_bind_by_name($stmt, ":p_correo", $correo);
+    oci_bind_by_name($stmt, ":p_contrasena", $contrasena);
+    oci_bind_by_name($stmt, ":p_idRol", $idRol);
+    $p_resultado = 0;
+    oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+    if (!oci_execute($stmt)) {
+        $e = oci_error($stmt);
+        $blob->free();
+        die("Error en oci_execute: " . htmlentities($e['message'], ENT_QUOTES));
+    }
+
+    $blob->free();
+    return $p_resultado == 1;
+}
+    
 
 
     // Función para actualizar un colaborador
@@ -192,20 +239,20 @@ class Colaborador
     public function deleteColaborador($idColaborador)
     {
         $conn = $this->db;
-        $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADOR.deleteColaborador(:p_idColaborador, :p_resultado); END;");
+        $p_resultado = 0;
+        
+        $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.deleteColaborador(:p_idColaborador, :p_resultado); END;");
     
-        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador, 200);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
     
         oci_execute($stmt);
     
         oci_free_statement($stmt);
-    
-        // Asegúrate de manejar el resultado según tus necesidades
-        if ($p_resultado != 1) {
-            // Manejar el error, si es necesario
-        }
     }
+
+
+
 
     public function buscarColaboradores($searchTerm)
     {
