@@ -8,7 +8,7 @@ drop PROCEDURE BuscarServicios;
 */
 
 --#########################################################################################################
-CREATE OR REPLACE PACKAGE P_Servicios 
+CREATE OR REPLACE PACKAGE P_SERVICIOS 
 AS
 
 --------------------- SP ---------------------
@@ -51,10 +51,10 @@ PROCEDURE buscarServicios(
     p_resultado OUT NUMBER
 );
 
-END P_Servicios;
+END P_SERVICIOS;
 
 --#########################################################################################################
-CREATE OR REPLACE PACKAGE BODY P_Servicios 
+CREATE OR REPLACE PACKAGE BODY P_SERVICIOS 
 AS
 
 --SP1----------------------------------------------------------------------------
@@ -198,5 +198,5 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error en buscarServicios: ' || SQLERRM);
 END;
 --FIN SP------------------------------------------------------------------------
-END P_Servicios;
+END P_SERVICIOS;
 --#########################################################################################################

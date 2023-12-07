@@ -32,12 +32,11 @@ class TipoMascota
         $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.getTipoMascota (:p_idTipoMascota, :p_Tipo, :p_resultado); END;");
     
         oci_bind_by_name($stmt, ":p_idTipoMascota", $id);
-        $p_idTipoMascota = "";
+        
         $p_Tipo = "";
         $p_resultado = 0;
 
-        oci_bind_by_name($stmt, ":p_idTipoMascota", $p_idTipoMascota, 200);
-        oci_bind_by_name($stmt, ":p_Tipo", $p_Tipo, 30);
+        oci_bind_by_name($stmt, ":p_Tipo", $p_Tipo, 200);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         
         oci_execute($stmt);
@@ -67,7 +66,6 @@ class TipoMascota
     
         oci_execute($stmt);
     
-        // Solo ejecuta el cursor si el resultado es 1
         if ($p_resultado == 1) {
             oci_execute($p_cursor);
             while ($row = oci_fetch_assoc($p_cursor)) {
@@ -119,7 +117,7 @@ class TipoMascota
     {
         $conn = $this->db;
         $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.deleteTipoMascota(:p_idTipoMascota, :p_resultado); END;");    
-        oci_bind_by_name($stmt, ":p_idTipoMascota", $p_id);    
+        oci_bind_by_name($stmt, ":p_idTipoMascota", $id);    
         $p_resultado = 0;
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         

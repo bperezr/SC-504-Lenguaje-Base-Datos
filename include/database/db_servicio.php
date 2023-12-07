@@ -26,10 +26,10 @@ class Servicio
    
 // Función para obtener un servicio por su ID
 
-public function getServicio($p_id)
+public function getServicio($id)
 {
     $conn = $this->db;
-    $stmt = oci_parse($conn, "BEGIN P:SERVICIOS.getServicio(:p_idServicio, :p_Servicio, :p_Descripcion, :p_resultado); END;");   
+    $stmt = oci_parse($conn, "BEGIN P_SERVICIOS.getServicio(:p_idServicio, :p_Servicio, :p_Descripcion, :p_resultado); END;");   
    
     oci_bind_by_name($stmt, ":p_idServicio", $id);  
 
@@ -68,7 +68,7 @@ public function getServicio($p_id)
         $stmt = oci_parse($conn, "BEGIN P_SERVICIOS.getServicios(:p_cursor, :p_resultado); END;");        
         $p_cursor = oci_new_cursor($conn);
         oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);  
-        $p_resultado =0;  
+        $p_resultado = 0;  
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
         oci_execute($stmt);
@@ -118,8 +118,8 @@ public function updateServicio($id, $servicio, $descripcion)
 
     $stmt = oci_parse($conn, "BEGIN P_SERVICIOS.updateServicio(:p_idServicio, :p_Servicio, :p_Descripcion, :p_resultado); END;");
     
-    oci_bind_by_name($stmt, ":p_idServicio", $pido);
-    oci_bind_by_name($stmt, ":p_Servicio", $p_servicio);
+    oci_bind_by_name($stmt, ":p_idServicio", $id);
+    oci_bind_by_name($stmt, ":p_Servicio", $servicio);
     oci_bind_by_name($stmt, ":p_Descripcion", $descripcion);
 
     $p_resultado = 0;
@@ -132,7 +132,7 @@ public function updateServicio($id, $servicio, $descripcion)
 
 
 // Función para eliminar un servicio por su ID
-public function deleteServicio($p_idServicio)
+public function deleteServicio($id)
 {
     $conn = $this->db;
 

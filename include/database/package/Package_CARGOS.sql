@@ -8,7 +8,7 @@ drop PROCEDURE BuscarCargos;
 */
 
 --#########################################################################################################
-CREATE OR REPLACE PACKAGE P_Cargo
+CREATE OR REPLACE PACKAGE P_CARGO
 AS
 
 --------------------- SP ---------------------
@@ -46,10 +46,10 @@ PROCEDURE buscarCargos(
     p_resultado OUT NUMBER
 );
 
-END P_Cargo;
+END P_CARGO;
 
 --#########################################################################################################
-CREATE OR REPLACE PACKAGE BODY P_Cargo
+CREATE OR REPLACE PACKAGE BODY P_CARGO
 AS
 
 --SP1----------------------------------------------------------------------------
@@ -190,5 +190,5 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error en buscarCargos: ' || SQLERRM);
 END;
 --FIN SP------------------------------------------------------------------------
-END P_Cargo;
+END P_CARGO;
 --#########################################################################################################

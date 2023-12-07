@@ -1,6 +1,6 @@
 <?php
 session_start();
-/*
+
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
@@ -12,10 +12,12 @@ if (isset($_SESSION['usuario'])) {
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
-}*/
+}
 
 require_once '../include/database/db_cargo.php';
-$cargo = new cargo();
+$cargo = new Cargo();
+
+
 $respuesta = $cargo->getCargos();
 $resultadoSP = $respuesta['resultado'];
 $cargos = $respuesta['datos'];
@@ -31,9 +33,9 @@ if ($resultadoSP == 1) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idcargo = $_POST['id'];
+    $idCargo = $_POST['id'];
 
-    $resultadoSP = $cargo->deleteCargo($idcargo);
+    $resultadoSP = $cargo->deleteCargo($idCargo);
 
     if ($resultadoSP == 1) {
         $_SESSION['mensaje'] = "cargo eliminado con éxito.";

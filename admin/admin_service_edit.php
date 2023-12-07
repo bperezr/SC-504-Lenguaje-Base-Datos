@@ -14,10 +14,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }
 
-/*  */
 require_once '../include/database/db_servicio.php';
 
-$servicio = new servicio();
+$servicio = new Servicio();
 $mensajeAlerta = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
