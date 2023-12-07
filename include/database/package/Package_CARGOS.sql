@@ -14,8 +14,8 @@ AS
 --------------------- SP ---------------------
 --SP1
 PROCEDURE getCargo(
-    p_idCargo IN cargo.idCargo%TYPE,
-    p_Cargo OUT cargo.cargo%TYPE,
+    p_idCargo IN Cargo.idCargo%TYPE,
+    p_Cargo OUT Cargo.Cargo%TYPE,
     p_resultado OUT NUMBER
 );
 --SP2
@@ -25,18 +25,18 @@ PROCEDURE getCargos(
 );
 --SP3
 PROCEDURE insertCargo(
-    p_Cargo IN cargo.cargo%TYPE,
+    p_Cargo IN Cargo.Cargo%TYPE,
     p_resultado OUT NUMBER
 );
 --SP4
 PROCEDURE updateCargo(
-    p_idCargo IN cargo.idCargo%TYPE,
-    p_Cargo IN cargo.cargo%TYPE,
+    p_idCargo IN Cargo.idCargo%TYPE,
+    p_Cargo IN Cargo.Cargo%TYPE,
     p_resultado OUT NUMBER
 );
 --SP5
 PROCEDURE deleteCargo(
-    p_idCargo IN cargo.idCargo%TYPE,
+    p_idCargo IN Cargo.idCargo%TYPE,
     p_resultado OUT NUMBER
 );
 --SP6
@@ -54,17 +54,17 @@ AS
 
 --SP1----------------------------------------------------------------------------
 PROCEDURE getCargo(
-    p_idCargo IN cargo.idCargo%TYPE,
-    p_Cargo OUT cargo.cargo%TYPE,
+    p_idCargo IN Cargo.idCargo%TYPE,
+    p_Cargo OUT Cargo.Cargo%TYPE,
     p_resultado OUT NUMBER
 ) AS
 BEGIN
     p_resultado := 0; -- Por defecto, no se encontró
 
     BEGIN
-        SELECT cargo
+        SELECT Cargo
         INTO p_Cargo
-        FROM cargo
+        FROM Cargo
         WHERE idCargo = p_idCargo;
 
         p_resultado := 1; -- Encontrado
@@ -80,6 +80,8 @@ BEGIN
 
 END;
 
+
+--SP--
 --SP2----------------------------------------------------------------------------
 PROCEDURE getCargos(
     p_cursor OUT SYS_REFCURSOR,
@@ -89,8 +91,8 @@ BEGIN
     p_resultado := 0;
 
     OPEN p_cursor FOR
-        SELECT c.idCargo, c.cargo
-        FROM cargo c;
+        SELECT c.idCargo, c.Cargo
+        FROM Cargo c;
 
     p_resultado := 1; -- Encontrado
 
@@ -105,11 +107,11 @@ END;
 
 --SP3----------------------------------------------------------------------------
 PROCEDURE insertCargo(
-    p_Cargo IN cargo.cargo%TYPE,
+    p_Cargo IN Cargo.Cargo%TYPE,
     p_resultado OUT NUMBER
 ) AS
 BEGIN
-    INSERT INTO cargo(cargo)
+    INSERT INTO Cargo(Cargo)
     VALUES (p_Cargo);
 
     p_resultado := 1; -- Éxito
@@ -122,13 +124,13 @@ END;
 
 --SP4----------------------------------------------------------------------------
 PROCEDURE updateCargo(
-    p_idCargo IN cargo.idCargo%TYPE,
-    p_Cargo IN cargo.cargo%TYPE,
+    p_idCargo IN Cargo.idCargo%TYPE,
+    p_Cargo IN Cargo.Cargo%TYPE,
     p_resultado OUT NUMBER
 ) AS
 BEGIN
-    UPDATE cargo
-    SET cargo = p_Cargo
+    UPDATE Cargo
+    SET Cargo = p_Cargo
     WHERE idCargo = p_idCargo;
 
     p_resultado := SQL%ROWCOUNT; -- Número de filas afectadas
@@ -147,11 +149,11 @@ END;
 
 --SP5----------------------------------------------------------------------------
 PROCEDURE deleteCargo(
-    p_idCargo IN cargo.idCargo%TYPE,
+    p_idCargo IN Cargo.idCargo%TYPE,
     p_resultado OUT NUMBER
 ) AS
 BEGIN
-    DELETE FROM cargo WHERE idCargo = p_idCargo;
+    DELETE FROM Cargo WHERE idCargo = p_idCargo;
 
     p_resultado := SQL%ROWCOUNT; -- Número de filas afectadas
 
@@ -174,9 +176,9 @@ PROCEDURE buscarCargos(
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT idCargo, cargo
-        FROM cargo
-        WHERE LOWER(cargo) LIKE LOWER('%' || p_searchTerm || '%');
+        SELECT idCargo, Cargo
+        FROM Cargo
+        WHERE LOWER(Cargo) LIKE LOWER('%' || p_searchTerm || '%');
 
     p_resultado := 1; -- Encontrado
 
