@@ -21,6 +21,7 @@ require_once 'include/database/db_mascota.php';
 
 $cliente = new Cliente();
 $lugar = new Lugar();
+$mascota = new Mascota();
 
 $provincias = $lugar->getProvincias();
 $cantones = $lugar->getCantones();
@@ -28,10 +29,9 @@ $distritos = $lugar->getDistritos();
 
 $mensajeError = '';
 
-$clienteData = $cliente->getCliente($id);
-/* echo "<pre>";
-print_r($clienteData);
-echo "</pre>"; */
+$clienteD = $cliente->getCliente($id);
+$resultadoSP = $clienteD['resultado'];
+$clienteData = $clienteD['datos'];
 
 $nombre = $clienteData['nombre'];
 $apellido1 = $clienteData['apellido1'];
@@ -43,13 +43,70 @@ $idCanton = $clienteData['idCanton'];
 $idDistrito = $clienteData['idDistrito'];
 $imagen = $clienteData['imagen'];
 
-/* Mascotas */
-$hayResultados = true;
-$mascota = new Mascota();
+$pro = $lugar->getNombreProvinciaPorID($idProvincia);
+$can = $lugar->getNombreCantonPorID($idCanton);
+$dis = $lugar->getNombreDistritoPorID($idDistrito);
 
+$provincia = $pro['datos'];
+$canton = $can['datos'];
+$distrito = $dis['datos'];
+
+// Obtener las mascotas del cliente
+$respuestaMascotas = $mascota->getMascotasPorCliente($id);
+$mascotas = $respuestaMascotas['datos'];
+$resultadoSP = $respuestaMascotas['resultado'];
+
+// Verificar si se obtuvieron resultados
+if ($resultadoSP == 0 && !empty($mascotas)) {
+    $hayResultados = true;
+} else {
+    $mensajeError = "No se encontraron mascotas para este cliente.";
+    $hayResultados = false;
+}
+
+if (isset($_GET['search'])) {
+    $searchTerm = $_GET['search'];
+    $respuestaB = $mascota->buscarMascotasPorCliente($id, $searchTerm);
+    $mascotas = $respuestaB['datos'];
+
+    if (empty($mascotas)) {
+        $hayResultados = false;
+    } else {
+        $hayResultados = true;
+    }
+}
+
+/* echo "<pre>";
+print_r($respuestaB);
+echo "</pre>";
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idMascota = $_POST['id'];
-    $mascota->deleteMascota($idMascota);
+    $idMascota = $_POST['idMascota'];
+
+    $mascotaInfo = $mascota->getMascota($idMascota);
+
+    if ($mascotaInfo['resultado'] == 0 && !empty($mascotaInfo['datos'])) {
+        $nombreImagen = $mascotaInfo['datos']['imagen'];
+
+        // Primero, intentar eliminar la mascota
+        $resultadoSP = $mascota->deleteMascota($idMascota);
+
+        if ($resultadoSP == 0) {
+            // Si la mascota se elimina con éxito, proceder a eliminar la imagen del servidor
+            if ($mascota->deleteImagen($nombreImagen)) {
+                $_SESSION['mensaje'] = "Mascota e imagen eliminadas con éxito.";
+            } else {
+                $_SESSION['mensaje'] = "Mascota eliminada, no se encontro la imagen.";
+            }
+        } elseif ($resultadoSP == 0) {
+            $_SESSION['mensaje'] = "No se encontró la mascota para eliminar.";
+        } else {
+            $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar la mascota.";
+        }
+    } else {
+        $_SESSION['mensaje'] = "No se encontró información de la mascota para eliminar.";
+    }
+
     header('Location: profile_client.php');
     exit;
 }
@@ -75,7 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="contenedor">
 
         <h1 class="centrar-texto">Perfil de Usuario</h1>
-
         <section class="perfil">
             <!-- Encabezado -->
             <div class="perfil__head">
@@ -110,28 +166,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Informacion -->
-
-            <h2>Direccion</h2>
-
+            <h2>dirección</h2>
             <div class="perfil__detalle">
                 <div class="perfil__detalle-info">
                     <p>Provincia:
-                        <?php echo $lugar->obtenerNombreProvinciaPorID($clienteData['idProvincia']); ?>
+                        <?php echo $provincia; ?>
                     </p>
                     <p>Canton:
-                        <?php echo $lugar->obtenerNombreCantonPorID($clienteData['idCanton']); ?>
+                        <?php echo $canton; ?>
                     </p>
                     <p>Distrito:
-                        <?php echo $lugar->obtenerNombreDistritoPorID($clienteData['idDistrito']); ?>
+                        <?php echo $distrito; ?>
                     </p>
                     <p>Direccion:
                         <?php echo $clienteData['domicilio']; ?>
                     </p>
                 </div>
             </div>
-
-            <!-- Mascotas -->
-            <h2>Mascotas</h2>
 
             <!-- Buscador -->
             <form action="profile_client.php" method="get">
@@ -160,70 +211,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 </div>
             </form>
-
-            <div class="perfil__mascota">
-                <?php
-                $mascota = new Mascota();
-                $todasLasMascotas = $mascota->getMascotasPorCliente($id);
-
-                if (isset($_GET['search'])) {
-                    $searchTerm = $_GET['search'];
-                    $mascotas = $mascota->buscarMascotas($id, $searchTerm);
-                    if (count($mascotas) === 0) {
-                        $hayResultados = false;
-                    } else {
-                        $hayResultados = true;
-                    }
-                }
-                ?>
-
-                <?php if ((isset($_GET['search']) && $hayResultados) || !isset($_GET['search'])): ?>
-                    <?php foreach ((isset($_GET['search']) && $hayResultados) ? $mascotas : $todasLasMascotas as $mascota): ?>
+            <!-- Mascotas -->
+            <?php if ($hayResultados): ?>
+                <section class="perfil__mascota">
+                    <?php foreach ($mascotas as $mascota): ?>
                         <!-- Tarjeta mascota -->
                         <div class="perfil__mascota-card">
+                            <!-- Imagen -->
                             <div class="contenedor__mascota-img">
                                 <div class="mascota__img">
-                                    <?php if (isset($mascota['imagen']) && file_exists("img/images_pets/" . $mascota['imagen'])): ?>
-                                        <img src="img/images_pets/<?php echo $mascota['imagen']; ?>" alt="Imagen de la mascota">
+                                    <?php if (isset($mascota['IMAGEN']) && file_exists("img/images_pets/" . $mascota['IMAGEN'])): ?>
+                                        <img src="img/images_pets/<?php echo $mascota['IMAGEN']; ?>" alt="Imagen de la mascota">
                                     <?php else: ?>
                                         <img src="img/no_disponible.webp" alt="Imagen no disponible">
                                     <?php endif; ?>
                                 </div>
                             </div>
-
+                            <!-- Nombre -->
                             <div class="mascota__detalle">
                                 <h4>
-                                    <?php echo $mascota['nombre']; ?>
+                                    <?php echo $mascota['NOMBRE']; ?>
                                 </h4>
                             </div>
                             <!-- Botones -->
                             <div class="tarjeta__btn">
-                                <a href="pet_edit.php?id=<?php echo $mascota['idMascota']; ?>" class="editar"><ion-icon
+                                <!-- Editar -->
+                                <a href="pet_edit.php?id=<?php echo $mascota['IDMASCOTA']; ?>" class="editar"><ion-icon
                                         name="create-sharp"></ion-icon>Editar</a>
+                                <!-- Eliminar -->
                                 <form action="" method="post" style="display: inline;">
-                                    <input type="hidden" name="id" value="<?php echo $mascota['idMascota']; ?>">
+                                    <input type="hidden" name="idMascota" value="<?php echo $mascota['IDMASCOTA']; ?>">
                                     <button type="submit" class="eliminar"
                                         onclick="return confirm('¿Estás seguro de que deseas eliminar esta mascota?')">
                                         <ion-icon name="trash-sharp"></ion-icon>Eliminar
                                     </button>
                                 </form>
-                            </div>
 
+                            </div>
                         </div>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="err_busqueda">
-                        <h2 class="brincar">No se encontraron mascotas que coincidan con la búsqueda.</h2>
-                        <img class="" src="img/dog1.webp" alt="no encontrado">
-                    </div>
-                <?php endif; ?>
+                </section>
+            <?php else: ?>
+                <div class="err_busqueda">
+                    <h2 class="brincar">No se encontraron mascotas que coincidan con la búsqueda.</h2>
+                    <img class="" src="img/dog1.webp" alt="no encontrado">
+                </div>
+            <?php endif; ?>
             </div>
 
         </section>
     </main>
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
-    <!-- JS -->
+    <!-- Mensaje -->
+    <?php if (isset($_SESSION['mensaje'])): ?>
+        <script>
+            window.onload = function () {
+                alert("<?php echo $_SESSION['mensaje']; ?>");
+                <?php unset($_SESSION['mensaje']); ?>
+            };
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>

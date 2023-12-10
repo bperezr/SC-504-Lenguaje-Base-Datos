@@ -20,20 +20,21 @@ $cliente = new Cliente();
 $resultados = $cliente->getVerClientes();
 $hayResultados = true;
 
-/* echo "<pre>";
-print_r($resultados);
-echo "</pre>"; */
 
+$datosClientes = $resultados['datos'];
 
 if (isset($_GET['search'])) {
     $searchTerm = $_GET['search'];
-    $resultados = $cliente->buscarClientess($searchTerm);
-    if (count($resultados) === 0) {
-        $hayResultados = false;
-    } else {
+    $respuesta = $cliente->buscarClientes($searchTerm);
+    $datosClientes = $respuesta['datos'];
+
+    if ($respuesta['numFilas'] >= 1) {
         $hayResultados = true;
+    } else {
+        $hayResultados = false;
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -54,8 +55,8 @@ if (isset($_GET['search'])) {
 
         <h1 class="centrar-texto">Clientes</h1>
 
-                <!-- Buscador -->
-                <form action="" method="get">
+        <!-- Buscador -->
+        <form action="" method="get">
             <div class="contenedor_buscar">
                 <div class="buscador buscador_buscar">
                     <!-- Texto buscar -->
@@ -76,26 +77,28 @@ if (isset($_GET['search'])) {
 
         <?php if ($hayResultados): ?>
             <section class="event__tarjetas">
-                <?php foreach ($resultados as $cliente): ?>
+                <?php foreach ($datosClientes as $cliente): ?>
                     <div class="tarjeta">
-                    <div class="tarjeta__imagen">
-                            <?php if (file_exists("../img/images_clients/" . $cliente['imagen'])): ?>
-                                <img src="../img/images_clients/<?php echo $cliente['imagen']; ?>" alt="Evento 1">
+                        <div class="tarjeta__imagen">
+                            <?php if (file_exists("../img/images_clients/" . $cliente['IMAGEN'])): ?>
+                                <img src="../img/images_clients/<?php echo $cliente['IMAGEN']; ?>" alt="Evento 1">
                             <?php else: ?>
                                 <img src="../img/no_disponible.webp" alt="Imagen no disponible">
                             <?php endif; ?>
                         </div>
                         <div class="tarjeta__detalle">
+                            <!-- Nombre -->
                             <h2>
-                                <?php echo $cliente['nombre'] . ' ' . $cliente['apellido1'] . ' ' . $cliente['apellido2']; ?>
+                                <?php echo $cliente['NOMBRE'] . ' ' . $cliente['APELLIDO1'] . ' ' . $cliente['APELLIDO2']; ?>
                             </h2>
                             <ul class="detalle-evento">
+                                <!-- Correo -->
                                 <li><strong>Correo:</strong>
-                                    <?php echo $cliente['correo']; ?>
+                                    <?php echo $cliente['CORREO']; ?>
                                 </li>
-
-                                <li><strong>Correo:</strong>
-                                    <?php echo $cliente['telefono']; ?>
+                                <!-- Telefono -->
+                                <li><strong>Teléfono:</strong>
+                                    <?php echo $cliente['TELEFONO']; ?>
                                 </li>
 
                             </ul>
