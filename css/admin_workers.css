@@ -784,6 +784,37 @@ textarea {
     /* Establecemos el punto de origen de la transformación */
 }
 
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Estilo para el encabezado de la tabla */
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Estilo para las celdas de datos */
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/* Estilo para filas alternas (para mejorar la legibilidad) */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Estilo para filas al pasar el ratón por encima */
+tr:hover {
+    background-color: #ddd;
+}
+
 @keyframes brincar-inclinar {
     0% {
         transform: translateY(0) rotate(0);
@@ -808,7 +839,7 @@ textarea {
     }
 }
 
-.mensaje-error  {
+.mensaje-error {
     color: #721c24;
     padding: 10px;
     margin: 10px 0;

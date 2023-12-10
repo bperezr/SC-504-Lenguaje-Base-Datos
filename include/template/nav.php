@@ -205,10 +205,12 @@
                         <li><a href="admin_especialidad.php" <?php if ($enlaceActivo == 'admin_especialidad')
                             echo 'class="active"'; ?>>Especialidad</a></li>
                         <!-- Mascotas -->
-                        <li><a href="admin_mascotas.php" <?php if ($enlaceActivo == 'admin_mascotas')
+                        <li><a href="admin_tipos.php" <?php if ($enlaceActivo == 'admin_tipos')
                             echo 'class="active"'; ?>>Tipos de Mascotas</a></li>
                     </ul>
                 </li>
+                <!-- Auditoria -->
+                <li><a href="admin_audit.php"><ion-icon name="eye"></ion-icon></a></li>
                 <!-- Cita -->
                 <li><a href="admin_cita.php"> <ion-icon name="medkit"></ion-icon></a></li>
                 <!-- Login -->

@@ -7,7 +7,7 @@
 
 --ESPECIALIDAD
 --#########################################################################################################
-CREATE OR REPLACE PACKAGE P_ESPECIALIDAD 
+CREATE OR REPLACE PACKAGE P_ESPECIALIDAD
 AS
 
 --------------------- SP ---------------------
