@@ -62,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasena = $_POST['contrasena'];
     $idRol = $_POST['rol'];
 
+    $nombreImagen = $colaborador->uploadImagen($imagen);
+
     if (is_array($resultadosCargos) && !empty($resultadosCargos)) {
         $idCargoValido = false;
 
@@ -81,14 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $correoExistente = $colaborador->verificarCorreoExistente($correo);
 
-    if ($correoExistente) {
-        $mensajeError = "El correo electrónico ya está registrado. Por favor, use otro correo.";
-    } else {
-        // Genera el hash de la contraseña
-       // $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
 
-        // Inserta el nuevo colaborador con la contraseña encriptada
-        $insertado = $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol);
+
+if ($correoExistente) {
+    $mensajeError = "El correo electrónico ya está registrado. Por favor, use otro correo.";
+} else {
+
+        $insertado = $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
 
         if ($insertado) {
             header('Location: admin_workers.php');

@@ -25,33 +25,94 @@ echo '</pre>';*/
 $hayResultados = true;
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['action'] === 'delete') {
         $idColaborador = $_POST['id'];
-        $c->deleteColaborador($idColaborador);
-        
+
+        try {
+            // Eliminar al colaborador
+            if ($c->deleteColaborador($idColaborador)) {
+                // Obtener información del colaborador
+                $colaboradorInfo = $c->getColaborador($idColaborador);
+
+                if ($colaboradorInfo['resultado'] == 0) {
+                    $nombreImagen = $colaboradorInfo['datos']['imagen'];
+
+                    // Eliminar la imagen, independientemente de si está o no vacía
+                    $c->deleteImagen($nombreImagen);
+
+                    $_SESSION['mensaje'] = "Colaborador eliminado con éxito.";
+
+                    // Redireccionar a la página de administración de trabajadores
+                    header('Location: admin_workers.php');
+                    exit;
+                } else {
+                    $_SESSION['mensaje'] = "No se encontró información del colaborador para eliminar.";
+                    echo "No se encontró información del colaborador para eliminar<br>";
+                }
+            } else {
+                $_SESSION['mensaje'] = "Error al eliminar al colaborador.";
+                echo "Error al eliminar al colaborador<br>";
+            }
+        } catch (Exception $e) {
+            $_SESSION['mensaje'] = "Error: " . $e->getMessage();
+        }
+    }
+}
+
+
+/*
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_POST['action'] === 'delete') {
+        $idColaborador = $_POST['id'];
+
+        // Mostrar mensaje de depuración
+        echo "Intentando eliminar colaborador con ID: $idColaborador<br>";
+
+        try {
+            // Obtener información del colaborador
+            $colaboradorInfo = $c->getColaborador($idColaborador);
+
+            // Verificar si se obtuvo información del colaborador
+            if ($colaboradorInfo['resultado'] == 0 && !empty($colaboradorInfo['datos'])) {
+                $nombreImagen = $colaboradorInfo['datos']['imagen'];
+
+                // Mostrar información de depuración
+                echo "ID Colaborador: $idColaborador<br>";
+                echo "Nombre Imagen: $nombreImagen<br>";
+
+                // Intentar eliminar la imagen
+                echo "Intentando eliminar imagen...<br>";
+                if ($c->deleteImagen($nombreImagen)) {
+                    echo "Imagen eliminada con éxito<br>";
+
+                    // Si la imagen se elimina con éxito, intentar eliminar al colaborador
+                    echo "Intentando eliminar colaborador...<br>";
+                    if ($c->deleteColaborador($idColaborador)) {
+                        $_SESSION['mensaje'] = "Colaborador e imagen eliminados con éxito.";
+                        echo "Colaborador eliminado con éxito<br>";
+                    } else {
+                        $_SESSION['mensaje'] = "Error al eliminar al colaborador.";
+                        echo "Error al eliminar al colaborador<br>";
+                    }
+                } else {
+                    $_SESSION['mensaje'] = "Error al eliminar la imagen.";
+                    echo "Error al eliminar la imagen<br>";
+                }
+            } else {
+                $_SESSION['mensaje'] = "No se encontró información del colaborador para eliminar.";
+                echo "No se encontró información del colaborador para eliminar<br>";
+            }
+        } catch (Exception $e) {
+            $_SESSION['mensaje'] = "Error: " . $e->getMessage();
+        }
+
         header('Location: admin_workers.php');
         exit;
     }
 }
-/*
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idColaborador = $_POST['id'];
 
-    $resultados = $c->deleteColaborador($idColaborador);
-
-    if ($resultadoSP == 1) {
-        $_SESSION['mensaje'] = "Colaborador eliminado con éxito.";
-    } elseif ($resultadoSP == 0) {
-        $_SESSION['mensaje'] = "No se encontró el colaborador para eliminar.";
-    } else {
-        $_SESSION['mensaje'] = "Ocurrió un error al intentar eliminar el colaborador.";
-    }
-
-    header('Location: admin_workers.php');
-    exit;
-}
 */
 
 if (isset($_GET['search'])) {

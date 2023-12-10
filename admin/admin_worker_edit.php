@@ -26,7 +26,15 @@ $cargo = new Cargo();
 $especialidad = new Especialidad();
 
 $cargos = $cargo->getCargos();
+$resultadosCargos = $cargos['datos'];
+
 $especialidades = $especialidad->getEspecialidades();
+$resultadosEspecialidades = $especialidades['datos'];
+
+$c = $colaborador->getRoles();
+$resultadosC = $c['datos'];
+
+
 
 $mensajeAlerta = "";
 
@@ -38,26 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idCargo = $_POST['cargo'];
     $idEspecialidad = $_POST['especialidad'];
     $correo = $_POST['correo'];
-    $contrasena = $_POST['contrasena'];
     $idRol = $_POST['rol'];
 
+    $colaboradorData = $colaborador->getColaborador($id);
     // Manejo de la imagen
-    if ($_FILES['imagen']['tmp_name']) {
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
         $imagen = $_FILES['imagen'];
         $nombreImagen = $colaborador->uploadImagen($imagen);
-        $colaboradorData = $colaborador->getColaborador($id);
-
         // Eliminar imagen anterior
         if ($colaboradorData && file_exists("../img/images_workers/" . $colaboradorData['imagen'])) {
             unlink("../img/images_workers/" . $colaboradorData['imagen']);
         }
     } else {
-        $colaboradorData = $colaborador->getColaborador($id);
         $nombreImagen = $colaboradorData['imagen'];
     }
 
-    // Actualizar colaborador
-    $colaborador->updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
+
+    $colaborador->updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $idRol);
 
     header('Location: admin_workers.php');
     exit;
@@ -66,10 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
         $colaboradorData = $colaborador->getColaborador($id);
-        
-        echo '<pre>';
-print_r($colaboradorData['datos']);
-echo '</pre>';
 
         if (!$colaboradorData) {
             header('Location: admin_workers.php');
@@ -80,6 +81,12 @@ echo '</pre>';
         exit;
     }
 }
+
+
+
+
+
+
 
 ?>
 
@@ -110,13 +117,13 @@ echo '</pre>';
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" value="<?php echo $colaboradorData['datos']['NOMBRE']; ?>"
-                            required>
+                        <input type="text" id="nombre" name="nombre"
+                            value="<?php echo $colaboradorData['datos']['nombre']; ?>" required>
                     </div>
                     <div class="campo">
                         <label for="apellido1">Apellido 1:</label>
                         <input type="text" id="apellido1" name="apellido1"
-                            value="<?php echo $colaboradorData['datos']['APELLIDO1']; ?>" required>
+                            value="<?php echo $colaboradorData['datos']['apellido1']; ?>" required>
                     </div>
                     <div class="campo">
                         <label for="apellido2">Apellido 2:</label>
@@ -126,20 +133,22 @@ echo '</pre>';
                     <div class="campo">
                         <label for="cargo">Cargo:</label>
                         <select id="cargo" name="cargo" required>
-                            <?php foreach ($cargos as $cargo): ?>
-                                <option value="<?php echo $cargo['idCargo']; ?>" <?php echo ($colaboradorData['datos']['idCargo'] == $cargo['idCargo']) ? 'selected' : ''; ?>>
-                                    <?php echo $cargo['cargo']; ?>
-                                </option>
-                            <?php endforeach; ?>
+                            <?php
+                            foreach ($resultadosCargos as $cargoResultado) {
+                                echo '<option value="' . $cargoResultado['idCargo'] . '">' . $cargoResultado['CARGO'] . '</option>';
+                            }
+                            ?>
+                        </select>
                         </select>
                     </div>
+
 
                     <div class="campo">
                         <label for="especialidad">Especialidad:</label>
                         <select id="especialidad" name="especialidad" required>
-                            <?php foreach ($especialidades as $especialidad): ?>
-                                <option value="<?php echo $especialidad['idEspecialidad']; ?>" <?php echo ($colaboradorData['datos']['idEspecialidad'] == $especialidad['idEspecialidad']) ? 'selected' : ''; ?>>
-                                    <?php echo $especialidad['especialidad']; ?>
+                            <?php foreach ($resultadosEspecialidades as $resultadosEspecialidad): ?>
+                                <option value="<?php echo $resultadosEspecialidad['IDESPECIALIDAD']; ?>">
+                                    <?php echo $resultadosEspecialidad['ESPECIALIDAD']; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -147,22 +156,15 @@ echo '</pre>';
 
                     <div class="campo">
                         <label for="correo">Correo:</label>
-                        <input type="text" id="correo" name="correo" value="<?php echo $colaboradorData['correo']; ?>"
-                            required readonly>
-                    </div>
-
-
-                    <div class="campo">
-                        <label for="apellido1">Contraseña:</label>
-                        <input type="password" id="contrasena" name="contrasena"
-                            value="<?php echo $colaboradorData['contrasena']; ?>" required>
+                        <input type="text" id="correo" name="correo"
+                            value="<?php echo $colaboradorData['datos']['correo']; ?>" required readonly>
                     </div>
 
                     <!-- Imagen -->
                     <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
-                        <?php if (file_exists("../img/images_workers/" . $colaboradorData['imagen'])): ?>
-                            <img id="preview" src="../img/images_workers/<?php echo $colaboradorData['imagen']; ?>"
+                        <?php if (file_exists("../img/images_workers/" . $colaboradorData['datos']['imagen'])): ?>
+                            <img id="preview" src="../img/images_workers/<?php echo $colaboradorData['datos']['imagen']; ?>"
                                 alt="Imagen actual">
                         <?php else: ?>
                             <img id="preview" src="../img/no_disponible.webp" alt="Imagen no disponible">
@@ -173,9 +175,9 @@ echo '</pre>';
                     <div class="campo">
                         <label for="rol">Rol:</label>
                         <select id="rol" name="rol" required>
-                            <?php foreach ($colaborador->getRoles() as $rol): ?>
-                                <option value="<?php echo $rol['idRol']; ?>" <?php echo ($colaboradorData['idRol'] == $rol['idRol']) ? 'selected' : ''; ?>>
-                                    <?php echo $rol['nombreRol']; ?>
+                            <?php foreach ($resultadosC as $rol): ?>
+                                <option value="<?php echo $rol['IDROL']; ?>">
+                                    <?php echo $rol['NOMBREROL']; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
