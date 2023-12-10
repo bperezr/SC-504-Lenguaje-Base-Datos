@@ -1,5 +1,6 @@
 <?php
 require_once 'db_config.php';
+
 class Colaborador
 {
     protected $db;
@@ -12,52 +13,136 @@ class Colaborador
     public function connectDB()
     {
         global $host, $user, $pass, $port, $sid;
-
+ 
         $connection_string = "//" . $host . ":" . $port . "/" . $sid;
         $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
-
+        
         if (!$this->db) {
             $e = oci_error();
             trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
     }
-
     // Función para obtener un solo colaborador por su ID
     public function getColaborador($id)
     {
-        $query = "SELECT * FROM colaborador WHERE idColaborador = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN  PAQUETE_COLABORADORES.getColaborador(:p_idColaborador, :p_nombre, :p_apellido1, :p_apellido2, :p_idCargo, :p_idEspecialidad, :p_imagen, :p_correo, :p_resultado); END;");
+    
+        oci_bind_by_name($stmt, ":p_idColaborador", $id, 200);
+    
+        $p_idColaborador=$id;
+        $p_nombre="";
+        $p_apellido1="";
+        $p_apellido2="";
+        $p_idCargo="";
+        $p_idEspecialidad="";
+        $p_imagen="";
+        $p_correo="";
+        $p_resultado=0;
+    
+        oci_bind_by_name($stmt, ":p_idColaborador", $p_idColaborador, 200);
+        oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
+        oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 200);
+        oci_bind_by_name($stmt, ":p_idCargo", $p_idCargo, 200);
+        oci_bind_by_name($stmt, ":p_idEspecialidad", $p_idEspecialidad, 200);
+        oci_bind_by_name($stmt, ":p_imagen", $p_imagen, 200);
+        oci_bind_by_name($stmt, ":p_correo", $p_correo, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+    
+        oci_execute($stmt);
+    
+        $colaborador = null;
+        if ($p_resultado == 0) {
+            $colaborador = array(
+                'idColaborador' => $p_idColaborador,
+                'nombre' => $p_nombre,
+                'apellido1' => $p_apellido1,
+                'apellido2' => $p_apellido2,
+                'idCargo' => $p_idCargo,
+                'idEspecialidad' => $p_idEspecialidad,
+                'imagen' => $p_imagen,
+                'correo' => $p_correo
+            );
+        }
+    
+        return array('datos' => $colaborador, 'resultado' => $p_resultado);
     }
+    
 
-    // Función para obtener todos los colaboradores
     public function getColaboradores()
-    {
-        $query = "SELECT c.*, e.especialidad, cg.cargo FROM colaborador as c
-        JOIN especialidad as e ON c.idEspecialidad = e.idEspecialidad
-        JOIN cargo as cg ON c.idCargo = cg.idCargo";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+{
+    $colaboradores = array();
+    $conn = $this->db;
+
+    $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.getColaboradores(:p_cursor, :p_resultado); END;");
+
+    $p_cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+    $p_resultado = 0;
+    oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+    oci_execute($stmt);
+
+    if ($p_resultado == 1) {
+        oci_execute($p_cursor);
+        while ($row = oci_fetch_assoc($p_cursor)) {
+            array_push($colaboradores, $row);
+        }
     }
 
-    public function getRoles()
-    {
-        $query = "SELECT idRol, nombreRol FROM rol";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    oci_free_statement($p_cursor);
+    oci_free_statement($stmt);
+
+    return array('datos' => $colaboradores, 'resultado' => $p_resultado);
+}
+
+    
+public function getRoles()
+{
+    $roles = array();
+    $conn = $this->db;
+
+    $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.getRoles(:p_cursor, :p_resultado); END;");
+
+    $p_cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+    $p_resultado = 0;
+    oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+    oci_execute($stmt);
+
+    if ($p_resultado == 1) {
+        oci_execute($p_cursor);
+        while ($row = oci_fetch_assoc($p_cursor)) {
+            array_push($roles, $row);
+        }
     }
 
-    public function verificarCorreoExistente($correo)
-    {
-        $query = "SELECT idColaborador FROM colaborador WHERE correo = :correo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-        $stmt->execute();
+    oci_free_statement($p_cursor);
+    oci_free_statement($stmt);
 
-        return $stmt->fetch(PDO::FETCH_COLUMN) !== false;
+    return array('datos' => $roles, 'resultado' => $p_resultado);
+}
+
+public function verificarCorreoExistente($correo)
+{
+    if (is_resource($this->db)) {
+        $stmt = oci_parse($this->db, "BEGIN PAQUETE_COLABORADORES.verificarCorreoExistente(:p_correo, :p_resultado); END;");
+        $p_resultado = 0;
+
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, 10, OCI_B_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado == 1;
+    } else {
+        die("Error: La conexión no es un recurso OCI8 válido.");
     }
+}
+
+
 
     public function getColaboradorPorCorreo($correo)
     {
@@ -69,82 +154,76 @@ class Colaborador
     }
 
     // Función para insertar un nuevo colaborador
+
     public function insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
     {
-        // Genera el hash
-        $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
+        $conn = $this->db;
 
-        $query = "INSERT INTO colaborador (nombre, apellido1, apellido2, idCargo, idEspecialidad, imagen, correo, contrasena, idRol)
-        VALUES (:nombre, :apellido1, :apellido2, :idCargo, :idEspecialidad, :imagen, :correo, :contrasena, :idRol)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':apellido1', $apellido1);
-        $stmt->bindParam(':apellido2', $apellido2);
-        $stmt->bindParam(':idCargo', $idCargo);
-        $stmt->bindParam(':idEspecialidad', $idEspecialidad);
-        $stmt->bindParam(':imagen', $imagen);
-        $stmt->bindParam(':correo', $correo);
-        $stmt->bindParam(':contrasena', $contrasenaHash); // Almacenamos el hash
-        $stmt->bindParam(':idRol', $idRol);
+        $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.insertColaborador(:p_nombre, :p_apellido1, :p_apellido2, :p_idCargo, :p_idEspecialidad, :p_imagen, :p_correo, :p_contrasena, :p_idRol, :p_resultado); END;");
 
-        return $stmt->execute();
+        oci_bind_by_name($stmt, ":p_nombre", $nombre);
+        oci_bind_by_name($stmt, ":p_apellido1", $apellido1);
+        oci_bind_by_name($stmt, ":p_apellido2", $apellido2);
+        oci_bind_by_name($stmt, ":p_idCargo", $idCargo);
+        oci_bind_by_name($stmt, ":p_idEspecialidad", $idEspecialidad);
+        oci_bind_by_name($stmt, ":p_imagen", $imagen);
+        oci_bind_by_name($stmt, ":p_correo", $correo);
+        oci_bind_by_name($stmt, ":p_contrasena", $contrasena);
+        oci_bind_by_name($stmt, ":p_idRol", $idRol);
+
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
+
 
     // Función para actualizar un colaborador
-    public function updateColaborador($id, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $contrasena, $idRol)
+    public function updateColaborador($idColaborador, $nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $imagen, $correo, $idRol)
+{
+    $conn = $this->db;
+                                    
+    $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.updateColaborador( :p_idColaborador, :p_nombre, :p_apellido1, :p_apellido2, :p_idCargo, :p_idEspecialidad, :p_imagen, :p_correo, :p_idRol,:p_resultado);END;");
+    
+    oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+    oci_bind_by_name($stmt, ":p_nombre", $nombre);
+    oci_bind_by_name($stmt, ":p_apellido1", $apellido1);
+    oci_bind_by_name($stmt, ":p_apellido2", $apellido2);
+    oci_bind_by_name($stmt, ":p_idCargo", $idCargo);
+    oci_bind_by_name($stmt, ":p_idEspecialidad", $idEspecialidad);
+    oci_bind_by_name($stmt, ":p_imagen", $imagen);
+    oci_bind_by_name($stmt, ":p_correo", $correo);
+
+    $resultado= null;
+    oci_bind_by_name($stmt, ":p_idRol", $idRol);
+    oci_bind_by_name($stmt, ":p_resultado", $resultado, -1, SQLT_INT);
+
+    oci_execute($stmt);
+
+    return $resultado; 
+}
+
+
+    public function deleteColaborador($idColaborador)
     {
-        // Si se proporciona una nueva contraseña, genera el hash de la misma
-        if (!empty($contrasena)) {
-            $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
-        }
-
-        $query = "UPDATE colaborador SET nombre = :nombre, apellido1 = :apellido1, apellido2 = :apellido2, idCargo = :idCargo, idEspecialidad = :idEspecialidad, imagen = :imagen, correo = :correo";
-
-        // Agrega el campo de la contraseña solo si se proporciona una nueva contraseña
-        if (!empty($contrasena)) {
-            $query .= ", contrasena = :contrasena";
-        }
-
-        $query .= ", idRol = :idRol WHERE idColaborador = :id";
-
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-        $stmt->bindParam(':apellido1', $apellido1, PDO::PARAM_STR);
-        $stmt->bindParam(':apellido2', $apellido2, PDO::PARAM_STR);
-        $stmt->bindParam(':idCargo', $idCargo, PDO::PARAM_INT);
-        $stmt->bindParam(':idEspecialidad', $idEspecialidad, PDO::PARAM_INT);
-        $stmt->bindParam(':imagen', $imagen);
-        $stmt->bindParam(':correo', $correo);
-
-        // Asigna el valor del hash solo si se proporciona una nueva contraseña
-        if (!empty($contrasena)) {
-            $stmt->bindParam(':contrasena', $contrasenaHash);
-        }
-
-        $stmt->bindParam(':idRol', $idRol);
-
-        return $stmt->execute();
+        $conn = $this->db;
+        $p_resultado = 0;
+        
+        $stmt = oci_parse($conn, "BEGIN PAQUETE_COLABORADORES.deleteColaborador(:p_idColaborador, :p_resultado); END;");
+    
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+    
+        oci_execute($stmt);
+    
+        oci_free_statement($stmt);
     }
 
-    public function deleteColaborador($id)
-    {
-        $query = "SELECT imagen FROM colaborador WHERE idColaborador = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($row) {
-            $nombreImagen = $row['imagen'];
-            $this->deleteImagen($nombreImagen);
-        }
 
-        $query = "DELETE FROM colaborador WHERE idColaborador = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
-    }
 
     public function buscarColaboradores($searchTerm)
     {
@@ -159,6 +238,7 @@ class Colaborador
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //PENDIENTE
     public function uploadImagen($imagen)
     {
         $carpetaImagenes = '../img/images_workers/';
@@ -167,6 +247,7 @@ class Colaborador
         return $nombreImagen;
     }
 
+    //PENDIENTE
     public function deleteImagen($nombreImagen)
     {
         $rutaImagen = "../img/images_workers/" . $nombreImagen;
