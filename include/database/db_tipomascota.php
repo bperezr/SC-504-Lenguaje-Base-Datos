@@ -1,6 +1,6 @@
 <?php
 require_once 'db_config.php';
-define('SQL_INT', OCI_B_INT);
+
 
 class TipoMascota
 {
@@ -118,7 +118,7 @@ class TipoMascota
     {
         $conn = $this->db;
         $stmt = oci_parse($conn, "BEGIN P_TIPOMASCOTA.deleteTipoMascota(:p_idTipoMascota, :p_resultado); END;");
-        oci_bind_by_name($stmt, ":p_idTipoMascota", $p_id);
+        oci_bind_by_name($stmt, ":p_idTipoMascota", $id);
         $p_resultado = 0;
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
