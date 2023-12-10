@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- Archivo creado  - martes-diciembre-05-2023   
+-- Archivo creado  - sábado-diciembre-09-2023   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table ASIGNACIONCITAS
@@ -441,8 +441,6 @@ Insert into HAPPYPAWS.CITAS (IDCITA,IDCLIENTE,IDMASCOTA,IDSERVICIO,FECHA,IDHORAR
 Insert into HAPPYPAWS.CITAS (IDCITA,IDCLIENTE,IDMASCOTA,IDSERVICIO,FECHA,IDHORARIO,IDESTADO) values ('20','5','17','3',to_date('31/08/23','DD/MM/RR'),'5','1');
 REM INSERTING into HAPPYPAWS.CLIENTE
 SET DEFINE OFF;
-Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMAGEN,DOMICILIO,IDPROVINCIA,IDCANTON,IDDISTRITO,IDROL,CORREO,CONTRASENA) values ('6',null,null,null,null,'NULL',null,null,null,null,'3','test@test.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
-Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMAGEN,DOMICILIO,IDPROVINCIA,IDCANTON,IDDISTRITO,IDROL,CORREO,CONTRASENA) values ('7',null,null,null,null,'NULL',null,null,null,null,'3','test@test2.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMAGEN,DOMICILIO,IDPROVINCIA,IDCANTON,IDDISTRITO,IDROL,CORREO,CONTRASENA) values ('1','Jorge','Hernández','Araya','60245117','7c62b90e2e77a68562e301db48ccbc76.jpg','200 metros sur del hotel Villas de la Colina','1','101','10101','3','jorge@email.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMAGEN,DOMICILIO,IDPROVINCIA,IDCANTON,IDDISTRITO,IDROL,CORREO,CONTRASENA) values ('2','Ana Laura','Mora','Soto','65432109','e762144327664d80aa08485d61ed9ff7.jpg','Calle del Sol, Apartamento 7A','1','101','10101','3','ana@email.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMAGEN,DOMICILIO,IDPROVINCIA,IDCANTON,IDDISTRITO,IDROL,CORREO,CONTRASENA) values ('3','Carlos','López','Chaves','87654321','cfb391f9fa4e6bda29ca7d3c39c7e5a4.jpg','Avenida Principal, Apartamento 12B','1','101','10101','3','carlos@email.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
@@ -1035,6 +1033,7 @@ Insert into HAPPYPAWS.SERVICIOS (IDSERVICIO,SERVICIO,DESCRIPCION) values ('1','M
 Insert into HAPPYPAWS.SERVICIOS (IDSERVICIO,SERVICIO,DESCRIPCION) values ('2','Cirugía','Procedimientos quirúrgicos para mascotas.');
 Insert into HAPPYPAWS.SERVICIOS (IDSERVICIO,SERVICIO,DESCRIPCION) values ('3','Castración','Servicios de castración para mascotas.');
 Insert into HAPPYPAWS.SERVICIOS (IDSERVICIO,SERVICIO,DESCRIPCION) values ('4','Aseo de Mascotas','Servicios profesionales de aseo para mascotas.');
+Insert into HAPPYPAWS.SERVICIOS (IDSERVICIO,SERVICIO,DESCRIPCION) values ('21','s1','s1');
 REM INSERTING into HAPPYPAWS.TIPOMASCOTA
 SET DEFINE OFF;
 Insert into HAPPYPAWS.TIPOMASCOTA (IDTIPOMASCOTA,TIPO) values ('1','Perro');
@@ -1807,6 +1806,78 @@ END P_LUGAR;
 
 /
 --------------------------------------------------------
+--  DDL for Package P_MASCOTA
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE PACKAGE "HAPPYPAWS"."P_MASCOTA" 
+AS
+
+--------------------- SP Basicos---------------------
+--SP1
+PROCEDURE getMascotas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP2
+PROCEDURE getMascota(
+    p_idMascota IN mascota.idMascota%TYPE,
+    p_nombre OUT mascota.nombre%TYPE,
+    p_descripcion OUT mascota.descripcion%TYPE,
+    p_imagen OUT mascota.imagen%TYPE,
+    p_idTipoMascota OUT mascota.idTipoMascota%TYPE,
+    p_idCliente OUT mascota.idCliente%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP3
+PROCEDURE insertMascota(
+    p_nombre IN mascota.nombre%TYPE,
+    p_descripcion IN mascota.descripcion%TYPE,
+    p_imagen IN mascota.imagen%TYPE,
+    p_idTipoMascota IN mascota.idTipoMascota%TYPE,
+    p_idCliente IN mascota.idCliente%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP4
+PROCEDURE updateMascota(
+    p_idMascota IN mascota.idMascota%TYPE,
+    p_nombre IN mascota.nombre%TYPE,
+    p_descripcion IN mascota.descripcion%TYPE,
+    p_imagen IN mascota.imagen%TYPE,
+    p_idTipoMascota IN mascota.idTipoMascota%TYPE,
+    p_idCliente IN mascota.idCliente%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP5
+PROCEDURE deleteMascota(
+    p_idMascota IN mascota.idMascota%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP6
+PROCEDURE buscarMascotas(
+    p_searchTerm IN mascota.nombre%TYPE,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER,
+    p_numFilas OUT NUMBER
+);
+--SP7
+PROCEDURE getMascotasPorCliente(
+    p_idCliente IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP8
+PROCEDURE buscarMascotasPorCliente(
+    p_idCliente IN NUMBER,
+    p_searchTerm IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER,
+    p_numFilas OUT NUMBER
+);
+
+END P_MASCOTA;
+
+/
+--------------------------------------------------------
 --  DDL for Package P_SERVICIOS
 --------------------------------------------------------
 
@@ -1854,6 +1925,51 @@ PROCEDURE buscarServicios(
 );
 
 END P_Servicios;
+
+/
+--------------------------------------------------------
+--  DDL for Package P_TIPOMASCOTA
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE PACKAGE "HAPPYPAWS"."P_TIPOMASCOTA" 
+AS
+
+--------------------- SP ---------------------
+--SP1
+PROCEDURE getTipoMascota(
+    p_idTipoMascota IN tipoMascota.idTipoMascota%TYPE,
+    p_Tipo OUT tipoMascota.tipo%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP2
+PROCEDURE getTipoMascotas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP3
+PROCEDURE insertTipoMascota(
+    p_Tipo IN tipoMascota.tipo%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP4
+PROCEDURE updateTipoMascota(
+    p_idTipoMascota IN tipoMascota.idTipoMascota%TYPE,
+    p_Tipo IN tipoMascota.tipo%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP5
+PROCEDURE deleteTipoMascota(
+    p_idTipoMascota IN tipoMascota.idTipoMascota%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP6
+PROCEDURE buscarTipoMascotas(
+    p_searchTerm IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+
+END P_tipoMascota;
 
 /
 --------------------------------------------------------
@@ -2363,24 +2479,38 @@ PROCEDURE camposNull(
     p_resultado OUT NUMBER
 ) AS
 BEGIN
+    -- Inicializar los campos de salida en NULL
+    p_nombre := NULL;
+    p_apellido1 := NULL;
+    p_apellido2 := NULL;
+    p_telefono := NULL;
+    p_domicilio := NULL;
+    p_idProvincia := NULL;
+    p_idCanton := NULL;
+    p_idDistrito := NULL;
+
     SELECT nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito
     INTO p_nombre, p_apellido1, p_apellido2, p_telefono, p_domicilio, p_idProvincia, p_idCanton, p_idDistrito
     FROM cliente
     WHERE correo = p_correo;
 
-    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
-
-    IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+    -- Verificar si alguno de los campos recuperados es NULL
+    IF p_nombre IS NULL OR p_apellido1 IS NULL OR p_apellido2 IS NULL OR
+       p_telefono IS NULL OR p_domicilio IS NULL OR p_idProvincia IS NULL OR
+       p_idCanton IS NULL OR p_idDistrito IS NULL THEN
+        p_resultado := 0; -- Al menos un campo es NULL
     ELSE
-        p_resultado := SQLCODE; -- Otro estado
+        p_resultado := 1; -- Todos los campos son no NULL
     END IF;
 
 EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := -1; -- No se encontró un cliente con el correo dado
     WHEN OTHERS THEN
-        p_resultado := SQLCODE; -- Error
+        p_resultado := SQLCODE; -- Otro error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END ;
+END;
+
 --SP13------------------------------------------------------------------------
 PROCEDURE updateClienteNuevo(
     p_idCliente IN cliente.idCliente%TYPE,
@@ -3116,6 +3246,248 @@ END P_LUGAR;
 
 /
 --------------------------------------------------------
+--  DDL for Package Body P_MASCOTA
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE PACKAGE BODY "HAPPYPAWS"."P_MASCOTA" 
+AS
+
+--SP1----------------------------------------------------------------------------
+PROCEDURE getMascotas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    -- Abrir cursor para seleccionar datos de las mascotas
+    OPEN p_cursor FOR
+        SELECT m.idMascota, m.nombre, m.descripcion, m.imagen,
+            m.idTipoMascota, m.idCliente
+        FROM mascota m;
+
+    -- Establecer el resultado
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en getMascotas: ' || SQLERRM);
+END;
+--SP2----------------------------------------------------------------------------
+PROCEDURE getMascota(
+    p_idMascota IN mascota.idMascota%TYPE,
+    p_nombre OUT mascota.nombre%TYPE,
+    p_descripcion OUT mascota.descripcion%TYPE,
+    p_imagen OUT mascota.imagen%TYPE,
+    p_idTipoMascota OUT mascota.idTipoMascota%TYPE,
+    p_idCliente OUT mascota.idCliente%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, descripcion, imagen, idTipoMascota, idCliente
+    INTO p_nombre, p_descripcion, p_imagen, p_idTipoMascota, p_idCliente
+    FROM mascota
+    WHERE idMascota = p_idMascota;
+
+    -- Establecer el resultado basado en SQLCODE
+    p_resultado := SQLCODE;
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en getMascota: ' || SQLERRM);
+END;
+--SP3----------------------------------------------------------------------------
+PROCEDURE insertMascota(
+    p_nombre IN mascota.nombre%TYPE,
+    p_descripcion IN mascota.descripcion%TYPE,
+    p_imagen IN mascota.imagen%TYPE,
+    p_idTipoMascota IN mascota.idTipoMascota%TYPE,
+    p_idCliente IN mascota.idCliente%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    INSERT INTO mascota(nombre, descripcion, imagen, idTipoMascota, idCliente)
+    VALUES (p_nombre, p_descripcion, p_imagen, p_idTipoMascota, p_idCliente);
+
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP4----------------------------------------------------------------------------
+PROCEDURE updateMascota(
+    p_idMascota IN mascota.idMascota%TYPE,
+    p_nombre IN mascota.nombre%TYPE,
+    p_descripcion IN mascota.descripcion%TYPE,
+    p_imagen IN mascota.imagen%TYPE,
+    p_idTipoMascota IN mascota.idTipoMascota%TYPE,
+    p_idCliente IN mascota.idCliente%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    UPDATE mascota
+    SET nombre = p_nombre,
+        descripcion = p_descripcion,
+        imagen = p_imagen,
+        idTipoMascota = p_idTipoMascota,
+        idCliente = p_idCliente
+    WHERE idMascota = p_idMascota;
+
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP5----------------------------------------------------------------------------
+PROCEDURE deleteMascota(
+    p_idMascota IN mascota.idMascota%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    DELETE FROM mascota WHERE idMascota = p_idMascota;
+
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP6----------------------------------------------------------------------------
+PROCEDURE buscarMascotas(
+    p_searchTerm IN mascota.nombre%TYPE,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER,
+    p_numFilas OUT NUMBER
+) AS
+BEGIN
+    -- Primera consulta para contar las filas
+    SELECT COUNT(*) INTO p_numFilas
+    FROM mascota
+    WHERE LOWER(nombre) LIKE LOWER('%' || p_searchTerm || '%') OR
+        LOWER(descripcion) LIKE LOWER('%' || p_searchTerm || '%');
+
+    -- Segunda consulta para obtener los datos
+    OPEN p_cursor FOR
+        SELECT idMascota, nombre, descripcion, imagen, idTipoMascota, idCliente
+        FROM mascota
+        WHERE LOWER(nombre) LIKE LOWER('%' || p_searchTerm || '%') OR
+            LOWER(descripcion) LIKE LOWER('%' || p_searchTerm || '%');
+
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    -- Establecer el resultado basado en el recuento de filas
+    IF p_numFilas > 0 THEN
+        p_resultado := 0; -- Se encontraron filas
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP7----------------------------------------------------------------------------
+PROCEDURE getMascotasPorCliente(
+    p_idCliente IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT *
+        FROM mascota
+        WHERE idCliente = p_idCliente;
+
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en getMascotasPorCliente: ' || SQLERRM);
+END;
+--SP8----------------------------------------------------------------------------
+PROCEDURE buscarMascotasPorCliente(
+    p_idCliente IN NUMBER,
+    p_searchTerm IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER,
+    p_numFilas OUT NUMBER
+) AS
+BEGIN
+    -- Primera consulta para contar las filas
+    SELECT COUNT(*) INTO p_numFilas
+    FROM mascota
+    WHERE idCliente = p_idCliente
+      AND (LOWER(nombre) LIKE LOWER('%' || p_searchTerm || '%') OR
+           LOWER(descripcion) LIKE LOWER('%' || p_searchTerm || '%'));
+
+    -- Segunda consulta para obtener los datos
+    OPEN p_cursor FOR
+        SELECT idMascota, nombre, descripcion, imagen, idTipoMascota, idCliente
+        FROM mascota
+        WHERE idCliente = p_idCliente
+          AND (LOWER(nombre) LIKE LOWER('%' || p_searchTerm || '%') OR
+               LOWER(descripcion) LIKE LOWER('%' || p_searchTerm || '%'));
+
+    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    -- Establecer el resultado basado en el recuento de filas
+    IF p_numFilas > 0 THEN
+        p_resultado := 0; -- Se encontraron filas
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--FIN SP------------------------------------------------------------------------
+END P_MASCOTA;
+
+/
+--------------------------------------------------------
 --  DDL for Package Body P_SERVICIOS
 --------------------------------------------------------
 
@@ -3264,6 +3636,152 @@ EXCEPTION
 END;
 --FIN SP------------------------------------------------------------------------
 END P_Servicios;
+
+/
+--------------------------------------------------------
+--  DDL for Package Body P_TIPOMASCOTA
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE PACKAGE BODY "HAPPYPAWS"."P_TIPOMASCOTA" 
+AS
+
+--SP1----------------------------------------------------------------------------
+PROCEDURE getTipoMascota(
+    p_idTipoMascota IN tipoMascota.idTipoMascota%TYPE,
+    p_Tipo OUT tipoMascota.tipo%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0; -- Por defecto, no se encontró
+
+    BEGIN
+        SELECT tipo
+        INTO p_Tipo
+        FROM tipoMascota
+        WHERE idTipoMascota = p_idTipoMascota;
+
+        p_resultado := 1; -- Encontrado
+
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            p_resultado := 0; -- No se encontró
+            DBMS_OUTPUT.PUT_LINE('No se encontró ningún Tipo con el id ' || p_idTipoMascota);
+        WHEN OTHERS THEN
+            p_resultado := 9; -- Error
+            DBMS_OUTPUT.PUT_LINE('Error en getTipoMascota: ' || SQLERRM);
+    END;
+
+END;
+
+--SP2----------------------------------------------------------------------------
+PROCEDURE getTipoMascotas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0;
+
+    OPEN p_cursor FOR
+        SELECT t.idTipoMascota, t.tipo
+        FROM tipoMascota t;
+
+    p_resultado := 1; -- Encontrado
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontró
+        DBMS_OUTPUT.PUT_LINE('Error en getTipotipoMascotas: ' || SQLERRM);
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en getTipotipoMascotas: ' || SQLERRM);
+END;
+
+--SP3----------------------------------------------------------------------------
+PROCEDURE insertTipoMascota(
+    p_Tipo IN tipoMascota.tipo%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    INSERT INTO tipoMascota(tipo)
+    VALUES (p_Tipo);
+
+    p_resultado := 1; -- Éxito
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en insertTipoMascota: ' || SQLERRM);
+END;
+
+--SP4----------------------------------------------------------------------------
+PROCEDURE updateTipoMascota(
+    p_idTipoMascota IN tipoMascota.idTipoMascota%TYPE,
+    p_Tipo IN tipoMascota.tipo%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    UPDATE tipoMascota
+    SET tipo = p_Tipo
+    WHERE idTipoMascota = p_idTipoMascota;
+
+    p_resultado := SQL%ROWCOUNT; -- Número de filas afectadas
+
+    IF p_resultado > 0 THEN
+        p_resultado := 1; -- Éxito
+    ELSE
+        p_resultado := 0; -- No se encontró ninguna fila para actualizar
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en updateTipoMascota: ' || SQLERRM);
+END;
+
+--SP5----------------------------------------------------------------------------
+PROCEDURE deleteTipoMascota(
+    p_idTipoMascota IN tipoMascota.idTipoMascota%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    DELETE FROM tipoMascota WHERE idTipoMascota = p_idTipoMascota;
+
+    p_resultado := SQL%ROWCOUNT; -- Número de filas afectadas
+
+    IF p_resultado > 0 THEN
+        p_resultado := 1; -- Éxito
+    ELSE
+        p_resultado := 0; -- No se encontró ninguna fila para eliminar
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en deleteTipoMascota: ' || SQLERRM);
+END;
+--SP6----------------------------------------------------------------------------
+PROCEDURE buscarTipoMascotas(
+    p_searchTerm IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT idTipoMascota, tipo
+        FROM tipoMascota
+        WHERE LOWER(tipo) LIKE LOWER('%' || p_searchTerm || '%');
+
+    p_resultado := 1; -- Encontrado
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontró ningun Tipo
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en buscarTipoMascotas: ' || SQLERRM);
+END;
+--FIN SP------------------------------------------------------------------------
+END P_tipoMascota;
 
 /
 --------------------------------------------------------

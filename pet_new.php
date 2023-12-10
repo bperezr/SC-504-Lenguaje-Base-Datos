@@ -22,25 +22,45 @@ $mascota = new Mascota();
 $tipoMascota = new TipoMascota();
 
 $tiposMascotaData = $tipoMascota->getTipoMascotas();
+$tipos = $tiposMascotaData['datos'];
 
 /* echo "<pre>";
-print_r($tiposMascotaData);
-echo "</pre>"; */
-
+print_r($tipos);
+echo "</pre>";
+ */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $nombreMascota = $_POST['nombre'];
     $descripcionMascota = $_POST['descripcion'];
     $idTipoMascota = $_POST['idTipoMascota'];
     $idCliente = $id;
-    $imagenMascota = $_FILES['imagen'];
+    $imagen = $_FILES['imagen'];
+    $nombreImagen = $mascota->uploadImagen($imagen);
 
-    $nombreImagen = $mascota->uploadImagen($imagenMascota);
-    $mascota->insertMascota($nombreMascota, $descripcionMascota, $idTipoMascota, $idCliente, $nombreImagen);
+    // Llama a la función insertMascota con los parámetros corregidos
+    $resultadoInsercion = $mascota->insertMascota($nombreMascota, $descripcionMascota, $nombreImagen, $idTipoMascota, $idCliente);
 
-    header('Location: profile_client.php');
-    exit;
+    // Verifica el resultado de la inserción
+    if ($resultadoInsercion['resultado'] == 0) {
+        // Inserción exitosa, redirige a la página de perfil del cliente
+        $_SESSION['mensaje'] = "Mascota agregada con éxito.";
+
+        echo "<pre>";
+        print_r($resultadoInsercion);
+        echo "</pre>";
+
+        header('Location: profile_client.php');
+        exit;
+    } else {
+        // Error en la inserción, muestra un mensaje de error
+        $_SESSION['mensaje'] = "Error al agregar la mascota.";
+        echo "Error en la inserción: " . $resultadoInsercion['error']['message'];
+        $mascota->deleteImagen($nombreImagen);
+
+        echo "<pre>";
+        print_r($resultadoInsercion);
+        echo "</pre>";
+    }
 }
 
 ?>
@@ -88,11 +108,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="campo">
-                        <label for="descripcion">Tipo de Mascota:</label>
+                        <label for="descripcion">Tipo de mascota:</label>
                         <select id="idTipoMascota" name="idTipoMascota" required>
-                            <?php foreach ($tiposMascotaData as $tipoMascotaItem) { ?>
-                                <option value="<?php echo $tipoMascotaItem['idTipoMascota']; ?>">
-                                    <?php echo $tipoMascotaItem['tipo']; ?>
+                            <?php foreach ($tipos as $tipoMascotaItem) { ?>
+                                <option value="<?php echo $tipoMascotaItem['IDTIPOMASCOTA']; ?>">
+                                    <?php if (isset($tipoMascotaItem['TIPO'])) {
+                                        echo $tipoMascotaItem['TIPO'];
+                                    } else {
+                                        echo "Tipo no disponible";
+                                    } ?>
                                 </option>
                             <?php } ?>
                         </select>

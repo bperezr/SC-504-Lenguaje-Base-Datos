@@ -499,24 +499,37 @@ PROCEDURE camposNull(
     p_resultado OUT NUMBER
 ) AS
 BEGIN
+    -- Inicializar los campos de salida en NULL
+    p_nombre := NULL;
+    p_apellido1 := NULL;
+    p_apellido2 := NULL;
+    p_telefono := NULL;
+    p_domicilio := NULL;
+    p_idProvincia := NULL;
+    p_idCanton := NULL;
+    p_idDistrito := NULL;
+
     SELECT nombre, apellido1, apellido2, telefono, domicilio, idProvincia, idCanton, idDistrito
     INTO p_nombre, p_apellido1, p_apellido2, p_telefono, p_domicilio, p_idProvincia, p_idCanton, p_idDistrito
     FROM cliente
     WHERE correo = p_correo;
 
-    p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
-
-    IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+    -- Verificar si alguno de los campos recuperados es NULL
+    IF p_nombre IS NULL OR p_apellido1 IS NULL OR p_apellido2 IS NULL OR
+        p_telefono IS NULL OR p_domicilio IS NULL OR p_idProvincia IS NULL OR
+        p_idCanton IS NULL OR p_idDistrito IS NULL THEN
+        p_resultado := 0; -- Al menos un campo es NULL
     ELSE
-        p_resultado := SQLCODE; -- Otro estado
+        p_resultado := 1; -- Todos los campos son no NULL
     END IF;
 
 EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := -1; -- No se encontró un cliente con el correo dado
     WHEN OTHERS THEN
-        p_resultado := SQLCODE; -- Error
+        p_resultado := SQLCODE; -- Otro error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END ;
+END;
 --SP13------------------------------------------------------------------------
 PROCEDURE updateClienteNuevo(
     p_idCliente IN cliente.idCliente%TYPE,

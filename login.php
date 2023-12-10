@@ -108,13 +108,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'apellido2' => $clienteInfo['datos']['apellido2']
                 );
 
-                if ($nombre == "Perfil no ingresado") {
+                $resultadoValidacion = $cliente->camposNull($correo);
+                if ($resultadoValidacion === 0) {
                     header("Location: profile_client_new.php");
                     exit();
                 } else {
                     header("Location: index.php");
                     exit();
                 }
+
             } else {
                 $mensajeError = "Usuario o contraseña incorrecta.";
             }

@@ -14,7 +14,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     exit();
 }
 
-
 require_once '../include/database/db_cargo.php';
 
 $cargo = new Cargo();

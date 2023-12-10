@@ -25,10 +25,11 @@ class Cliente
 
     public function getCliente($id)
     {
-        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.getCliente(:p_idCliente, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_imagen, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_idRol, :p_correo, :p_resultado); END;");
+        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.getCliente(:p_idCliente, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_imagen, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_idRol, :p_correo, :p_contrasena, :p_resultado); END;");
 
         oci_bind_by_name($stmt, ":p_idCliente", $id);
 
+        // Declarar variables para los parámetros OUT
         $p_nombre = '';
         $p_apellido1 = '';
         $p_apellido2 = '';
@@ -40,19 +41,22 @@ class Cliente
         $p_idDistrito = -1;
         $p_idRol = -1;
         $p_correo = '';
-        $p_resultado = -1;
+        $p_contrasena = ''; // Faltaba este parámetro
+        $p_resultado = 0;
 
+        // Vincular parámetros OUT
         oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
         oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
         oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 200);
         oci_bind_by_name($stmt, ":p_telefono", $p_telefono, 200);
         oci_bind_by_name($stmt, ":p_imagen", $p_imagen, 400);
         oci_bind_by_name($stmt, ":p_domicilio", $p_domicilio, 200);
-        oci_bind_by_name($stmt, ":p_idProvincia", $p_idProvincia);
-        oci_bind_by_name($stmt, ":p_idCanton", $p_idCanton);
-        oci_bind_by_name($stmt, ":p_idDistrito", $p_idDistrito);
-        oci_bind_by_name($stmt, ":p_idRol", $p_idRol);
+        oci_bind_by_name($stmt, ":p_idProvincia", $p_idProvincia, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idCanton", $p_idCanton, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idDistrito", $p_idDistrito, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idRol", $p_idRol, -1, SQLT_INT);
         oci_bind_by_name($stmt, ":p_correo", $p_correo, 200);
+        oci_bind_by_name($stmt, ":p_contrasena", $p_contrasena, 200); // Asegúrate de vincular este parámetro
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
         oci_execute($stmt);
@@ -71,12 +75,14 @@ class Cliente
                 'idCanton' => $p_idCanton,
                 'idDistrito' => $p_idDistrito,
                 'idRol' => $p_idRol,
-                'correo' => $p_correo
+                'correo' => $p_correo,
+                'contrasena' => $p_contrasena
             );
         }
 
         return array('datos' => $cliente, 'resultado' => $p_resultado);
     }
+
 
     //DONE
     public function getClientes()
@@ -227,34 +233,34 @@ class Cliente
     //DONE
     public function buscarClientes($searchTerm)
     {
+        $conn = $this->db;
 
-        $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.buscarClientes(:p_searchTerm, :p_cursor, :p_resultado, :p_numFilas); END;");
+        $stmt = oci_parse($conn, "BEGIN P_CLIENTE.buscarClientes(:p_searchTerm, :p_cursor, :p_resultado, :p_numFilas); END;");
 
         oci_bind_by_name($stmt, ":p_searchTerm", $searchTerm);
-
-        $p_cursor = oci_new_cursor($this->db);
+        $p_cursor = oci_new_cursor($conn);
         oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
-
         $p_resultado = 0;
-        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         $p_numFilas = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
         oci_bind_by_name($stmt, ":p_numFilas", $p_numFilas, -1, SQLT_INT);
 
         oci_execute($stmt);
 
         $clientes = [];
-        if ($p_resultado == 0 && $p_numFilas > 0) {
+        if ($p_resultado == 0) {
             oci_execute($p_cursor);
             while ($row = oci_fetch_assoc($p_cursor)) {
-                $clientes[] = $row;
+                array_push($clientes, $row);
             }
         }
 
         oci_free_statement($p_cursor);
         oci_free_statement($stmt);
 
-        return $clientes;
+        return ['datos' => $clientes, 'numFilas' => $p_numFilas];
     }
+
 
 
     /* -----------------Login Cliente ----------------- */
@@ -367,36 +373,45 @@ class Cliente
 
     public function camposNull($correo)
     {
+        // Declarar las variables de salida
+        $p_nombre = null;
+        $p_apellido1 = null;
+        $p_apellido2 = null;
+        $p_telefono = null;
+        $p_domicilio = null;
+        $p_idProvincia = null;
+        $p_idCanton = null;
+        $p_idDistrito = null;
+        $p_resultado = null;
+
+        // Preparar la llamada al procedimiento almacenado
         $stmt = oci_parse($this->db, "BEGIN P_CLIENTE.camposNull(:p_correo, :p_nombre, :p_apellido1, :p_apellido2, :p_telefono, :p_domicilio, :p_idProvincia, :p_idCanton, :p_idDistrito, :p_resultado); END;");
 
+        // Vincular parámetros de entrada y salida
         oci_bind_by_name($stmt, ":p_correo", $correo);
-
-        $p_nombre = '';
-        $p_apellido1 = '';
-        $p_apellido2 = '';
-        $p_telefono = '';
-        $p_domicilio = '';
-        $p_idProvincia = -1;
-        $p_idCanton = -1;
-        $p_idDistrito = -1;
-        $p_resultado = -1;
-
         oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
         oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 200);
         oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 200);
         oci_bind_by_name($stmt, ":p_telefono", $p_telefono, 200);
         oci_bind_by_name($stmt, ":p_domicilio", $p_domicilio, 200);
-        oci_bind_by_name($stmt, ":p_idProvincia", $p_idProvincia);
-        oci_bind_by_name($stmt, ":p_idCanton", $p_idCanton);
-        oci_bind_by_name($stmt, ":p_idDistrito", $p_idDistrito);
+        oci_bind_by_name($stmt, ":p_idProvincia", $p_idProvincia, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idCanton", $p_idCanton, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_idDistrito", $p_idDistrito, -1, SQLT_INT);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
+        // Ejecutar el procedimiento almacenado
         oci_execute($stmt);
 
-        if ($p_nombre == '' || $p_apellido1 == '' || $p_apellido2 == '' || $p_telefono == '' || $p_domicilio == '' || $p_idProvincia == -1 || $p_idCanton == -1 || $p_idDistrito == -1) {
+        // Verificar el resultado
+        if ($p_resultado === 0) {
+            // Hay campos nulos
             return 0;
-        } else {
+        } elseif ($p_resultado === 1) {
+            // No hay campos nulos
             return 1;
+        } else {
+            // Ocurrió un error
+            return -1;
         }
     }
 
