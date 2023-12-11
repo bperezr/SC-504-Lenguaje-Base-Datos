@@ -328,6 +328,25 @@
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "HAPPYPAWS" ;
+--------------------------------------------------------
+--  DDL for View V_AUDITORIACITA
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE NONEDITIONABLE VIEW "HAPPYPAWS"."V_AUDITORIACITA" ("Fecha", "IDCita", "Cliente", "Mascota", "Servicio", "Modificador", "Estado") AS 
+  SELECT 
+    ac.fechaModificacion AS "Fecha",
+    ac.idCita AS "IDCita",
+    cl.nombre || ' ' || cl.apellido1 || ' ' || cl.apellido2 AS "Cliente",
+    m.nombre AS "Mascota",
+    s.servicio AS "Servicio",
+    ac.modificador AS "Modificador",
+    ac.nuevoEstado AS "Estado"
+FROM AUDITORIACITAS ac
+INNER JOIN citas ci ON ac.idCita = ci.idCita
+INNER JOIN cliente cl ON ci.idCliente = cl.idCliente
+INNER JOIN mascota m ON ci.idMascota = m.idMascota
+INNER JOIN servicios s ON ci.idServicio = s.idServicio
+;
 REM INSERTING into HAPPYPAWS.ASIGNACIONCITAS
 SET DEFINE OFF;
 Insert into HAPPYPAWS.ASIGNACIONCITAS (IDASIGNACIONCITA,IDCITA,IDCOLABORADOR) values ('1','2','4');
@@ -1062,6 +1081,10 @@ REM INSERTING into HAPPYPAWS.TIPOMASCOTA
 SET DEFINE OFF;
 Insert into HAPPYPAWS.TIPOMASCOTA (IDTIPOMASCOTA,TIPO) values ('1','Perro');
 Insert into HAPPYPAWS.TIPOMASCOTA (IDTIPOMASCOTA,TIPO) values ('2','Gato');
+REM INSERTING into HAPPYPAWS.V_AUDITORIACITA
+SET DEFINE OFF;
+Insert into HAPPYPAWS.V_AUDITORIACITA ("Fecha","IDCita","Cliente","Mascota","Servicio","Modificador","Estado") values (to_timestamp('10/12/23 01:16:22,194000000 PM','DD/MM/RR HH12:MI:SSXFF AM'),'2','Jorge Hernández Araya','Mango','Castración','jorge@email','Creada');
+Insert into HAPPYPAWS.V_AUDITORIACITA ("Fecha","IDCita","Cliente","Mascota","Servicio","Modificador","Estado") values (to_timestamp('10/12/23 01:16:22,203000000 PM','DD/MM/RR HH12:MI:SSXFF AM'),'2','Jorge Hernández Araya','Mango','Castración','luis.moreles@happypaws.com','Atendida');
 --------------------------------------------------------
 --  DDL for Index ASIGNACIONCITAS_PK
 --------------------------------------------------------
@@ -1470,6 +1493,11 @@ PROCEDURE buscarAuditoriasCitas(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER,
     p_numFilas OUT NUMBER
+);
+--SP4
+PROCEDURE ObtenerDatosDesdeVista (
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
 );
 END P_auditoria;
 
@@ -2205,6 +2233,22 @@ EXCEPTION
     WHEN OTHERS THEN
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP4----------------------------------------------------------------------------
+PROCEDURE ObtenerDatosDesdeVista (
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT *
+    FROM v_auditoriacita;
+
+    p_resultado := 0; -- Éxito
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
 END;
 --FIN SP------------------------------------------------------------------------
 END P_auditoria;

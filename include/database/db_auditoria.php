@@ -118,6 +118,31 @@ class Auditoria
         return ['datos' => $auditoriasCitas, 'numFilas' => $p_numFilas, 'resultado' => $p_resultado];
     }
 
+    public function getAuditoriasCitasDesdeVista()
+    {
+        $stmt = oci_parse($this->db, "BEGIN P_AUDITORIA.ObtenerDatosDesdeVista(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $auditoriasCitas = array();
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($auditoriasCitas, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $auditoriasCitas, 'resultado' => $p_resultado);
+    }
 
 }
 ?>
