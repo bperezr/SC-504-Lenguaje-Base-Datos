@@ -25,6 +25,11 @@ PROCEDURE buscarAuditoriasCitas(
     p_resultado OUT NUMBER,
     p_numFilas OUT NUMBER
 );
+--SP4
+PROCEDURE ObtenerDatosDesdeVista (
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
 END P_auditoria;
 
 --#########################################################################################################
@@ -100,6 +105,22 @@ EXCEPTION
     WHEN OTHERS THEN
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP4----------------------------------------------------------------------------
+PROCEDURE ObtenerDatosDesdeVista (
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+)
+AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT *
+    FROM v_auditoriacita;
+
+    p_resultado := 0; -- Éxito
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
 END;
 --FIN SP------------------------------------------------------------------------
 END P_auditoria;

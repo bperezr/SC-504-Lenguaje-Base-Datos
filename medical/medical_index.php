@@ -3,6 +3,7 @@ session_start();
 
 require_once '../include/database/db_config.php';
 require_once '../include/database/db_cita.php';
+require_once '../include/database/db_contador.php';
 
 if (isset($_SESSION['usuario'])) {
   $usuario = $_SESSION['usuario'];
@@ -17,10 +18,10 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
 }
 
 
-$cita = new Cita();
-$citasCanceladas = $cita->getCitasPorEstadoYColaborador(3, $id);
-$citasAsignadas = $cita->getCitasPorEstadoYColaborador(1, $id);
-$citasAtendidas = $cita->getCitasPorEstadoYColaborador(2, $id);
+$contador = new Contador();
+$citasCanceladas = $contador->contarCitasCanceladasColaborador($id);
+$citasAsignadas = $contador->contarCitasAsignadasColaborador($id);
+$citasAtendidas = $contador->contarCitasAtendidasColaborador($id);
 
 ?>
 
@@ -50,7 +51,7 @@ $citasAtendidas = $cita->getCitasPorEstadoYColaborador(2, $id);
             <h2>Citas Atendidas</h2>
             <p class="conteo">
               <?php
-              echo count($citasAtendidas);
+              echo $citasAtendidas;
               ?>
             </p>
             <a href="medical_appointments.php" class="read-more">
@@ -74,7 +75,7 @@ $citasAtendidas = $cita->getCitasPorEstadoYColaborador(2, $id);
             <h2>Citas Asignadas</h2>
             <p class="conteo">
               <?php
-              echo count($citasAsignadas);
+              echo $citasAsignadas;
               ?>
             </p>
             <a href="medical_appointments.php" class="read-more">
@@ -98,7 +99,7 @@ $citasAtendidas = $cita->getCitasPorEstadoYColaborador(2, $id);
             <h2>Citas Canceladas</h2>
             <p class="conteo">
               <?php
-              echo count($citasCanceladas);
+              echo $citasCanceladas;
               ?>
             </p>
             <a href="medical_appointments.php" class="read-more">

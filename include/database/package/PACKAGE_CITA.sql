@@ -1,5 +1,12 @@
+--Drop PACKAGE P_CITA;
+
+--CITA
+--#########################################################################################################
+
 CREATE OR REPLACE PACKAGE P_CITA
 AS
+--------------------- SP ---------------------
+--SP1
 PROCEDURE getMascotasCliente(
     p_IDCLIENTE IN MASCOTA.IDCLIENTE%TYPE,
     P_IDMASCOTA out MASCOTA.IDMASCOTA%TYPE,
@@ -9,14 +16,17 @@ PROCEDURE getMascotasCliente(
     p_IDTIPOMASCOTA OUT MASCOTA.IDTIPOMASCOTA%TYPE,
     p_resultado OUT NUMBER
 );
+--SP2
 PROCEDURE getServicios(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
 );
+--SP3
 PROCEDURE getEstados(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
 );
+--SP4
 PROCEDURE getMedicosPorServicio(
     p_IDSERVICIO IN COLABORADORSERVICIO.IDSERVICIO%TYPE,
     P_idColaborador OUT COLABORADOR.IDCOLABORADOR%TYPE,
@@ -25,6 +35,7 @@ PROCEDURE getMedicosPorServicio(
     p_apellido2 OUT COLABORADOR.APELLIDO2%TYPE,
     p_resultado OUT NUMBER 
 );
+--SP5
 PROCEDURE insertCita(
  P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
  P_IDMASCOTA IN CITAS.IDMASCOTA%TYPE,
@@ -34,6 +45,7 @@ PROCEDURE insertCita(
  P_IDESTADO IN CITAS.IDESTADO%TYPE,
  P_RESULTADO OUT NUMBER
 );
+--SP6
 PROCEDURE updateCita(
  P_IDCITA IN CITAS.IDCITA%TYPE,
  P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
@@ -49,69 +61,95 @@ P_IDCITA IN CITAS.IDCITA%TYPE,
 P_IDESTADO IN CITAS.IDESTADO%TYPE,
 P_RESULTADO OUT NUMBER
 );
+--SP7
 PROCEDURE insertAsignacionCita(
 P_IDCITA IN ASIGNACIONCITAS.IDCITA%TYPE,
 P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
 P_RESULTADO OUT NUMBER
 );
+--SP8
 PROCEDURE insertHistorialMedico(
 P_DETALLECITA IN HISTORIALMEDICO.DETALLECITA%TYPE,
-P_COSTO IN HISTORIALMEDICO.COSTO%TYPE,
+P_COSTE IN HISTORIALMEDICO.COSTE%TYPE,
 P_IDMASCOTA IN HISTORIALMEDICO.IDMASCOTA%TYPE,
 P_IDCOLABORADOR IN HISTORIALMEDICO.IDCOLABORADOR%TYPE,
 P_IDCITA IN HISTORIALMEDICO.IDCITA%TYPE,
 P_RESULTADO OUT NUMBER
 );
+--SP9
 PROCEDURE updateAsignacionCita(
 P_IDASIGNACION IN ASIGNACIONCITAS.IDASIGNACIONCITA%TYPE,
 P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
 P_RESULTADO OUT NUMBER
 );
+--SP10
 PROCEDURE getDetalleCitaMedico (
     P_IDCOLABORADOR IN NUMBER,
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
 );
+--SP11
 PROCEDURE getAllDetalleCitaMedico(
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
 );
+--SP12
 PROCEDURE getCitaMedica(
     P_IDCITA IN NUMBER,
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
 );
+--SP13
 PROCEDURE getHistorialMedico(
     P_IDCITA IN NUMBER,
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
 );
+--SP14
 PROCEDURE getAllHistorialMedico(
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
 );
+--SP15
 PROCEDURE getCitasCliente(
 P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
 P_RESULTADO OUT NUMBER,
 P_CITASCLIENTE OUT SYS_REFCURSOR
 );
+--SP16
 PROCEDURE getCitasPorEstado(
 P_IDESTADO IN CITAS.IDESTADO%TYPE,
 P_RESULTADO OUT NUMBER,
 P_CITAS OUT SYS_REFCURSOR
 );
+--SP17
 PROCEDURE getCitasPorEstadoYColaborador(
  P_IDESTADO IN CITAS.IDESTADO%TYPE,
  P_IDCOLABORADOR IN COLABORADOR.IDCOLABORADOR%TYPE,
  P_RESULTADO OUT NUMBER,
  P_CITAS OUT SYS_REFCURSOR
 );
+--SP18
+PROCEDURE GetHorariosDisponibles(
+    p_fecha IN DATE,
+    p_medicoId IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP19
+PROCEDURE GetHorariosCitas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
 
 END P_CITA;
 
+--#########################################################################################################
+
 create or replace PACKAGE BODY  P_CITA 
 AS
----------------
+
+--SP1----------------------------------------------------------------------------
 PROCEDURE getMascotasCliente(
     p_IDCLIENTE IN MASCOTA.IDCLIENTE%TYPE,
     P_IDMASCOTA out MASCOTA.IDMASCOTA%TYPE,
@@ -129,7 +167,7 @@ FROM MASCOTA WHERE idCliente = p_IDCLIENTE;
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -139,9 +177,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-
----------------
-
+--SP2----------------------------------------------------------------------------
 PROCEDURE getServicios(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
@@ -155,12 +191,11 @@ BEGIN
 
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        p_resultado := 0; -- No se encontró
+        p_resultado := 0; -- No se encontrï¿½
     WHEN OTHERS THEN
         p_resultado := 9; -- Error
 END;
-
----------------
+--SP3----------------------------------------------------------------------------
 PROCEDURE getEstados(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
@@ -174,12 +209,11 @@ BEGIN
 
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        p_resultado := 0; -- No se encontró
+        p_resultado := 0; -- No se encontrï¿½
     WHEN OTHERS THEN
         p_resultado := 9; -- Error
 END;
-
----------------------
+--SP4----------------------------------------------------------------------------
 PROCEDURE getMedicosPorServicio(
     p_IDSERVICIO IN COLABORADORSERVICIO.IDSERVICIO%TYPE,
     P_idColaborador OUT COLABORADOR.IDCOLABORADOR%TYPE,
@@ -198,7 +232,7 @@ SELECT c.idColaborador, c.nombre, c.apellido1, c.apellido2
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -208,8 +242,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-
----------------------
+--SP5----------------------------------------------------------------------------
 PROCEDURE insertCita(
  P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
  P_IDMASCOTA IN CITAS.IDMASCOTA%TYPE,
@@ -226,7 +259,7 @@ BEGIN
   p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- Exito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -235,9 +268,8 @@ EXCEPTION
     WHEN OTHERS THEN
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END ;
-
------------------------
+END;
+--SP5----------------------------------------------------------------------------
 PROCEDURE updateCita(
  P_IDCITA IN CITAS.IDCITA%TYPE,
  P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
@@ -262,7 +294,7 @@ BEGIN
  p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -272,8 +304,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END ;
-
------------------------------
+--SP6----------------------------------------------------------------------------
 PROCEDURE updateEstadoCita(
 P_IDCITA IN CITAS.IDCITA%TYPE,
 P_IDESTADO IN CITAS.IDESTADO%TYPE,
@@ -285,7 +316,7 @@ UPDATE CITAS SET IDESTADO = P_IDESTADO WHERE IDCITA = P_IDCITA;
  p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -296,8 +327,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 
 END;
-
------------------------
+--SP7----------------------------------------------------------------------------
 PROCEDURE insertAsignacionCita(
 P_IDCITA IN ASIGNACIONCITAS.IDCITA%TYPE,
 P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
@@ -309,7 +339,7 @@ INSERT INTO ASIGNACIONCITAS (IDCITA, IDCOLABORADOR) VALUES (P_IDCITA,P_IDCOLABOR
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -319,24 +349,23 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-
--------------------------
+--SP8----------------------------------------------------------------------------
 PROCEDURE insertHistorialMedico(
 P_DETALLECITA IN HISTORIALMEDICO.DETALLECITA%TYPE,
-P_COSTO IN HISTORIALMEDICO.COSTO%TYPE,
+P_COSTE IN HISTORIALMEDICO.COSTE%TYPE,
 P_IDMASCOTA IN HISTORIALMEDICO.IDMASCOTA%TYPE,
 P_IDCOLABORADOR IN HISTORIALMEDICO.IDCOLABORADOR%TYPE,
 P_IDCITA IN HISTORIALMEDICO.IDCITA%TYPE,
 P_RESULTADO OUT NUMBER
 )AS
 BEGIN
-INSERT into historialmedico (detalleCita,costo,idMascota,idColaborador,idCita) 
-VALUES (P_DETALLECITA, P_COSTO, P_IDMASCOTA, P_IDCOLABORADOR, P_IDCITA);
+INSERT into historialmedico (detalleCita,coste,idMascota,idColaborador,idCita) 
+VALUES (P_DETALLECITA, P_COSTE, P_IDMASCOTA, P_IDCOLABORADOR, P_IDCITA);
 
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -346,8 +375,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-
-------------------------
+--SP9----------------------------------------------------------------------------
 PROCEDURE updateAsignacionCita(
 P_IDASIGNACION IN ASIGNACIONCITAS.IDASIGNACIONCITA%TYPE,
 P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
@@ -359,7 +387,7 @@ UPDATE asignacioncitas SET idColaborador = P_IDCOLABORADOR WHERE idasignacionCit
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -370,8 +398,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 
 END;
-
--------------------------------------
+--SP10----------------------------------------------------------------------------
 PROCEDURE getDetalleCitaMedico (
     P_IDCOLABORADOR IN NUMBER,
     P_RESULTADO OUT NUMBER,
@@ -412,7 +439,7 @@ BEGIN
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -424,8 +451,7 @@ EXCEPTION
     
     
 END getDetalleCitaMedico;
-
------------------------------
+--SP11----------------------------------------------------------------------------
 PROCEDURE getAllDetalleCitaMedico(
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
@@ -464,7 +490,7 @@ BEGIN
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -474,9 +500,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM); 
 END;
-
---------------------------------------
-
+--SP12----------------------------------------------------------------------------
 PROCEDURE getCitaMedica(
     P_IDCITA IN NUMBER,
     P_RESULTADO OUT NUMBER,
@@ -517,7 +541,7 @@ BEGIN
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -527,9 +551,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);   
 END;
-
----------------------------------
-
+--SP13----------------------------------------------------------------------------
 PROCEDURE getHistorialMedico(
     P_IDCITA IN NUMBER,
     P_RESULTADO OUT NUMBER,
@@ -541,7 +563,7 @@ BEGIN
     SELECT 
     H.IDHMEDICO,
     H.DETALLECITA,
-    H.COSTO,
+    H.COSTE,
     H.IDMASCOTA,
     H.IDCOLABORADOR,
     H.IDCITA,
@@ -565,7 +587,7 @@ BEGIN
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -576,10 +598,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM); 
 
 END;
-
-
------------------------------------
-
+--SP14----------------------------------------------------------------------------
 PROCEDURE getAllHistorialMedico(
     P_RESULTADO OUT NUMBER,
     P_CITAS OUT SYS_REFCURSOR
@@ -590,7 +609,7 @@ BEGIN
     SELECT 
     H.IDHMEDICO,
     H.DETALLECITA,
-    H.COSTO,
+    H.COSTE,
     H.IDMASCOTA,
     H.IDCOLABORADOR,
     H.IDCITA,
@@ -613,7 +632,7 @@ BEGIN
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -623,9 +642,7 @@ EXCEPTION
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM); 
 END;
-
-----------------------------------------
-
+--SP15----------------------------------------------------------------------------
 PROCEDURE getCitasCliente(
 P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
 P_RESULTADO OUT NUMBER,
@@ -656,7 +673,7 @@ WHERE c.idCliente = P_IDCLIENTE;
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -667,9 +684,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);   
 
 END getCitasCliente;
-
----------------------------------------
-
+--SP16----------------------------------------------------------------------------
 PROCEDURE getCitasPorEstado(
 P_IDESTADO IN CITAS.IDESTADO%TYPE,
 P_RESULTADO OUT NUMBER,
@@ -698,7 +713,7 @@ e.estado AS nombreEstado
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -709,9 +724,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);                    
                     
 END getCitasPorEstado;
-
-
---------------------
+--SP17----------------------------------------------------------------------------
 PROCEDURE getCitasPorEstadoYColaborador(
  P_IDESTADO IN CITAS.IDESTADO%TYPE,
  P_IDCOLABORADOR IN COLABORADOR.IDCOLABORADOR%TYPE,
@@ -740,7 +753,7 @@ e.estado AS nombreEstado
 p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
 
     IF p_resultado = 0 THEN
-        p_resultado := 0; -- Éxito
+        p_resultado := 0; -- ï¿½xito
     ELSE
         p_resultado := SQLCODE; -- Otro estado
     END IF;
@@ -751,11 +764,50 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);                  
 
             
-END getCitasPorEstadoYColaborador;
+END;
+--SP18----------------------------------------------------------------------------
+PROCEDURE GetHorariosDisponibles(
+    p_fecha IN DATE,
+    p_medicoId IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT hc.idHorario, hc.horaInicio, hc.horaFin
+        FROM horariocitas hc
+        LEFT JOIN citas c ON hc.idHorario = c.idHorario AND c.fecha = p_fecha AND c.idestado != 2
+        LEFT JOIN asignacioncitas ac ON c.idCita = ac.idcita
+        WHERE c.idCita IS NULL OR (ac.idColaborador != p_medicoId OR ac.idColaborador IS NULL)
+        ORDER BY hc.horaInicio;
 
+    p_resultado := 0; -- Ã‰xito
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 1; -- No se encontraron datos
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+END;
+--SP19----------------------------------------------------------------------------
+PROCEDURE GetHorariosCitas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT idHorario, horaInicio, horaFin
+        FROM horariocitas;
 
+    p_resultado := 0; -- Ã‰xito
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 1; -- No se encontraron datos
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+END;
+--FIN SP----------------------------------------------------------------------------
 END P_CITA;
-
+--#########################################################################################################
 
 
 

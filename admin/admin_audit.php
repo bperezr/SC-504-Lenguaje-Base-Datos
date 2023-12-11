@@ -17,10 +17,14 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 require_once '../include/database/db_auditoria.php';
 $auditoria = new Auditoria();
 
-$resultado = $auditoria->getAuditoriasCitas();
+$resultado = $auditoria->getAuditoriasCitasDesdeVista();
 $datosAuditoria = $resultado['datos'];
 $resultadoSP = $resultado['resultado'];
 
+/* echo "<pre>";
+print_r($datosAuditoria);
+echo "</pre>";
+ */
 $hayResultados = true;
 
 if (isset($_GET['search'])) {
@@ -88,6 +92,9 @@ if (isset($_GET['search'])) {
                     <tr>
                         <th>Fecha de Modificación</th>
                         <th>ID Cita</th>
+                        <th>Cliente de la Cita</th>
+                        <th>Mascota</th>
+                        <th>Servicio</th>
                         <th>Modificador</th>
                         <th>Nuevo Estado</th>
                     </tr>
@@ -96,16 +103,29 @@ if (isset($_GET['search'])) {
                     <?php foreach ($datosAuditoria as $auditoria): ?>
                         <tr>
                             <td>
-                                <?php echo $auditoria['FECHAMODIFICACION']; ?>
+                                <?php
+                                $fecha = new DateTime($auditoria['Fecha']);
+                                $fechaFormateada = $fecha->format('d/m/y H:i:s');
+                                echo $fechaFormateada;
+                                ?>
                             </td>
                             <td>
-                                <?php echo $auditoria['IDCITA']; ?>
+                                <?php echo $auditoria['IDCita']; ?>
                             </td>
                             <td>
-                                <?php echo $auditoria['MODIFICADOR']; ?>
+                                <?php echo $auditoria['Cliente']; ?>
                             </td>
                             <td>
-                                <?php echo $auditoria['NUEVOESTADO']; ?>
+                                <?php echo $auditoria['Mascota']; ?>
+                            </td>
+                            <td>
+                                <?php echo $auditoria['Servicio']; ?>
+                            </td>
+                            <td>
+                                <?php echo $auditoria['Modificador']; ?>
+                            </td>
+                            <td>
+                                <?php echo $auditoria['Estado']; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

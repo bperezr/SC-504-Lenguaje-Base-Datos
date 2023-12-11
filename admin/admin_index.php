@@ -2,7 +2,8 @@
 session_start();
 
 require_once '../include/database/db_config.php';
-require_once '../include/database/db_cita.php';
+//require_once '../include/database/db_cita.php';
+require_once '../include/database/db_contador.php';
 
 if (isset($_SESSION['usuario'])) {
   $usuario = $_SESSION['usuario'];
@@ -17,11 +18,11 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 }
 
 
-$cita = new Cita();
-$citasCanceladas = $cita->getCitasPorEstado(3);
-$citasAsignadas = $cita->getCitasPorEstado(1);
-$citasAtendidas = $cita->getCitasPorEstado(2);
+$contador = new Contador();
 
+$citasCanceladas = $contador->contarCitasCanceladas();
+$citasAsignadas = $contador->contarCitasAsignadas();
+$citasAtendidas = $contador->contarCitasAtendidas();
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +49,7 @@ $citasAtendidas = $cita->getCitasPorEstado(2);
             <h2>Citas Atendidas</h2>
             <p class="conteo">
               <?php
-              echo count($citasAtendidas);
+              echo $citasAtendidas;
               ?>
             </p>
             <a href="admin_citas.php" class="read-more">
@@ -72,7 +73,7 @@ $citasAtendidas = $cita->getCitasPorEstado(2);
             <h2>Citas Asignadas</h2>
             <p class="conteo">
               <?php
-              echo count($citasAsignadas);
+              echo $citasAsignadas;
               ?>
             </p>
             <a href="admin_citas.php" class="read-more">
@@ -96,7 +97,7 @@ $citasAtendidas = $cita->getCitasPorEstado(2);
             <h2>Citas Canceladas</h2>
             <p class="conteo">
               <?php
-              echo count($citasCanceladas);
+              echo $citasCanceladas;
               ?>
             </p>
             <a href="admin_citas.php" class="read-more">
