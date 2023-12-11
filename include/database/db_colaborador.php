@@ -260,16 +260,30 @@ public function verificarCorreoExistente($correo)
 
     public function getMedicosPorServicio($idServicio)
     {
-        $query = "SELECT c.idColaborador, c.nombre, c.apellido1, c.apellido2
-                FROM colaborador c
-                INNER JOIN serviciomedico sm ON c.idColaborador = sm.idColaborador
-                WHERE sm.idServicio = :idServicio";
+        $conn = $this->db;
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idServicio', $idServicio, PDO::PARAM_INT);
-        $stmt->execute();
+        $stmt = oci_parse($conn, "BEGIN P_COLABORADOR.getMedicosPorServicio(:p_idServicio, :p_cursor, :p_resultado); END;");
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
+        $p_cursor = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $medicosServicios = [];
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($medicosServicios, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return ['datos' => $medicosServicios, 'resultado' => $p_resultado];
     }
 
     /* -----------------Login  ----------------- */

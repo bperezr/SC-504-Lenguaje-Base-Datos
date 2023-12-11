@@ -10,147 +10,242 @@ class Cita
         $this->connectDB();
     }
 
-    /*public function connectDB()
-    {
-        global $host, $port, $user, $pass, $dbname;
-
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-        try {
-            $this->db = new PDO($dsn, $user, $pass);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos: ' . $e->getMessage());
-        }
-    }*/
-
     public function connectDB()
     {
-        global $host, $user, $pass , $port, $sid;
+        global $host, $user, $pass, $port, $sid;
 
-        try {
-            $this->db = new PDO("oci:dbname=//$host:$port/$sid", $user, $pass );
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Error al conectar a la base de datos Oracle: ' . $e->getMessage());
+        $connection_string = "//" . $host . ":" . $port . "/" . $sid;
+        $this->db = oci_connect($user, $pass, $connection_string, 'AL32UTF8');
+
+        if (!$this->db) {
+            $e = oci_error();
+            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
-}
-
+    }
 
     public function getMascotasCliente($idCliente)
     {
-        $sql = "SELECT * from mascota where idCliente = :idCliente";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':idCliente', $idCliente, PDO::PARAM_INT);
-        $stmt->execute();
-        $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $mascotas;
+        $stmt = oci_parse($this->db,"BEGIN P_CITA.getMascotasCliente(:p_IDCLIENTE, :P_IDMASCOTA, :p_NOMBRE, :p_DESCRIPCION, :p_IMAGEN, :p_IDTIPOMASCOTA, :p_resultado);END;");
+    
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
+        $p_idMascota = 0;
+        $p_nombre = '';
+        $p_descripcion = '';
+        $p_imagen = '';
+        $p_idTipoMascota = 0;
+        $p_resultado =0;
+
+        oci_bind_by_name($stmt, ":p_idMascota", $p_idMascota,-1,SQLT_INT);
+        oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
+        oci_bind_by_name($stmt, ":p_descripcion", $p_descripcion, 400);
+        oci_bind_by_name($stmt, ":p_imagen", $p_imagen, 400);
+        oci_bind_by_name($stmt, ":p_idTipoMascota", $p_idTipoMascota, 200);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $mascota = array();
+        if ($p_resultado == 0) {
+            $mascota = array(
+                'idMascota' => $p_idMascota,
+                'nombre' => $p_nombre,
+                'descripcion' => $p_descripcion,
+                'imagen' => $p_imagen,
+                'idTipoMascota' => $p_idTipoMascota
+            );
+        }
+
+        return array('datos' => $mascota, 'resultado' => $p_resultado);
     }
 
     public function getServicios()
     {
-        $query = "SELECT * FROM servicios";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.getServicios(:p_cursor, :p_resultado); END;");
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $servicios = array();
+
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($servicios, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $servicios, 'resultado' => $p_resultado);
+
     }
 
     public function getEstados()
     {
-        $query = "SELECT * FROM estado";
-        $stmt = $this->db->query($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.getEstados(:p_cursor, :p_resultado); END;");
+        $p_cursor = oci_new_cursor($this->db);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $estados = array();
+
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($estados, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $estados, 'resultado' => $p_resultado);
     }
 
     public function getMedicosPorServicio($idServicio)
     {
-        $query = "SELECT c.idColaborador, c.nombre, c.apellido1, c.apellido2
-            FROM colaborador c
-            INNER JOIN colaboradorservicio cs ON c.idColaborador = cs.idColaborador
-            WHERE cs.idServicio = :idServicio";
+        $stmt = oci_parse($this->db,"BEGIN P_CITA.getMedicosPorServicio(:p_idServicio, :p_idColaborador, :p_NOMBRE, :p_apellido1, :p_apellido2, :p_resultado);END;");
+    
+        oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
+        $p_idColaborador = 0;
+        $p_nombre = '';
+        $p_apellido1 = '';
+        $p_apellido2 = '';
+        $p_resultado =0;
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idServicio', $idServicio, PDO::PARAM_INT);
-        $stmt->execute();
+        oci_bind_by_name($stmt, ":p_idColaborador", $p_idColaborador,-1,SQLT_INT);
+        oci_bind_by_name($stmt, ":p_nombre", $p_nombre, 200);
+        oci_bind_by_name($stmt, ":p_apellido1", $p_apellido1, 50);
+        oci_bind_by_name($stmt, ":p_apellido2", $p_apellido2, 50);
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        oci_execute($stmt);
+
+        $medicos = array();
+        if ($p_resultado == 0) {
+            $medicos = array(
+                'idColaborador' => $p_idColaborador,
+                'nombre' => $p_nombre,
+                'apellido1' => $p_apellido1,
+                'apellido2' => $p_apellido2
+            );
+        }
+
+        return array('datos' => $medicos, 'resultado' => $p_resultado);
     }
 
-    public function insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario)
+    public function insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario, $idEstado)
     {
-        $query = "INSERT INTO citas (idCliente, idMascota, idServicio, fecha, idHorario, idestado)
-            VALUES (:idCliente, :idMascota, :idServicio, :fecha, :idHorario, :idestado)";
-        $stmt = $this->db->prepare($query);
-        $idestado = 1;
-        $stmt->bindValue(':idCliente', $idCliente, PDO::PARAM_INT);
-        $stmt->bindValue(':idMascota', $idMascota, PDO::PARAM_INT);
-        $stmt->bindValue(':idServicio', $idServicio, PDO::PARAM_INT);
-        $stmt->bindValue(':fecha', $fecha, PDO::PARAM_STR);
-        $stmt->bindValue(':idHorario', $idHorario, PDO::PARAM_INT);
-        $stmt->bindValue(':idestado', $idestado, PDO::PARAM_INT);
-        return $stmt->execute();
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.insertCita(:p_idCliente, :p_idMascota, :p_idServicio, :p_fecha :p_idHorario, p_idEstado, :p_resultado); END;");
+        
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
+        oci_bind_by_name($stmt, ":p_idMascota", $idMascota);
+        oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
+        oci_bind_by_name($stmt, ":p_fecha", $fecha);
+        oci_bind_by_name($stmt, ":p_idHorario", $idHorario);
+        oci_bind_by_name($stmt, ":p_idEstado", $idEstado);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
 
-    public function updateCita($idCita, $idCliente, $idMascota, $idServicio, $fecha, $idHorario)
+    public function updateCita($idCita, $idCliente, $idMascota, $idServicio, $fecha, $idHorario, $idEstado)
     {
-        $query = "UPDATE citas SET idCliente = :idCliente, idMascota = :idMascota, idServicio = :idServicio, fecha = :fecha, idHorario = :idHorario WHERE idCita = :idCita";
-        $stmt = $this->db->prepare($query);
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.updateCita(:p_idCita, :p_idCliente, :p_idMascota, :p_idServicio, :p_fecha :p_idHorario, :p_idEstado, :p_resultado); END;");
+        
+        oci_bind_by_name($stmt, ":p_idCita", $idCita);
+        oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
+        oci_bind_by_name($stmt, ":p_idMascota", $idMascota);
+        oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
+        oci_bind_by_name($stmt, ":p_fecha", $fecha);
+        oci_bind_by_name($stmt, ":p_idHorario", $idHorario);
+        oci_bind_by_name($stmt, ":p_idEstado", $idEstado);
 
-        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
-        $stmt->bindValue(':idCliente', $idCliente, PDO::PARAM_INT);
-        $stmt->bindValue(':idMascota', $idMascota, PDO::PARAM_INT);
-        $stmt->bindValue(':idServicio', $idServicio, PDO::PARAM_INT);
-        $stmt->bindValue(':fecha', $fecha, PDO::PARAM_STR);
-        $stmt->bindValue(':idHorario', $idHorario, PDO::PARAM_INT);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
-        return $stmt->execute();
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
 
-    public function updateEstadoCita($idCita, $idEstado)
+    public function updateEstadoCita($idCita, $idEstado)    
     {
-        $query = "UPDATE citas SET idestado = :idEstado WHERE idCita = :idCita";
-        $stmt = $this->db->prepare($query);
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.updateEstadoCita(:p_idCita, :p_idEstado); END; ");
 
-        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
-        $stmt->bindValue(':idEstado', $idEstado, PDO::PARAM_INT);
+        oci_bind_by_name($stmt, ":p_idCita", $idCita);
+        oci_bind_by_name($stmt, ":p_idEstado", $idEstado);
 
-        return $stmt->execute();
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
 
     public function insertAsignacionCita($idCita, $idColaborador)
-    {
-        $query = "INSERT INTO asignacioncitas (idcita, idColaborador) VALUES (:idCita, :idColaborador)";
-        $stmt = $this->db->prepare($query);
+    {      
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.insertAsignacionCita(:p_idCita, :p_idColaborador, :p_resultado); END;");
+        
+        oci_bind_by_name($stmt, ":p_idCita", $idCita);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
 
-        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
-        $stmt->bindValue(':idColaborador', $idColaborador, PDO::PARAM_INT);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
 
-        return $stmt->execute();
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
 
+    public function updateAsignacionCita($idAsignacionCita, $idCita, $idColaborador)
+    {
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.updateAsignacionCita(:p_idAsignacionCita,:p_idCita, :p_idColaborador, :p_resultado); END;");
+        
+        oci_bind_by_name($stmt, ":p_idAsignacionCita", $idAsignacionCita);
+        oci_bind_by_name($stmt, ":p_idCita", $idCita);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
+    }
 
     public function insertHistorialMedico($detalleCita, $costo, $idMascota, $idColaborador, $idCita)
-    {
-        $query = "INSERT into historialmedico (detalleCita,costo,idMascota,idColaborador,idCita) VALUES (:detalleCita, :costo, :idMascota, :idColaborador, :idCita)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':detalleCita', $detalleCita, PDO::PARAM_STR);
-        $stmt->bindValue(':costo', $costo, PDO::PARAM_INT);
-        $stmt->bindValue(':idMascota', $idMascota, PDO::PARAM_INT);
-        $stmt->bindValue(':idColaborador', $idColaborador, PDO::PARAM_INT);
-        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
+    {        
+        $stmt = oci_parse($this->db, "BEGIN P_CITA.insertHistorialMedico(:p_detalleCita, :p_costo, :p_idMascota, :p_idColaborador, :p_idCita, :p_resultado); END;");
+        
+        oci_bind_by_name($stmt, ":p_detalleCita", $detalleCita);
+        oci_bind_by_name($stmt, ":p_costo", $costo);
+        oci_bind_by_name($stmt, ":p_idMascota", $idMascota);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+        oci_bind_by_name($stmt, ":p_idCita", $idCita);
 
-        return $stmt->execute();
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
     }
-
-    public function updateAsignacionCita($idasignacionCita, $idCita, $idColaborador)
-    {
-        $query = "UPDATE asignacioncitas SET idcita = :idCita, idColaborador = :idColaborador WHERE idasignacionCita = :idasignacionCita";
-        $stmt = $this->db->prepare($query);
-
-        $stmt->bindValue(':idasignacionCita', $idasignacionCita, PDO::PARAM_INT);
-        $stmt->bindValue(':idCita', $idCita, PDO::PARAM_INT);
-        $stmt->bindValue(':idColaborador', $idColaborador, PDO::PARAM_INT);
-
-        return $stmt->execute();
-    }
+    
 
     public function getLastInsertId()
     {
@@ -158,23 +253,31 @@ class Cita
     }
 
     public function getDetalleCitaMedico($idColaborador)
-    {
-        $query = "select ac.idcita,ac.idColaborador,m.idMascota,col.nombre as nombreMedico, m.nombre as nombreMascota, m.descripcion, cli.nombre, 
-      cli.apellido1, cli.apellido2, cli.correo, cli.telefono, s.servicio, c.fecha, c.idestado, hc.horaInicio, hc.horaFin, e.estado  
-      from asignacioncitas AS ac 
-      join citas as c on ac.idcita = c.idcita
-      join colaborador as col on ac.idColaborador = col.idColaborador
-      join mascota as m on c.idMascota = m.idmascota 
-      join cliente as cli on c.idCliente = cli.idCliente
-      join servicios as s on c.idServicio = s.idServicio
-      join horariocitas as hc on c.idHorario = hc.idHorario
-      join estado as e on c.idestado = e.idestado WHERE ac.idColaborador = :idColaborador order by c.fecha desc";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':idColaborador', $idColaborador, PDO::PARAM_INT);
-        $stmt->execute();
+    {    
+        $conn = $this->db;
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = oci_parse($conn, "BEGIN P_CITAS.getDetalleCitaMedico(:p_idColaborador, :p_cursor, :p_resultado); END;");
 
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+        $p_cursor = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        $detalleCita = [];
+        if ($p_resultado == 0) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($detalleCita, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return ['datos' => $detalleCita, 'resultado' => $p_resultado];
     }
 
     public function getAllDetalleCitaMedico()

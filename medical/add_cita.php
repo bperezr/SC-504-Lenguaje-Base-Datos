@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
@@ -16,11 +17,51 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
 
 require_once '../include/database/db_cita.php';
 require_once '../include/database/db_cliente.php';
+require_once '../include/database/db_mascota.php';
+require_once '../include/database/db_servicio.php';
+require_once '../include/database/db_colaborador.php';
+
 $cita = new Cita();
 $cliente = new Cliente();
+$mascotas = new Mascota();
+$servicio = new Servicio();
+$colaborador = new Colaborador();
 
-$mascotasCliente = $cita->getMascotasCliente($id);
-$servicios = $cita->getServicios();
+$servicios = $servicio->getServicios();
+$serviciosData = $servicios['datos'];
+
+
+if (isset($_GET['idServicio'])) {
+    $idServicio = $_GET['idServicio'];
+    
+    // Crear una instancia de tu clase P_COLABORADOR (ajusta el nombre de la clase según tu implementación)
+
+    // Llamar a la función getMedicosPorServicio para obtener los datos
+    $resultado = $colaborador->getMedicosPorServicio($idServicio);
+
+    // Devolver los datos en formato JSON
+    header('Content-Type: application/json');
+    echo json_encode($resultado['datos']);
+} else {
+    // Manejar el caso en que no se proporciona el parámetro esperado
+    echo 'Error: Falta el parámetro idServicio';
+}
+
+
+
+/* echo "<pre>";
+print_r($servicios);
+echo "</pre>";
+ */
+
+if ($resultadoSP == 0 && !empty($mascotaData)) {
+    $hayResultados = true;
+} else {
+    $mensajeError = "No se encontraron mascotas para este cliente.";
+    $hayResultados = false;
+}
+
+
 $correoCliente = '';
 
 
@@ -33,20 +74,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idHorario = $_POST['horario'];
         $idColaborador = $_POST['colaborador'];
 
-        $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
+        $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario,1);
                     $idCita = $cita->getLastInsertId();
                     $idColaborador = $_POST['colaborador'];
                     $cita->insertAsignacionCita($idCita, $idColaborador);
 
                     header('Location: medical_appointments.php');
-                    exit;
-
-/*         echo "ID Cliente: $idCliente<br>";
-        echo "ID Mascota: $idMascota<br>";
-        echo "ID Servicio: $idServicio<br>";
-        echo "Fecha: $fecha<br>";
-        echo "ID Horario: $idHorario<br>";
-        echo "ID Colaborador: $idColaborador<br>"; */
+                    exit;     
     }
 }
 
@@ -75,11 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $correoCliente = $_POST['correoCliente'];
 
                 $cliente = $cliente->obtenerClientePorCorreo($correoCliente);
+                $clienteData = $cliente['datos'];
 
-                if ($cliente) {
+                if ($clienteData) {
                     echo "<p>Cliente encontrado:</p>";
-                    echo "<p>ID de Cliente: " . $cliente['idCliente'] . "</p>";
-                    echo "<p>Nombre: " . $cliente['nombre'] . " " . $cliente['apellido1'] . " " . $cliente['apellido2'] . "</p>";
+                    echo "<p>ID de Cliente: " . $clienteData['idCliente'] . "</p>";
+                    echo "<p>Nombre: " . $clienteData['nombre'] . " " . $clienteData['apellido1'] . " " . $clienteData['apellido2'] . "</p>";
                 } else {
                     echo "<p>Cliente no encontrado.</p>";
                 }
@@ -89,43 +124,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="correoCliente" id="correoCliente" value="<?php echo $correoCliente; ?>">
             <button type="submit" name="buscarCliente">Buscar</button>
 
-            <input type="hidden" name="idCliente" id="idCliente" value="<?php echo $cliente['idCliente']; ?>">
+            <input type="hidden" name="IDCLIENTE" id="IDCLIENTE" value="<?php echo $clienteData['idCliente']; ?>">
 
             <div class="campo" id="campoMascota">
                 <label for="mascota">Mascota:</label>
-                <select id="mascota" name="mascota">
+                <select id="mascota" name="MASCOTA">
                     <option value="" disabled selected>Seleccione la mascota</option>
                     <?php
-                    if ($cliente) {
-                        $mascotasCliente = $cita->getMascotasCliente($cliente['idCliente']);
+                    if ($clienteData) {
+                        $mascotasCliente = $mascotas->getMascotasPorCliente($clienteData['idCliente']);                      
+                        $mascotaData = $mascotasCliente['datos'];
 
-                        if (!empty($mascotasCliente)) {
-                            foreach ($mascotasCliente as $mascota) {
-                                echo "<option value='" . $mascota['idMascota'] . "'>" . $mascota['nombre'] . "</option>";
+                        if (!empty($mascotaData)) {
+                            foreach ($mascotaData as $mascotasCliente) {                            
+                                echo "<option value='" . $mascotasCliente['IDMASCOTA'] . "'>" . $mascotasCliente['NOMBRE'] . "</option>";
                             }
                         } else {
                             echo "<option value='' disabled>No hay mascotas registradas para este cliente</option>";
                         }
                     }
+
                     ?>
                 </select>
             </div>
 
             <div class="campo">
-                <label for="servicio">Servicio:</label>
-                <select id="servicio" name="servicio">
+                <label for="SERVICIO">Servicio:</label>
+                <select id="SERVICIO" name="SERVICIO">
                     <option value="" disabled selected>Seleccione un servicio</option>
-                    <?php foreach ($servicios as $servicio): ?>
-                        <option value="<?php echo $servicio['idServicio']; ?>"><?php echo $servicio['servicio']; ?>
+                    <?php foreach ($serviciosData as $servicio): ?>
+                        <option value="<?php echo $servicio['IDSERVICIO']; ?>"><?php echo $servicio['SERVICIO']; ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
-            <div class="campo" id="campoMedico" style="display: none;">
+            <div class="campo" id="campoMedico">
                 <label for="colaborador">Médico:</label>
-                <select id="colaborador" name="colaborador">
-                    <option value="" disabled selected>Seleccione un médico</option>
+                <select id="colaborador" name="colaborador">         
+
                 </select>
             </div>
 
@@ -152,93 +189,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Footer -->
     <?php include '../include/template/footer2.php'; ?>
     <!-- JS -->
+
     <script>
-        $(document).ready(function () {
-            $('#servicio').on('change', function () {
-                var selectedServicio = $(this).val();
-                if (selectedServicio !== "") {
-                    $.ajax({
-                        url: '../include/functions/get_medicos.php',
-                        method: 'POST',
-                        data: { servicio: selectedServicio },
-                        dataType: 'json',
-                        success: function (data) {
-                            var selectMedico = $('#colaborador');
-                            selectMedico.empty();
-                            selectMedico.append('<option value="" disabled selected>Seleccione un médico</option>');
-                            $.each(data, function (index, medico) {
-                                selectMedico.append('<option value="' + medico.idColaborador + '">' + medico.nombre + ' ' + medico.apellido1 + '</option>');
-                            });
-                            $('#campoMedico').show();
-                        }
-                    });
-                } else {
-                    $('#campoMedico').hide();
-                }
-            });
-
-
-            $('#servicio').on('change', function () {
-                var selectedServicio = $(this).val();
-                if (selectedServicio !== "") {
-                    $.ajax({
-                        url: '../include/functions/get_medicos.php',
-                        method: 'POST',
-                        data: { servicio: selectedServicio },
-                        dataType: 'json',
-                        success: function (data) {
-                            var selectMedico = $('#colaborador');
-                            selectMedico.empty();
-                            selectMedico.append('<option value="" disabled selected>Seleccione un médico</option>');
-                            $.each(data, function (index, medico) {
-                                selectMedico.append('<option value="' + medico.idColaborador + '">' + medico.nombre + ' ' + medico.apellido1 + '</option>');
-                            });
-                            $('#campoMedico').show();
-                        }
-                    });
-                } else {
-                    $('#campoMedico').hide();
-                }
-            });
-
-            $('#fecha').on('change', function () {
-                var selectedFecha = $(this).val();
-                var selectedMedico = $('#colaborador').val();
-
-                if (selectedFecha && selectedMedico) {
-                    $.ajax({
-                        url: '../include/functions/get_horarios_disponibles.php',
-                        method: 'POST',
-                        data: { fecha: selectedFecha, medico: selectedMedico },
-                        dataType: 'json',
-                        success: function (data) {
-                            var selectHorario = $('#horario');
-                            selectHorario.empty();
-                            selectHorario.append('<option value="" disabled selected>Seleccione un horario</option>');
-                            $.each(data, function (index, horario) {
-                                selectHorario.append('<option value="' + horario.idHorario + '">' + horario.horaInicio + ' - ' + horario.horaFin + '</option>');
-                            });
-                            $('#campoHorario').show();
-                        }
-                    });
-                } else {
-                    $('#campoHorario').hide();
-                }
-            });
-            function validarFecha() {
-                var fechaInput = new Date($('#fecha').val());
-                var diaSemana = fechaInput.getDay();
-                if (diaSemana === 0 || diaSemana === 6) {
-                    fechaInput.setDate(fechaInput.getDate() + (diaSemana === 0 ? 1 : 2));
-                }
-                var fechaMinima = new Date($('#fecha').attr('min'));
-                if (fechaInput < fechaMinima) {
-                    $('#fecha').val(fechaMinima.toISOString().slice(0, 10));
-                }
-            }
-        });
-
-    </script>
+</script>
+    
 </body>
 
 </html>
