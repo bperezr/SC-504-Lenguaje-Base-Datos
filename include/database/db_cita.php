@@ -248,10 +248,10 @@ class Cita
     }
     
 
-    /*  public function getLastInsertId()
+     public function getLastInsertId()
     {
         return $this->db->lastInsertId();
-     } */
+     } 
 
     public function getDetalleCitaMedico($idColaborador)
     {    
