@@ -19,6 +19,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
 $cita = new Cita();
 
 $citaDetalle = $cita->getAllHistorialMedico($id);
+$citaData = $citaDetalle['datos'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {   
     $id= $_POST['idCita'];
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <th>Cliente</th>
                     <th>Mascota</th>                    
                     <th>Fecha</th>   
-                    <th>Detalle Cita</th>
+                    <!-- <th>Detalle Cita</th> -->
                     <th>Costo</th>
                     <th>Información detallada</th>
                     <th></th>
@@ -60,16 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </thead>
             <tbody> 
             <?php
-                foreach ($citaDetalle as $cdetalle) {                
+                foreach ($citaData as $cdetalle) {                
                         echo "<tr>";
-                        echo "<td>" . $cdetalle['idCita'] . "</td>";
-                        echo "<td>" . $cdetalle['nombre'] . " ".  $cdetalle['apellido1'] . " ".  $cdetalle['apellido2'] . "</td>";
-                        echo "<td>" . $cdetalle['nombreMascota'] . "</td>";
-                        echo "<td>" . $cdetalle['fecha'] . "</td>";
-                        echo "<td>" . $cdetalle['detalleCita'] . "</td>";
-                        echo "<td>" . "₡" . $cdetalle['costo'] . "</td>";
+                        echo "<td>" . $cdetalle['IDCITA'] . "</td>";
+                        echo "<td>" . $cdetalle['NOMBRE'] . " ".  $cdetalle['APELLIDO1'] . " ".  $cdetalle['APELLIDO2'] . "</td>";
+                        echo "<td>" . $cdetalle['NOMBREMASCOTA'] . "</td>";
+                        echo "<td>" . $cdetalle['FECHA'] . "</td>";
+                        //echo "<td>" . $cdetalle['DETALLECITA'] . "</td>";
+                        echo "<td>" . "₡" . $cdetalle['COSTO'] . "</td>";
                         echo "<td>";
-                        echo "<a href='citas.php?id=" . $cdetalle['idCita'] . "'class='detalleCita'>Detalle Cita</a>";
+                        echo "<a href='citas.php?id=" . $cdetalle['IDCITA'] . "'class='detalleCita'>Detalle Cita</a>";
                         echo "</td>";
                         echo "</tr>";                   
                 }

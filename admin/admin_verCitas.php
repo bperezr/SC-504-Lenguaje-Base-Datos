@@ -19,8 +19,13 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 $idCita = $_GET['id'];
 $cita = new Cita();
 $citasDetalle = $cita->getCitaMedica($idCita);
+$citaData =$citasDetalle['datos'];
+
+
+
 $estados = $cita->getEstados();
 $historialMedico = $cita->getHistorialMedico($idCita);
+$historialMedicoData = $historialMedico['datos'];
 
 $detalleCita = "";
 $costo = "";
@@ -28,16 +33,16 @@ $idEstado = "";
 $nombreEstado = "";
 
 if ($idCita) {
-    foreach ($historialMedico as $hm) {
-        $detalleCita = $hm['detalleCita'];
-        $costo = $hm['costo'];
+    foreach ($historialMedicoData as $hm) {
+        $detalleCita = $hm['DETALLECITA'];
+        $costo = $hm['COSTO'];
     }
 }
 
 if ($idCita) {
-    foreach ($citasDetalle as $cd) {
-        $idEstado = $cd['idestado'];
-        $nombreEstado = $cd['estado'];
+    foreach ($citaData as $cd) {
+        $idEstado = $cd['IDESTADO'];
+        $nombreEstado = $cd['ESTADO'];
     }
 }
 
@@ -85,18 +90,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <a href="admin_citas.php" class="boton input-text">Atras</a>
                                     </div>
                             <h3 align="center">Detalle de cita</h3>
-                            <?php foreach ($citasDetalle as $citaDetalle): ?>
+                            <?php foreach ($citaData as $citaDetalle): ?>
                                 <div class="dbox w-100 d-flex align-items-start">
                                     <div class="icon d-flex align-items-center justify-content-center">
                                         <span class="fa fa-user"></span>
                                     </div>
                                     <div class="text pl-3">
                                         <p>
-                                            <?php echo $citaDetalle['nombre'] . " " . $citaDetalle['apellido1'] . " " . $citaDetalle['apellido2']; ?>
+                                            <?php echo $citaDetalle['NOMBRE'] . " " . $citaDetalle['APELLIDO1'] . " " . $citaDetalle['APELLIDO2']; ?>
                                         </p>
-                                        <?php echo "Correo: " . $citaDetalle['correo'] ?>
+                                        <?php echo "Correo: " . $citaDetalle['CORREO'] ?>
                                         </p>
-                                        <?php echo "Teléfono: " . $citaDetalle['telefono'] ?>
+                                        <?php echo "Teléfono: " . $citaDetalle['TELEFONO'] ?>
                                         </p>
                                     </div>
                                 </div>
@@ -107,10 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                     <div class="text pl-3">
                                         <p>
-                                            <?php echo "Paciente: " . $citaDetalle['nombreMascota'] ?>
+                                            <?php echo "Paciente: " . $citaDetalle['NOMBREMASCOTA'] ?>
                                         </p>
                                         <p>
-                                            <?php echo "Informacion del paciente: " . $citaDetalle['descripcion'] ?>
+                                            <?php echo "Informacion del paciente: " . $citaDetalle['DESCRIPCION'] ?>
                                         </p>
                                     </div>
                                 </div>
@@ -124,13 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <?php echo "Detalle de la cita: " ?>
                                         </p>
                                         <p>
-                                            <?php echo "Fecha: " . $citaDetalle['fecha'] ?>
+                                            <?php echo "Fecha: " . $citaDetalle['FECHA'] ?>
                                         </p>
                                         <p>
-                                            <?php echo "Hora: " . $citaDetalle['horaInicio'] . " - " . $citaDetalle['horaFin'] ?>
+                                            <?php echo "Hora: " . $citaDetalle['HORAINICIO'] . " - " . $citaDetalle['HORAFIN'] ?>
                                         </p>
                                         <p>
-                                            <?php echo "Servicio: " . $citaDetalle['servicio'] ?>
+                                            <?php echo "Servicio: " . $citaDetalle['SERVICIO'] ?>
                                         </p>
                                     </div>
                                 </div>
@@ -141,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                     <div class="text pl-3">
                                         <p>
-                                            <?php echo "Estado de la cita: " . $citaDetalle['estado'] ?>
+                                            <?php echo "Estado de la cita: " . $citaDetalle['ESTADO'] ?>
                                         </p>
                                     </div>
                                 </div>

@@ -27,26 +27,12 @@ $mascotas = new Mascota();
 $servicio = new Servicio();
 $colaborador = new Colaborador();
 
+
 $servicios = $servicio->getServicios();
-$serviciosData = $servicios['datos'];
+$dServicio = isset($servicios['datos']) ? $servicios['datos'] : [];
 
-
-if (isset($_GET['idServicio'])) {
-    $idServicio = $_GET['idServicio'];
-    
-    // Crear una instancia de tu clase P_COLABORADOR (ajusta el nombre de la clase según tu implementación)
-
-    // Llamar a la función getMedicosPorServicio para obtener los datos
-    $resultado = $colaborador->getMedicosPorServicio($idServicio);
-
-    // Devolver los datos en formato JSON
-    header('Content-Type: application/json');
-    echo json_encode($resultado['datos']);
-} else {
-    // Manejar el caso en que no se proporciona el parámetro esperado
-    echo 'Error: Falta el parámetro idServicio';
-}
-
+$horarioscita = $cita->getHorariosCitas();
+$dHorarioscita = isset($horarioscita['datos']) ? $horarioscita['datos'] : [];
 
 
 /* echo "<pre>";
@@ -54,34 +40,38 @@ print_r($servicios);
 echo "</pre>";
  */
 
-if ($resultadoSP == 0 && !empty($mascotaData)) {
-    $hayResultados = true;
-} else {
-    $mensajeError = "No se encontraron mascotas para este cliente.";
-    $hayResultados = false;
-}
-
-
 $correoCliente = '';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['idCliente'])) {
-        $idCliente = $_POST['idCliente'];
-        $idMascota = $_POST['mascota'];
-        $idServicio = $_POST['servicio'];
+    if (isset($_POST['colaborador'])) {
+        $idCliente = $_POST['IDCLIENTE'];
+        $idMascota = $_POST['MASCOTA'];
+        $idServicio = $_POST['SERVICIO'];
         $fecha = $_POST['fecha'];
         $idHorario = $_POST['horario'];
         $idColaborador = $_POST['colaborador'];
 
-        $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario,1);
-                    $idCita = $cita->getLastInsertId();
-                    $idColaborador = $_POST['colaborador'];
-                    $cita->insertAsignacionCita($idCita, $idColaborador);
+        if($idColaborador){
+            $resultadoInsercion= $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario,1);
 
-                    header('Location: medical_appointments.php');
-                    exit;     
-    }
+            if ($resultadoInsercion === 0) {
+                // Inserción exitosa
+                $_SESSION['mensaje'] = "Cita creada.";
+        
+                header('Location: cita_vista.php');
+                exit;
+            } else {
+                $_SESSION['mensaje'] = "Error al crear la cita.";
+            }
+            
+        }
+            header('Location: medical_appointments.php');
+            exit;       
+
+        }
+
+       
 }
 
 ?>
@@ -150,9 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="campo">
                 <label for="SERVICIO">Servicio:</label>
-                <select id="SERVICIO" name="SERVICIO">
+                <select id="SERVICIO" name="SERVICIO" onchange="cargarMedicos()">
                     <option value="" disabled selected>Seleccione un servicio</option>
-                    <?php foreach ($serviciosData as $servicio): ?>
+                    <?php foreach ($dServicio as $servicio): ?>
                         <option value="<?php echo $servicio['IDSERVICIO']; ?>"><?php echo $servicio['SERVICIO']; ?>
                         </option>
                     <?php endforeach; ?>
@@ -160,10 +150,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="campo" id="campoMedico">
-                <label for="colaborador">Médico:</label>
-                <select id="colaborador" name="colaborador">         
-
-                </select>
+                        <label for="colaborador">Médico:</label>
+                        <select id="colaborador" name="colaborador">
+                            <option value="" disabled selected>Seleccione un médico</option>
+                        </select>
             </div>
 
             <div class="campo">
@@ -173,11 +163,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
             <div class="campo">
-                <label for="horario">Horario:</label>
-                <select id="horario" name="horario">
-                    <option value="" disabled selected>Seleccione un horario</option>
-                </select>
-            </div>
+                        <label for="horario">Horario:</label>
+                        <select id="horario" name="horario">
+                            <option value="" disabled selected>Seleccione un horario</option>
+                            <?php foreach ($dHorarioscita as $horario): ?>
+                                <option value="<?php echo $horario['IDHORARIO']; ?>">
+                                    <?php echo $horario['HORAINICIO']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
             <div class="boton-contacto">
                 <input class="boton input-text" type="submit" value="Enviar" name="nuevaCita">
@@ -191,6 +186,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- JS -->
 
     <script>
+         function cargarMedicos() {
+            var servicioSeleccionado = document.getElementById("SERVICIO").value;
+            var selectMedico = document.getElementById("colaborador");
+            selectMedico.innerHTML = "<option value='' disabled selected>Seleccione un médico</option>";
+
+            if (servicioSeleccionado) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '../include/functions/get_medicos.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        var medicos = JSON.parse(this.responseText);
+                        if (medicos.length > 0) {
+                            medicos.forEach(function (medico) {
+                                var option = document.createElement("option");
+                                option.value = medico.IDCOLABORADOR;
+                                option.text = medico.NOMBRE + ' ' + medico.APELLIDO1;
+                                selectMedico.appendChild(option);
+                            });
+                        } else {
+                            var option = document.createElement("option");
+                            option.value = "";
+                            option.text = "No hay médicos disponibles";
+                            option.disabled = true;
+                            selectMedico.appendChild(option);
+                        }
+                    }
+                };
+                xhr.send('idServicio=' + servicioSeleccionado);
+            }
+        }
 </script>
     
 </body>

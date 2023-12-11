@@ -21,10 +21,7 @@ $resultado = $auditoria->getAuditoriasCitasDesdeVista();
 $datosAuditoria = $resultado['datos'];
 $resultadoSP = $resultado['resultado'];
 
-/* echo "<pre>";
-print_r($datosAuditoria);
-echo "</pre>";
- */
+ 
 $hayResultados = true;
 
 if (isset($_GET['search'])) {
@@ -32,6 +29,8 @@ if (isset($_GET['search'])) {
     $respuesta = $auditoria->buscarAuditoriasCitas($searchTerm);
     $datosAuditoria = $respuesta['datos'];
     $resultado = $respuesta['resultado'];
+
+
 
     if ($resultado == 1) {
         // No se encontraron auditorías de citas
@@ -104,9 +103,9 @@ if (isset($_GET['search'])) {
                         <tr>
                             <td>
                                 <?php
-                                $fecha = new DateTime($auditoria['Fecha']);
-                                $fechaFormateada = $fecha->format('d/m/y H:i:s');
-                                echo $fechaFormateada;
+                               // $fecha = new DateTime($auditoria['Fecha']);
+                                //$fechaFormateada = $fecha->format('d/m/y H:i:s');
+                                echo $auditoria['Fecha'];
                                 ?>
                             </td>
                             <td>

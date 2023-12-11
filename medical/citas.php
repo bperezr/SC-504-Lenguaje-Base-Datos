@@ -19,25 +19,32 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 2) {
 $idCita = $_GET['id'];
 $cita = new Cita();
 $citasDetalle = $cita->getCitaMedica($idCita);
-$estados = $cita->getEstados();
-$historialMedico = $cita->getHistorialMedico($idCita);
+$citaData = $citasDetalle['datos'];
 
-$detalleCita = "";
+
+$estados = $cita->getEstados();
+$estadoData = $estados['datos'];
+
+$historialMedico = $cita->getHistorialMedico($idCita);
+$hmedicodata = $historialMedico['datos'];
+
+
 $costo = "";
 $idEstado = "";
 $nombreEstado="";
+$detalleCita ="";
 
 if($idCita){
-    foreach($historialMedico as $hm){
-        $detalleCita = $hm['detalleCita'];
-        $costo = $hm['costo']; 
+    foreach($hmedicodata as $hm){
+        $detalleCita = $hm['DETALLECITA'];
+        $costo = $hm['COSTO']; 
     }
 }
 
 if($idCita){
-    foreach($citasDetalle as $cd){
-        $idEstado = $cd['idestado'];
-        $nombreEstado = $cd['estado'];
+    foreach($citaData as $cd){
+        $idEstado = $cd['IDESTADO'];
+        $nombreEstado = $cd['ESTADO'];
     }
 }
 
@@ -111,9 +118,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <select type="number" name="idestado" id="idestado">
                                                     <option value="<?php echo $idEstado; ?>"><?php echo $nombreEstado; ?>
                                                         <?php
-                                                        foreach ($estados as $estado) {
-                                                            if($estado["estado"] != $nombreEstado && $estado["estado"] != "Cancelada" ){
-                                                                echo '<option  value="' . $estado["idestado"] . '">' . $estado["estado"] . '</option>';
+                                                        foreach ($estadoData as $estado) {
+                                                            if($estado["ESTADO"] != $nombreEstado && $estado["ESTADO"] != "Cancelada" ){
+                                                                echo '<option  value="' . $estado["IDESTADO"] . '">' . $estado["ESTADO"] . '</option>';
                                                             }
                                                             
                                                         }
@@ -123,12 +130,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
                                             <?php endif ?>
 
-                                            <?php foreach ($citasDetalle as $enviardetalle) : ?>
+                                            <?php foreach ($citaData as $enviardetalle) : ?>
                                                 <div>
                                                     <!-- informacion para enviar en el insert de historial medico -->
-                                                    <input type="hidden" name="idMascota" id="idMascota" value="<?php echo $enviardetalle['idMascota']; ?>">
-                                                    <input type="hidden" name="idColaborador" id="idColaborador" value="<?php echo $enviardetalle['idColaborador']; ?>">
-                                                    <input type="hidden" name="idcita" id="idcita" value="<?php echo $enviardetalle['idcita']; ?>">
+                                                    <input type="hidden" name="idMascota" id="idMascota" value="<?php echo $enviardetalle['IDMASCOTA']; ?>">
+                                                    <input type="hidden" name="idColaborador" id="idColaborador" value="<?php echo $enviardetalle['IDCOLABORADOR']; ?>">
+                                                    <input type="hidden" name="idcita" id="idcita" value="<?php echo $enviardetalle['IDCITA']; ?>">
                                                 </div>
                                             <?php endforeach; ?>
 
@@ -147,15 +154,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="col-lg-4 col-md-5 d-flex align-items-stretch">
                                 <div class="info-wrap bg-primary w-100 p-md-5 p-4">
                                     <h3 align="center">Detalle de cita</h3>
-                                    <?php foreach ($citasDetalle as $citaDetalle) : ?>
+                                    <?php foreach ($citaData as $citaDetalle) : ?>
                                         <div class="dbox w-100 d-flex align-items-start">
                                             <div class="icon d-flex align-items-center justify-content-center">
                                                 <span class="fa fa-user"></span>
                                             </div>
                                             <div class="text pl-3">
-                                                <p><?php echo $citaDetalle['nombre'] . " " . $citaDetalle['apellido1'] . " " . $citaDetalle['apellido2']; ?></p>
-                                                <?php echo "Correo: " . $citaDetalle['correo'] ?></p>
-                                                <?php echo "Teléfono: " . $citaDetalle['telefono'] ?></p>
+                                                <p><?php echo $citaDetalle['NOMBRE'] . " " . $citaDetalle['APELLIDO1'] . " " . $citaDetalle['APELLIDO1']; ?></p>
+                                                <?php echo "Correo: " . $citaDetalle['CORREO'] ?></p>
+                                                <?php echo "Teléfono: " . $citaDetalle['TELEFONO'] ?></p>
                                             </div>
                                         </div>
 
@@ -164,8 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <span class="fa fa-stethoscope"></span>
                                             </div>
                                             <div class="text pl-3">
-                                                <p><?php echo "Paciente: " . $citaDetalle['nombreMascota'] ?></p>
-                                                <p><?php echo "Informacion del paciente: " . $citaDetalle['descripcion'] ?></p>
+                                                <p><?php echo "Paciente: " . $citaDetalle['NOMBREMASCOTA'] ?></p>
+                                                <p><?php echo "Informacion del paciente: " . $citaDetalle['DESCRIPCION'] ?></p>
                                             </div>
                                         </div>
 
@@ -175,9 +182,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
                                             <div class="text pl-3">
                                                 <p><?php echo "Detalle de la cita: " ?></p>
-                                                <p><?php echo "Fecha: " . $citaDetalle['fecha'] ?></p>
-                                                <p><?php echo "Hora: " . $citaDetalle['horaInicio'] . " - " . $citaDetalle['horaFin'] ?></p>
-                                                <p><?php echo "Servicio: " . $citaDetalle['servicio'] ?></p>
+                                                <p><?php echo "Fecha: " . $citaDetalle['FECHA'] ?></p>
+                                                <p><?php echo "Hora: " . $citaDetalle['HORAINICIO'] . " - " . $citaDetalle['HORAFIN'] ?></p>
+                                                <p><?php echo "Servicio: " . $citaDetalle['SERVICIO'] ?></p>
                                             </div>
                                         </div>
 
@@ -186,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <span class="fa fa-check-square-o"></span>
                                             </div>
                                             <div class="text pl-3">
-                                                <p><?php echo "Estado de la cita: " . $citaDetalle['estado'] ?></p>
+                                                <p><?php echo "Estado de la cita: " . $citaDetalle['ESTADO'] ?></p>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>

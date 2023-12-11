@@ -19,6 +19,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
 $cita = new Cita();
 
 $citaDetalle = $cita->getAllDetalleCitaMedico();
+$citaData = $citaDetalle['datos'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['idCita'];
@@ -60,31 +61,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </thead>
             <tbody>
                 <?php
-                foreach ($citaDetalle as $cdetalle) {
+                foreach ($citaData as $cdetalle) {
                     echo "<tr>";
-                    echo "<td>" . $cdetalle['idcita'] . "</td>";
-                    echo "<td>" . $cdetalle['nombreMedico'] . "</td>";
-                    echo "<td>" . $cdetalle['nombre'] . " " . $cdetalle['apellido1'] . " " . $cdetalle['apellido2'] . "</td>";
-                    echo "<td>" . $cdetalle['nombreMascota'] . "</td>";
-                    echo "<td>" . $cdetalle['fecha'] . "</td>";
-                    echo "<td>" . $cdetalle['horaInicio'] . " - " . $cdetalle['horaFin'] . "</td>";
+                    echo "<td>" . $cdetalle['IDCITA'] . "</td>";
+                    echo "<td>" . $cdetalle['NOMBREMEDICO'] . "</td>";
+                    echo "<td>" . $cdetalle['NOMBRE'] . " " . $cdetalle['APELLIDO1'] . " " . $cdetalle['APELLIDO2'] . "</td>";
+                    echo "<td>" . $cdetalle['NOMBREMASCOTA'] . "</td>";
+                    echo "<td>" . $cdetalle['FECHA'] . "</td>";
+                    echo "<td>" . $cdetalle['HORAINICIO'] . " - " . $cdetalle['HORAFIN'] . "</td>";
                     // Aplica una clase CSS específica basada en el estado
-                    $estadoClass = ($cdetalle['estado'] == 'Atendida' ? 'atendida' : ($cdetalle['estado'] == 'Asignada' ? 'asignada' : 'cancelada'));
-                    echo "<td class='$estadoClass'>" . $cdetalle['estado'] . "</td>";
+                    $estadoClass = ($cdetalle['ESTADO'] == 'Atendida' ? 'atendida' : ($cdetalle['ESTADO'] == 'Asignada' ? 'asignada' : 'cancelada'));
+                    echo "<td class='$estadoClass'>" . $cdetalle['ESTADO'] . "</td>";
 
-                    if ($cdetalle['estado'] == 'Asignada') {
+                    if ($cdetalle['ESTADO'] == 'Asignada') {
                         echo "<td>";
-                        echo "<a href='admin_verCitas.php?id=" . $cdetalle['idcita'] . "'class='detalleCita'>Detalle Cita</a>";
+                        echo "<a href='admin_verCitas.php?id=" . $cdetalle['IDCITA'] . "'class='detalleCita'>Detalle Cita</a>";
                         echo "</td>";
                         echo "<td>";
-                        echo "<form action='medical_appointments.php' method='post' onsubmit='return confirm(\"¿Estás seguro de cancelar esta cita?\")'>";
-                        echo "<input type='hidden' name='idCita' value='" . $cdetalle['idcita'] . "'>";
+                        echo "<form action='admin_citas.php' method='post' onsubmit='return confirm(\"¿Estás seguro de cancelar esta cita?\")'>";
+                        echo "<input type='hidden' name='idCita' value='" . $cdetalle['IDCITA'] . "'>";
                         echo "<button  class='cancelarCita' type='submit'>Cancelar</button>";
                         echo "</form>";
                         echo "</td>";
                     } else {
                         echo "<td>";
-                        echo "<a href='admin_verCitas.php?id=" . $cdetalle['idcita'] . "'class='detalleCita'>Detalle Cita</a>";
+                        echo "<a href='admin_verCitas.php?id=" . $cdetalle['IDCITA'] . "'class='detalleCita'>Detalle Cita</a>";
                         echo "</td>";
                     }
                     echo "</tr>";

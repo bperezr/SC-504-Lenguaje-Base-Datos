@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idHorario = $_POST['horario'];
         $idColaborador = $_POST['colaborador'];
 
-        $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
+        $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario,1);
                     $idCita = $cita->getLastInsertId();
                     $idColaborador = $_POST['colaborador'];
                     $cita->insertAsignacionCita($idCita, $idColaborador);

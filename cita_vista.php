@@ -18,11 +18,7 @@ require_once 'include/database/db_cita.php';
 
 $cita = new Cita();
 $citasCliente = $cita->getCitasCliente($id);
-
-/* echo "<pre>";
-print_r($citasCliente);
-echo "</pre>"; */
-
+$citaData = $citasCliente['datos'];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -70,21 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </thead>
             <tbody>
                 <?php
-                foreach ($citasCliente as $citaCliente) {
-                    if ($citaCliente['idEstado'] != 'Cancelada') {
+                foreach ($citaData as $citaCliente) {
+                    if ($citaCliente['IDESTADO'] != 'Cancelada') {
                         echo "<tr>";
 
-                        echo "<td>" . $citaCliente['idCita'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreMascota'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreServicio'] . "</td>";
-                        echo "<td>" . $citaCliente['fecha'] . "</td>";
-                        echo "<td>" . $citaCliente['horaInicio'] . " - " . $citaCliente['horaFin'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreMedico'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreEstado'] . "</td>";
+                        echo "<td>" . $citaCliente['IDCITA'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBREMASCOTA'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBRESERVICIO'] . "</td>";
+                        echo "<td>" . $citaCliente['FECHA'] . "</td>";
+                        echo "<td>" . $citaCliente['HORAINICIO'] . " - " . $citaCliente['HORAFIN'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBREMEDICO'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBREESTADO'] . "</td>";
                         echo "<td>";
 
                         echo "<form action='cita_vista.php' method='post' onsubmit='return confirm(\"¿Estás seguro de cancelar esta cita?\")'>";
-                        echo "<input type='hidden' name='idCita' value='" . $citaCliente['idCita'] . "'>";
+                        echo "<input type='hidden' name='idCita' value='" . $citaCliente['IDCITA'] . "'>";
                         echo "<button type='submit'>Cancelar</button>";
                         echo "</form>";
                         echo "</td>";
@@ -112,16 +108,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </thead>
             <tbody>
                 <?php
-                foreach ($citasCliente as $citaCliente) {
-                    if ($citaCliente['idEstado'] == 'Cancelada') {
+                foreach ($citaData as $citaCliente) {
+                    if ($citaCliente['IDESTADO'] == 'Cancelada') {
                         echo "<tr>";
-                        echo "<td>" . $citaCliente['idCita'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreMascota'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreServicio'] . "</td>";
-                        echo "<td>" . $citaCliente['fecha'] . "</td>";
-                        echo "<td>" . $citaCliente['horaInicio'] . " - " . $citaCliente['horaFin'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreMedico'] . "</td>";
-                        echo "<td>" . $citaCliente['nombreEstado'] . "</td>";
+                        echo "<td>" . $citaCliente['IDCITA'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBREMASCOTA'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBRESERVICIO'] . "</td>";
+                        echo "<td>" . $citaCliente['FECHA'] . "</td>";
+                        echo "<td>" . $citaCliente['HORAINICIO'] . " - " . $citaCliente['HORAFIN'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBREMEDICO'] . "</td>";
+                        echo "<td>" . $citaCliente['NOMBREESTADO'] . "</td>";
                         echo "</tr>";
                     }
                 }
