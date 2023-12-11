@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-/*if (isset($_SESSION['usuario'])) {
+if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
     $rolUsuario = $usuario['idRol'];
@@ -10,21 +10,10 @@ session_start();
 }
 
 if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
-    header("Location: ../acceso_denegado.php");
+    header("Location: acceso_denegado.php");
     exit();
-}*/
+}
 
-/*  */
-/*if (isset($_SESSION['usuario'])) {
-    $usuario = $_SESSION['usuario'];
-    $correoUsuario = $usuario['correo'];
-    $rolUsuario = $usuario['idRol'];
-} else {
-    header("Location: ../login.php");
-    exit();
-}*/
-?>
-<?php
 require_once '../include/database/db_colaborador.php';
 require_once '../include/database/db_cargo.php';
 require_once '../include/database/db_especialidad.php';
@@ -46,8 +35,6 @@ echo '<pre>';
 print_r($resultadosC);
 echo '</pre>';*/
 
-
-
 $mensajeError = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -64,34 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $nombreImagen = $colaborador->uploadImagen($imagen);
 
-    if (is_array($resultadosCargos) && !empty($resultadosCargos)) {
-        $idCargoValido = false;
-
-        foreach ($resultadosCargos as $cargoResultado) {
-            if ($cargoResultado['IDCARGO'] == $idCargo) {
-                $idCargoValido = true;
-                break;
-            }
-        }
-
-        if (!$idCargoValido) {
-            $mensajeError = "El ID del cargo no es válido.";
-        }
-    } else {
-        $mensajeError = "No se pudieron obtener los datos de los cargos.";
-    }
-
     $correoExistente = $colaborador->verificarCorreoExistente($correo);
 
-
-
-if ($correoExistente) {
-    $mensajeError = "El correo electrónico ya está registrado. Por favor, use otro correo.";
-} else {
+    if ($correoExistente) {
+        $mensajeError = "El correo electrónico ya está registrado. Por favor, use otro correo.";
+    } else {
 
         $insertado = $colaborador->insertColaborador($nombre, $apellido1, $apellido2, $idCargo, $idEspecialidad, $nombreImagen, $correo, $contrasena, $idRol);
 
-        if ($insertado) {
+        if ($insertado == 0) {
             header('Location: admin_workers.php');
             exit;
         } else {
@@ -130,7 +98,7 @@ if ($correoExistente) {
                     <?php echo $mensajeError; ?>
                 </div>
 
-                
+
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Nombre:</label>
@@ -158,12 +126,12 @@ if ($correoExistente) {
                         <label for="especialidad">Especialidad:</label>
 
                         <select id="especialidad" name="especialidad" required>
-    <?php foreach ($resultadosEspecialidades as $resultadosEspecialidad): ?>
-        <option value="<?php echo $resultadosEspecialidad['IDESPECIALIDAD']; ?>">
-            <?php echo $resultadosEspecialidad['ESPECIALIDAD']; ?>
-        </option>
-    <?php endforeach; ?>
-</select>
+                            <?php foreach ($resultadosEspecialidades as $resultadosEspecialidad): ?>
+                                <option value="<?php echo $resultadosEspecialidad['IDESPECIALIDAD']; ?>">
+                                    <?php echo $resultadosEspecialidad['ESPECIALIDAD']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
 
                     </div>
 
@@ -196,17 +164,17 @@ if ($correoExistente) {
                         <button class="enviar" type="submit">Agregar</button>
                         <a class="cancelar" href="#" onclick="window.history.back();">Cancelar</a>
                     </div>
-                    
-                    
+
+
                 </form>
             </div>
 
-            
+
         </section>
 
-        
+
     </main>
-    
+
 
     <!-- Footer -->
     <?php include '../include/template/footer.php'; ?>

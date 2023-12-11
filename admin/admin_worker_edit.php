@@ -1,6 +1,6 @@
 <?php
 session_start();
-/*
+
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
     $correoUsuario = $usuario['correo'];
@@ -13,9 +13,6 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 1) {
     header("Location: ../acceso_denegado.php");
     exit();
 }
-*/
-/*  */
-
 
 require_once '../include/database/db_colaborador.php';
 require_once '../include/database/db_cargo.php';
@@ -49,16 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idRol = $_POST['rol'];
 
     $colaboradorData = $colaborador->getColaborador($id);
-    // Manejo de la imagen
+
+    $nombreImagen = $colaboradorData['datos']['imagen'];
+
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
         $imagen = $_FILES['imagen'];
-        $nombreImagen = $colaborador->uploadImagen($imagen);
-        // Eliminar imagen anterior
-        if ($colaboradorData && file_exists("../img/images_workers/" . $colaboradorData['imagen'])) {
-            unlink("../img/images_workers/" . $colaboradorData['imagen']);
+
+        // Eliminar imagen anterior si existe
+        if ($colaboradorData && !empty($colaboradorData['datos']['imagen'])) {
+            $imagenAnterior = $colaboradorData['datos']['imagen'];
+            ;
+            $eliminacionExitosa = $colaborador->deleteImagen($imagenAnterior);
+
+            if ($eliminacionExitosa) {
+                echo "Imagen anterior eliminada: $imagenAnterior";
+            } else {
+                echo "No se pudo eliminar la imagen anterior: $imagenAnterior";
+            }
         }
-    } else {
-        $nombreImagen = $colaboradorData['imagen'];
+
+        $nombreImagen = $colaborador->uploadImagen($imagen);
     }
 
 
@@ -81,12 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-
-
-
-
-
-
 
 ?>
 
@@ -114,6 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="evento">
             <div class="evento__detalle">
                 <h2 class="centrar-texto">Editar Personal</h2>
+
+                <div class="btn_atras">
+                    <a href="admin_workers.php" class="boton input-text">Cambiar contraseña</a>
+                </div>
+
                 <form id="formularioEvento" class="formulario-evento" enctype="multipart/form-data" method="POST">
                     <div class="campo">
                         <label for="nombre">Nombre:</label>
@@ -133,15 +139,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="campo">
                         <label for="cargo">Cargo:</label>
                         <select id="cargo" name="cargo" required>
-                            <?php
-                            foreach ($resultadosCargos as $cargoResultado) {
-                                echo '<option value="' . $cargoResultado['idCargo'] . '">' . $cargoResultado['CARGO'] . '</option>';
-                            }
-                            ?>
-                        </select>
+                            <?php foreach ($resultadosCargos as $cargoResultado): ?>
+                                <option value="<?php echo $cargoResultado['IDCARGO']; ?>">
+                                    <?php echo $cargoResultado['CARGO']; ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-
 
                     <div class="campo">
                         <label for="especialidad">Especialidad:</label>
@@ -160,10 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             value="<?php echo $colaboradorData['datos']['correo']; ?>" required readonly>
                     </div>
 
-                    <!-- Imagen -->
                     <div id="formularioEvento" class="campo campo-imagen">
                         <label for="imagen">Imagen:</label>
-                        <?php if (file_exists("../img/images_workers/" . $colaboradorData['datos']['imagen'])): ?>
+                        <?php if ($colaboradorData['datos']['imagen'] !== null && file_exists("../img/images_workers/" . $colaboradorData['datos']['imagen'])): ?>
                             <img id="preview" src="../img/images_workers/<?php echo $colaboradorData['datos']['imagen']; ?>"
                                 alt="Imagen actual">
                         <?php else: ?>
