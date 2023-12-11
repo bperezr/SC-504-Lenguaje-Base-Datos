@@ -1,2 +1,5 @@
 
 test.php
+include/database/db_config.php
+include/database/db_cita.php
+include/connections/connect.php
