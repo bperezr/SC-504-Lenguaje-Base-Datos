@@ -198,6 +198,9 @@
                         <!-- Servicios -->
                         <li><a href="admin_services.php" <?php if ($enlaceActivo == 'admin_servicios')
                             echo 'class="active"'; ?>>Servicios</a></li>
+                        <!-- Servicios  medico-->
+                        <li><a href="admin_service_medical.php" <?php if ($enlaceActivo == 'admin_serviciosM')
+                            echo 'class="active"'; ?>>Servicios Médico</a></li>
                         <!-- Cargos -->
                         <li><a href="admin_cargos.php" <?php if ($enlaceActivo == 'admin_cargos')
                             echo 'class="active"'; ?>>Cargos</a></li>
@@ -206,7 +209,7 @@
                             echo 'class="active"'; ?>>Especialidad</a></li>
                         <!-- Mascotas -->
                         <li><a href="admin_tipos.php" <?php if ($enlaceActivo == 'admin_tipos')
-                            echo 'class="active"'; ?>>Tipos de Mascotas</a></li>
+                            echo 'class="active"'; ?>>Tipos Mascotas</a></li>
                     </ul>
                 </li>
                 <!-- Auditoria -->

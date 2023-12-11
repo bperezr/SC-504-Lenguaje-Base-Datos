@@ -111,7 +111,35 @@ PROCEDURE getColaboradorPorCorreo(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
 );
-
+--SP15
+PROCEDURE getColaboradoresEspecialidad(
+    p_colaboradores OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP16
+PROCEDURE getServiciosPorColaborador(
+    p_idColaborador IN NUMBER,
+    p_servicios OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP17
+PROCEDURE deleteColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP18
+PROCEDURE insertColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP19
+PROCEDURE getServiciosNoAsignados (
+    p_idColaborador IN NUMBER,
+    p_resultado OUT NUMBER,
+    p_servicios OUT SYS_REFCURSOR
+);
 END P_COLABORADOR;
 
 --#########################################################################################################
@@ -516,6 +544,129 @@ BEGIN
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error en getColaboradorPorCorreo: ' || SQLERRM);
 END;
---FIN SP------------------------------------------------------------------------
+--SP15----------------------------------------------------------------------------
+PROCEDURE getColaboradoresEspecialidad(
+    p_colaboradores OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0;
+
+    OPEN p_colaboradores FOR
+        SELECT c.idColaborador,
+            c.nombre,
+            c.apellido1,
+            c.apellido2,
+            car.cargo as nombreCargo,
+            esp.especialidad as nombreEspecialidad,
+            c.imagen,
+            c.correo
+        FROM colaborador c
+        LEFT JOIN cargo car ON c.idCargo = car.idCargo
+        LEFT JOIN especialidad esp ON c.idEspecialidad = esp.idEspecialidad
+        WHERE c.idEspecialidad IN (1, 2, 3, 4);
+
+    p_resultado := 1; -- Éxito
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontraron datos
+        DBMS_OUTPUT.PUT_LINE('Error en getColaboradoresEspecialidad: ' || SQLERRM);
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+        DBMS_OUTPUT.PUT_LINE('Error en getColaboradoresEspecialidad: ' || SQLERRM);
+END;
+--SP16----------------------------------------------------------------------------
+PROCEDURE getServiciosPorColaborador(
+    p_idColaborador IN NUMBER,
+    p_servicios OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0;
+
+    OPEN p_servicios FOR
+        SELECT s.idServicio,
+            s.servicio,
+            s.descripcion
+        FROM colaboradorservicio cs
+        JOIN servicios s ON cs.idServicio = s.idServicio
+        WHERE cs.idColaborador = p_idColaborador;
+
+    p_resultado := 1; -- Éxito
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontraron datos
+        DBMS_OUTPUT.PUT_LINE('Error en getServiciosPorColaborador: ' || SQLERRM);
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+        DBMS_OUTPUT.PUT_LINE('Error en getServiciosPorColaborador: ' || SQLERRM);
+END;
+--SP17------------------------------------------------------------------------
+PROCEDURE deleteColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    -- Eliminar la asociación del colaborador con el servicio
+    DELETE FROM colaboradorservicio
+    WHERE idServicio = p_idServicio AND idColaborador = p_idColaborador;
+
+    p_resultado := SQL%ROWCOUNT; -- Número de filas afectadas
+
+    IF p_resultado > 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- No se encontró la asociación
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE;
+        DBMS_OUTPUT.PUT_LINE('Error en deleteColaboradorServicio: ' || SQLERRM);
+END;
+--SP18------------------------------------------------------------------------
+PROCEDURE insertColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    INSERT INTO colaboradorservicio (idServicio, idColaborador)
+    VALUES (p_idServicio, p_idColaborador);
+
+    p_resultado := SQLCODE; -- Éxito
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en insertColaboradorServicio: ' || SQLERRM);
+END;
+--SP19------------------------------------------------------------------------
+PROCEDURE getServiciosNoAsignados (
+    p_idColaborador IN NUMBER,
+    p_resultado OUT NUMBER,
+    p_servicios OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_servicios FOR
+    SELECT s.IDSERVICIO, s.SERVICIO
+    FROM servicios s
+    WHERE s.IDSERVICIO NOT IN (
+        SELECT cs.IDSERVICIO
+        FROM colaboradorservicio cs
+        WHERE cs.IDCOLABORADOR = p_idColaborador
+    );
+
+    p_resultado := 0; -- Éxito
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en getServiciosNoAsignados: ' || SQLERRM);
+        p_servicios := NULL;
+END;
 END P_COLABORADOR;
 --#########################################################################################################

@@ -3,40 +3,65 @@ session_start();
 
 if (isset($_SESSION['usuario'])) {
     $usuario = $_SESSION['usuario'];
-    $correoUsuario = $usuario['correo'];
-    $rolUsuario = $usuario['idRol'];
-    $rol = $usuario['rol'];
-    $id = $usuario['id'];
+    $correoUsuario = isset($usuario['correo']) ? $usuario['correo'] : '';
+    $rolUsuario = isset($usuario['idRol']) ? $usuario['idRol'] : '';
+    $rol = isset($usuario['rol']) ? $usuario['rol'] : '';
+    $id = isset($usuario['id']) ? $usuario['id'] : '';
 }
 
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['idRol'] != 3) {
+if (!isset($_SESSION['usuario']) || $rolUsuario != 3) {
     header("Location: acceso_denegado.php");
     exit();
 }
 
 require_once 'include/database/db_cita.php';
+require_once 'include/database/db_colaborador.php';
+require_once 'include/database/db_mascota.php';
+require_once 'include/database/db_servicio.php';
+
 $cita = new Cita();
-$mascotasCliente = $cita->getMascotasCliente($id);
-$servicios = $cita->getServicios();
+$medico = new Colaborador();
+$mascota = new Mascota();
+$servicio = new Servicio();
+
+$mascotasCliente = $mascota->getMascotasPorCliente($id);
+$dMascota = isset($mascotasCliente['datos']) ? $mascotasCliente['datos'] : [];
+
+$servicios = $servicio->getServicios();
+$dServicio = isset($servicios['datos']) ? $servicios['datos'] : [];
+
+$horarioscita = $cita->getHorariosCitas();
+$dHorarioscita = isset($horarioscita['datos']) ? $horarioscita['datos'] : [];
+
+$colaboradorServicio = [];
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idCliente = $id;
-    $idMascota = $_POST['mascota'];
-    $idServicio = $_POST['servicio'];
-    $fecha = $_POST['fecha'];
-    $idHorario = $_POST['horario'];
-    $idColaborador = $_POST['colaborador'];
+    $idMascota = isset($_POST['mascota']) ? $_POST['mascota'] : null;
+    $idServicio = isset($_POST['servicio']) ? $_POST['servicio'] : null;
+    $fecha = isset($_POST['fecha']) ? $_POST['fecha'] : null;
+    $fechaFormateada = ($fecha !== null) ? date('d/m/y', strtotime($fecha)) : null;
 
-    $cita->insertCita($idCliente, $idMascota, $idServicio, $fecha, $idHorario);
-    $idCita = $cita->getLastInsertId();
-    $idColaborador = $_POST['colaborador'];
-    $cita->insertAsignacionCita($idCita, $idColaborador);
+    $idHorario = isset($_POST['horario']) ? $_POST['horario'] : null;
+    $idColaborador = isset($_POST['colaborador']) ? $_POST['colaborador'] : null;
+    $idEstado = 1;
 
-    header('Location: cita_vista.php');
-    exit;
+    // Insertar la cita y obtener el resultado
+    $resultadoInsercion = $cita->insertCita($idCliente, $idMascota, $idServicio, $fechaFormateada, $idHorario, $idEstado);
+
+    if ($resultadoInsercion === 0) {
+        // Inserción exitosa
+        $_SESSION['mensaje'] = "Cita creada.";
+
+        //header('Location: cita_vista.php');
+        //exit;
+    } else {
+        $_SESSION['mensaje'] = "Error al crear la cita.";
+    }
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -67,8 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="mascota">Mascota:</label>
                         <select id="mascota" name="mascota">
                             <option value="" disabled selected>Seleccione la mascota</option>
-                            <?php foreach ($mascotasCliente as $mascota): ?>
-                                <option value="<?php echo $mascota['idMascota']; ?>"><?php echo $mascota['nombre']; ?>
+                            <?php foreach ($dMascota as $mascota): ?>
+                                <option value="<?php echo $mascota['IDMASCOTA']; ?>">
+                                    <?php echo $mascota['NOMBRE']; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -76,16 +102,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="campo">
                         <label for="servicio">Servicio:</label>
-                        <select id="servicio" name="servicio">
+                        <select id="servicio" name="servicio" onchange="cargarMedicos()">
                             <option value="" disabled selected>Seleccione un servicio</option>
-                            <?php foreach ($servicios as $servicio): ?>
-                                <option value="<?php echo $servicio['idServicio']; ?>"><?php echo $servicio['servicio']; ?>
+                            <?php foreach ($dServicio as $servicio): ?>
+                                <option value="<?php echo $servicio['IDSERVICIO']; ?>">
+                                    <?php echo $servicio['SERVICIO']; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
 
-                    <div class="campo" id="campoMedico" style="display: none;">
+                    <div class="campo" id="campoMedico">
                         <label for="colaborador">Médico:</label>
                         <select id="colaborador" name="colaborador">
                             <option value="" disabled selected>Seleccione un médico</option>
@@ -98,14 +125,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             oninput="validarFecha()">
                     </div>
 
-
                     <div class="campo">
                         <label for="horario">Horario:</label>
-                        <select id="horario" name="horario">
+                        <select id="horario" name="horario" onchange="cargarMedicos()">
                             <option value="" disabled selected>Seleccione un horario</option>
+                            <?php foreach ($dHorarioscita as $horario): ?>
+                                <option value="<?php echo $horario['IDHORARIO']; ?>">
+                                    <?php echo $horario['HORAINICIO']; ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-                </div><!-- contenedor-campos -->
+
+                </div>
 
                 <div class="boton-contacto">
                     <input class="boton input-text" type="submit" value="Enviar">
@@ -119,73 +151,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Footer -->
     <?php include 'include/template/footer.php'; ?>
-    <!-- JS -->
+    <!--  -->
     <script>
-        $(document).ready(function () {
-            $('#servicio').on('change', function () {
-                var selectedServicio = $(this).val();
-                if (selectedServicio !== "") {
-                    $.ajax({
-                        url: 'include/functions/get_medicos.php',
-                        method: 'POST',
-                        data: { servicio: selectedServicio },
-                        dataType: 'json',
-                        success: function (data) {
-                            var selectMedico = $('#colaborador');
-                            selectMedico.empty();
-                            selectMedico.append('<option value="" disabled selected>Seleccione un médico</option>');
-                            $.each(data, function (index, medico) {
-                                selectMedico.append('<option value="' + medico.idColaborador + '">' + medico.nombre + ' ' + medico.apellido1 + '</option>');
-                            });
-                            $('#campoMedico').show();
-                        }
-                    });
-                } else {
-                    $('#campoMedico').hide();
-                }
-            });
+        function cargarMedicos() {
+            var servicioSeleccionado = document.getElementById("servicio").value;
+            var selectMedico = document.getElementById("colaborador");
+            selectMedico.innerHTML = "<option value='' disabled selected>Seleccione un médico</option>";
 
-            $('#fecha').on('change', function () {
-                var selectedFecha = $(this).val();
-                var selectedMedico = $('#colaborador').val();
-
-                if (selectedFecha && selectedMedico) {
-                    $.ajax({
-                        url: 'include/functions/get_horarios_disponibles.php',
-                        method: 'POST',
-                        data: { fecha: selectedFecha, medico: selectedMedico },
-                        dataType: 'json',
-                        success: function (data) {
-                            var selectHorario = $('#horario');
-                            selectHorario.empty();
-                            selectHorario.append('<option value="" disabled selected>Seleccione un horario</option>');
-                            $.each(data, function (index, horario) {
-                                selectHorario.append('<option value="' + horario.idHorario + '">' + horario.horaInicio + ' - ' + horario.horaFin + '</option>');
+            if (servicioSeleccionado) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'include/functions/get_medicos.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        var medicos = JSON.parse(this.responseText);
+                        if (medicos.length > 0) {
+                            medicos.forEach(function (medico) {
+                                var option = document.createElement("option");
+                                option.value = medico.IDCOLABORADOR;
+                                option.text = medico.NOMBRE + ' ' + medico.APELLIDO1;
+                                selectMedico.appendChild(option);
                             });
-                            $('#campoHorario').show();
+                        } else {
+                            var option = document.createElement("option");
+                            option.value = "";
+                            option.text = "No hay médicos disponibles";
+                            option.disabled = true;
+                            selectMedico.appendChild(option);
                         }
-                    });
-                } else {
-                    $('#campoHorario').hide();
-                }
-            });
-            function validarFecha() {
-                var fechaInput = new Date($('#fecha').val());
-                var diaSemana = fechaInput.getDay(); // 0: domingo, 6: sábado
-                // Verificar si es sábado o domingo
-                if (diaSemana === 0 || diaSemana === 6) {
-                    // Sumar días para obtener el siguiente día laboral (lunes)
-                    fechaInput.setDate(fechaInput.getDate() + (diaSemana === 0 ? 1 : 2));
-                }
-                // Obtener la fecha mínima permitida (día actual)
-                var fechaMinima = new Date($('#fecha').attr('min'));
-                // Si la fecha actual es menor que la fecha mínima, ajustarla
-                if (fechaInput < fechaMinima) {
-                    $('#fecha').val(fechaMinima.toISOString().slice(0, 10)); // Formato yyyy-mm-dd
-                }
+                    }
+                };
+                xhr.send('idServicio=' + servicioSeleccionado);
             }
-        });
+        }
     </script>
+    <!-- Mensaje -->
+    <?php if (isset($_SESSION['mensaje'])): ?>
+        <script>
+            window.onload = function () {
+                alert("<?php echo $_SESSION['mensaje']; ?>");
+                <?php unset($_SESSION['mensaje']); ?>
+            };
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>

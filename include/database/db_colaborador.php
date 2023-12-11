@@ -352,6 +352,132 @@ class Colaborador
         return array('datos' => $colaborador, 'resultado' => $resultado);
     }
 
+    /* -----------------Colaborador Servicio  ----------------- */
+
+    public function getColaboradoresEspecialidad()
+    {
+        $colaboradores = array();
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_COLABORADOR.getColaboradoresEspecialidad(:p_cursor, :p_resultado); END;");
+
+        $p_cursor = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        if ($p_resultado == 1) {
+            oci_execute($p_cursor);
+            while ($row = oci_fetch_assoc($p_cursor)) {
+                array_push($colaboradores, $row);
+            }
+        }
+
+        oci_free_statement($p_cursor);
+        oci_free_statement($stmt);
+
+        return array('datos' => $colaboradores, 'resultado' => $p_resultado);
+    }
+
+    public function getServiciosPorColaborador($idColaborador)
+    {
+        $servicios = array();
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_COLABORADOR.getServiciosPorColaborador(:p_idColaborador, :p_servicios, :p_resultado); END;");
+
+        $p_servicios = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador, -1, SQLT_INT);
+        oci_bind_by_name($stmt, ":p_servicios", $p_servicios, -1, OCI_B_CURSOR);
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        if ($p_resultado == 1) {
+            oci_execute($p_servicios);
+            while ($row = oci_fetch_assoc($p_servicios)) {
+                array_push($servicios, $row);
+            }
+        }
+
+        oci_free_statement($p_servicios);
+        oci_free_statement($stmt);
+
+        return array('datos' => $servicios, 'resultado' => $p_resultado);
+    }
+
+    public function insertColaboradorServicio($idServicio, $idColaborador)
+    {
+        $conn = $this->db;
+
+        $stmt = oci_parse($conn, "BEGIN P_COLABORADOR.insertColaboradorServicio(:p_idServicio, :p_idColaborador, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        return $p_resultado;
+    }
+
+    public function deleteColaboradorServicio($idServicio, $idColaborador)
+    {
+        $conn = $this->db;
+        $p_resultado = 0;
+
+        $stmt = oci_parse($conn, "BEGIN P_COLABORADOR.deleteColaboradorServicio(:p_idServicio, :p_idColaborador, :p_resultado); END;");
+
+        oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
+
+        $p_resultado = 0;
+        oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
+
+        oci_execute($stmt);
+
+        oci_free_statement($stmt);
+
+        return $p_resultado;
+    }
+    public function getServiciosNoAsignados($idColaborador)
+    {
+        $conn = $this->db;
+        $stmt = oci_parse($conn, "BEGIN P_COLABORADOR.getServiciosNoAsignados(:p_idColaborador, :p_resultado, :p_servicios); END;");
+
+        oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador, SQLT_INT);
+
+        $p_idColaborador = $idColaborador;
+        $p_resultado = 0;
+
+        // Bind del parámetro de salida p_servicios
+        $p_servicios = oci_new_cursor($conn);
+        oci_bind_by_name($stmt, ":p_servicios", $p_servicios, -1, OCI_B_CURSOR);
+
+        oci_execute($stmt);
+
+        $servicios = array();
+
+        if ($p_resultado == 0) {
+            // Recorremos el cursor para obtener los servicios
+            oci_execute($p_servicios);
+            while (($row = oci_fetch_assoc($p_servicios)) !== false) {
+                $servicios[] = $row;
+            }
+        }
+
+        // Cerramos el cursor
+        oci_free_statement($stmt);
+
+        return array('datos' => $servicios, 'resultado' => $p_resultado);
+    }
+
+
     /* ------------IMAGEN------------ */
 
     //PENDIENTE

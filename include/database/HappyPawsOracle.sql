@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- Archivo creado  - domingo-diciembre-10-2023   
+-- Archivo creado  - lunes-diciembre-11-2023   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Sequence test_seq
@@ -492,6 +492,7 @@ Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMA
 Insert into HAPPYPAWS.CLIENTE (IDCLIENTE,NOMBRE,APELLIDO1,APELLIDO2,TELEFONO,IMAGEN,DOMICILIO,IDPROVINCIA,IDCANTON,IDDISTRITO,IDROL,CORREO,CONTRASENA) values ('5','María','Vargas','Cruz','23456789','9401d9199f70549d5b152ebcc68178c8.jpg','Avenida Central, Casa #56','1','101','10101','3','maria@email.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 REM INSERTING into HAPPYPAWS.COLABORADOR
 SET DEFINE OFF;
+Insert into HAPPYPAWS.COLABORADOR (IDCOLABORADOR,NOMBRE,APELLIDO1,APELLIDO2,IDCARGO,IDESPECIALIDAD,IMAGEN,IDROL,CORREO,CONTRASENA) values ('41','Test','Test','Test','3','1','d9706138bd5a9ce2d26b5cd5defad7ad.jpg','2','test@happypaws.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 Insert into HAPPYPAWS.COLABORADOR (IDCOLABORADOR,NOMBRE,APELLIDO1,APELLIDO2,IDCARGO,IDESPECIALIDAD,IMAGEN,IDROL,CORREO,CONTRASENA) values ('1','admin','admin','admin','1','5','2bec2643a2e49f487d6262bcf2bbb14a.jpg','1','admin@happypaws.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 Insert into HAPPYPAWS.COLABORADOR (IDCOLABORADOR,NOMBRE,APELLIDO1,APELLIDO2,IDCARGO,IDESPECIALIDAD,IMAGEN,IDROL,CORREO,CONTRASENA) values ('2','Luis Carlos','Morales','Mena','3','1','4512cd38ce4ed7fbf944f817a9e28b68.jpg','2','luis.moreles@happypaws.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
 Insert into HAPPYPAWS.COLABORADOR (IDCOLABORADOR,NOMBRE,APELLIDO1,APELLIDO2,IDCARGO,IDESPECIALIDAD,IMAGEN,IDROL,CORREO,CONTRASENA) values ('3','Ana','Rodríguez','Moya','3','2','814bf8304eb6011bbf97fd94350b44fe.jpg','2','ana.rodriges@happypaws.com','599C124096F1F87DAE3DEB83B654C6198B8ECB9C150D2A4AA513C41288DD7645');
@@ -500,6 +501,7 @@ Insert into HAPPYPAWS.COLABORADOR (IDCOLABORADOR,NOMBRE,APELLIDO1,APELLIDO2,IDCA
 REM INSERTING into HAPPYPAWS.COLABORADORSERVICIO
 SET DEFINE OFF;
 Insert into HAPPYPAWS.COLABORADORSERVICIO (IDSERVICIO,IDCOLABORADOR) values ('1','2');
+Insert into HAPPYPAWS.COLABORADORSERVICIO (IDSERVICIO,IDCOLABORADOR) values ('1','3');
 Insert into HAPPYPAWS.COLABORADORSERVICIO (IDSERVICIO,IDCOLABORADOR) values ('2','3');
 Insert into HAPPYPAWS.COLABORADORSERVICIO (IDSERVICIO,IDCOLABORADOR) values ('3','4');
 Insert into HAPPYPAWS.COLABORADORSERVICIO (IDSERVICIO,IDCOLABORADOR) values ('4','5');
@@ -1081,10 +1083,6 @@ REM INSERTING into HAPPYPAWS.TIPOMASCOTA
 SET DEFINE OFF;
 Insert into HAPPYPAWS.TIPOMASCOTA (IDTIPOMASCOTA,TIPO) values ('1','Perro');
 Insert into HAPPYPAWS.TIPOMASCOTA (IDTIPOMASCOTA,TIPO) values ('2','Gato');
-REM INSERTING into HAPPYPAWS.V_AUDITORIACITA
-SET DEFINE OFF;
-Insert into HAPPYPAWS.V_AUDITORIACITA ("Fecha","IDCita","Cliente","Mascota","Servicio","Modificador","Estado") values (to_timestamp('10/12/23 01:16:22,194000000 PM','DD/MM/RR HH12:MI:SSXFF AM'),'2','Jorge Hernández Araya','Mango','Castración','jorge@email','Creada');
-Insert into HAPPYPAWS.V_AUDITORIACITA ("Fecha","IDCita","Cliente","Mascota","Servicio","Modificador","Estado") values (to_timestamp('10/12/23 01:16:22,203000000 PM','DD/MM/RR HH12:MI:SSXFF AM'),'2','Jorge Hernández Araya','Mango','Castración','luis.moreles@happypaws.com','Atendida');
 --------------------------------------------------------
 --  DDL for Index ASIGNACIONCITAS_PK
 --------------------------------------------------------
@@ -1146,20 +1144,20 @@ Insert into HAPPYPAWS.V_AUDITORIACITA ("Fecha","IDCita","Cliente","Mascota","Ser
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "HAPPYPAWS" ;
 --------------------------------------------------------
---  DDL for Index COLABORADOR_PK
+--  DDL for Index COLABORADORSERVICIO_PK
 --------------------------------------------------------
 
-  CREATE UNIQUE INDEX "HAPPYPAWS"."COLABORADOR_PK" ON "HAPPYPAWS"."COLABORADOR" ("IDCOLABORADOR") 
+  CREATE UNIQUE INDEX "HAPPYPAWS"."COLABORADORSERVICIO_PK" ON "HAPPYPAWS"."COLABORADORSERVICIO" ("IDSERVICIO", "IDCOLABORADOR") 
   PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "HAPPYPAWS" ;
 --------------------------------------------------------
---  DDL for Index COLABORADORSERVICIO_PK
+--  DDL for Index COLABORADOR_PK
 --------------------------------------------------------
 
-  CREATE UNIQUE INDEX "HAPPYPAWS"."COLABORADORSERVICIO_PK" ON "HAPPYPAWS"."COLABORADORSERVICIO" ("IDSERVICIO", "IDCOLABORADOR") 
+  CREATE UNIQUE INDEX "HAPPYPAWS"."COLABORADOR_PK" ON "HAPPYPAWS"."COLABORADOR" ("IDCOLABORADOR") 
   PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
@@ -1250,196 +1248,6 @@ Insert into HAPPYPAWS.V_AUDITORIACITA ("Fecha","IDCita","Cliente","Mascota","Ser
 --------------------------------------------------------
 
   CREATE UNIQUE INDEX "HAPPYPAWS"."PROVINCIA_PK" ON "HAPPYPAWS"."PROVINCIA" ("IDPROVINCIA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index SERVICIOS_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."SERVICIOS_PK" ON "HAPPYPAWS"."SERVICIOS" ("IDSERVICIO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index TIPOMASCOTA_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."TIPOMASCOTA_PK" ON "HAPPYPAWS"."TIPOMASCOTA" ("IDTIPOMASCOTA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index ASIGNACIONCITAS_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."ASIGNACIONCITAS_PK" ON "HAPPYPAWS"."ASIGNACIONCITAS" ("IDASIGNACIONCITA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index AUDITORIA_CITAS_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."AUDITORIA_CITAS_PK" ON "HAPPYPAWS"."AUDITORIACITAS" ("IDAUDITORIA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index CANTON_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."CANTON_PK" ON "HAPPYPAWS"."CANTON" ("IDCANTON") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index CARGO_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."CARGO_PK" ON "HAPPYPAWS"."CARGO" ("IDCARGO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index CITAS_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."CITAS_PK" ON "HAPPYPAWS"."CITAS" ("IDCITA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index CLIENTE_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."CLIENTE_PK" ON "HAPPYPAWS"."CLIENTE" ("IDCLIENTE") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index COLABORADOR_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."COLABORADOR_PK" ON "HAPPYPAWS"."COLABORADOR" ("IDCOLABORADOR") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index COLABORADORSERVICIO_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."COLABORADORSERVICIO_PK" ON "HAPPYPAWS"."COLABORADORSERVICIO" ("IDSERVICIO", "IDCOLABORADOR") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index DISTRITO_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."DISTRITO_PK" ON "HAPPYPAWS"."DISTRITO" ("IDDISTRITO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index ESPECIALIDAD_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."ESPECIALIDAD_PK" ON "HAPPYPAWS"."ESPECIALIDAD" ("IDESPECIALIDAD") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index ESTADO_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."ESTADO_PK" ON "HAPPYPAWS"."ESTADO" ("IDESTADO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index EVENTOS_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."EVENTOS_PK" ON "HAPPYPAWS"."EVENTOS" ("IDEVENTO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index HISTORIALMEDICO_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."HISTORIALMEDICO_PK" ON "HAPPYPAWS"."HISTORIALMEDICO" ("IDHMEDICO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index HORARIOCITAS_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."HORARIOCITAS_PK" ON "HAPPYPAWS"."HORARIOCITAS" ("IDHORARIO") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index MASCOTA_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."MASCOTA_PK" ON "HAPPYPAWS"."MASCOTA" ("IDMASCOTA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index PROVINCIA_PK
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."PROVINCIA_PK" ON "HAPPYPAWS"."PROVINCIA" ("IDPROVINCIA") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS" ;
---------------------------------------------------------
---  DDL for Index PK_ROL
---------------------------------------------------------
-
-  CREATE UNIQUE INDEX "HAPPYPAWS"."PK_ROL" ON "HAPPYPAWS"."ROL" ("IDROL") 
   PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
@@ -1545,6 +1353,152 @@ PROCEDURE buscarCargos(
 );
 
 END P_Cargo;
+
+/
+--------------------------------------------------------
+--  DDL for Package P_CITA
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE PACKAGE "HAPPYPAWS"."P_CITA" 
+AS
+--------------------- SP ---------------------
+--SP1
+PROCEDURE getMascotasCliente(
+    p_IDCLIENTE IN MASCOTA.IDCLIENTE%TYPE,
+    P_IDMASCOTA out MASCOTA.IDMASCOTA%TYPE,
+    p_NOMBRE OUT MASCOTA.NOMBRE%TYPE,
+    p_DESCRIPCION OUT MASCOTA.DESCRIPCION%TYPE,
+    p_IMAGEN OUT MASCOTA.IMAGEN%TYPE,
+    p_IDTIPOMASCOTA OUT MASCOTA.IDTIPOMASCOTA%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP2
+PROCEDURE getServicios(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP3
+PROCEDURE getEstados(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP4
+PROCEDURE getMedicosPorServicio(
+    p_IDSERVICIO IN COLABORADORSERVICIO.IDSERVICIO%TYPE,
+    P_idColaborador OUT COLABORADOR.IDCOLABORADOR%TYPE,
+    p_NOMBRE OUT COLABORADOR.NOMBRE%TYPE,
+    p_apellido1 OUT COLABORADOR.APELLIDO1%TYPE,
+    p_apellido2 OUT COLABORADOR.APELLIDO2%TYPE,
+    p_resultado OUT NUMBER 
+);
+--SP5
+PROCEDURE insertCita(
+ P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
+ P_IDMASCOTA IN CITAS.IDMASCOTA%TYPE,
+ P_IDSERVICIO IN CITAS.IDSERVICIO%TYPE,
+ P_FECHA IN CITAS.FECHA%TYPE,
+ P_IDHORARIO IN CITAS.IDHORARIO%TYPE,
+ P_IDESTADO IN CITAS.IDESTADO%TYPE,
+ P_RESULTADO OUT NUMBER
+);
+--SP6
+PROCEDURE updateCita(
+ P_IDCITA IN CITAS.IDCITA%TYPE,
+ P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
+ P_IDMASCOTA IN CITAS.IDMASCOTA%TYPE,
+ P_IDSERVICIO IN CITAS.IDSERVICIO%TYPE,
+ P_FECHA IN CITAS.FECHA%TYPE,
+ P_IDHORARIO IN CITAS.IDHORARIO%TYPE,
+ P_IDESTADO IN CITAS.IDESTADO%TYPE,
+ P_RESULTADO OUT NUMBER
+);
+PROCEDURE updateEstadoCita(
+P_IDCITA IN CITAS.IDCITA%TYPE,
+P_IDESTADO IN CITAS.IDESTADO%TYPE,
+P_RESULTADO OUT NUMBER
+);
+--SP7
+PROCEDURE insertAsignacionCita(
+P_IDCITA IN ASIGNACIONCITAS.IDCITA%TYPE,
+P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
+P_RESULTADO OUT NUMBER
+);
+--SP8
+PROCEDURE insertHistorialMedico(
+P_DETALLECITA IN HISTORIALMEDICO.DETALLECITA%TYPE,
+P_COSTE IN HISTORIALMEDICO.COSTE%TYPE,
+P_IDMASCOTA IN HISTORIALMEDICO.IDMASCOTA%TYPE,
+P_IDCOLABORADOR IN HISTORIALMEDICO.IDCOLABORADOR%TYPE,
+P_IDCITA IN HISTORIALMEDICO.IDCITA%TYPE,
+P_RESULTADO OUT NUMBER
+);
+--SP9
+PROCEDURE updateAsignacionCita(
+P_IDASIGNACION IN ASIGNACIONCITAS.IDASIGNACIONCITA%TYPE,
+P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
+P_RESULTADO OUT NUMBER
+);
+--SP10
+PROCEDURE getDetalleCitaMedico (
+    P_IDCOLABORADOR IN NUMBER,
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+);
+--SP11
+PROCEDURE getAllDetalleCitaMedico(
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+);
+--SP12
+PROCEDURE getCitaMedica(
+    P_IDCITA IN NUMBER,
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+);
+--SP13
+PROCEDURE getHistorialMedico(
+    P_IDCITA IN NUMBER,
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+);
+--SP14
+PROCEDURE getAllHistorialMedico(
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+);
+--SP15
+PROCEDURE getCitasCliente(
+P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
+P_RESULTADO OUT NUMBER,
+P_CITASCLIENTE OUT SYS_REFCURSOR
+);
+--SP16
+PROCEDURE getCitasPorEstado(
+P_IDESTADO IN CITAS.IDESTADO%TYPE,
+P_RESULTADO OUT NUMBER,
+P_CITAS OUT SYS_REFCURSOR
+);
+--SP17
+PROCEDURE getCitasPorEstadoYColaborador(
+ P_IDESTADO IN CITAS.IDESTADO%TYPE,
+ P_IDCOLABORADOR IN COLABORADOR.IDCOLABORADOR%TYPE,
+ P_RESULTADO OUT NUMBER,
+ P_CITAS OUT SYS_REFCURSOR
+);
+--SP18
+PROCEDURE GetHorariosDisponibles(
+    p_fecha IN DATE,
+    p_medicoId IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP19
+PROCEDURE GetHorariosCitas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+
+END P_CITA;
 
 /
 --------------------------------------------------------
@@ -1804,7 +1758,35 @@ PROCEDURE getColaboradorPorCorreo(
     p_cursor OUT SYS_REFCURSOR,
     p_resultado OUT NUMBER
 );
-
+--SP15
+PROCEDURE getColaboradoresEspecialidad(
+    p_colaboradores OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP16
+PROCEDURE getServiciosPorColaborador(
+    p_idColaborador IN NUMBER,
+    p_servicios OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+);
+--SP17
+PROCEDURE deleteColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP18
+PROCEDURE insertColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+);
+--SP19
+PROCEDURE getServiciosNoAsignados (
+    p_idColaborador IN NUMBER,
+    p_resultado OUT NUMBER,
+    p_servicios OUT SYS_REFCURSOR
+);
 END P_COLABORADOR;
 
 /
@@ -2398,6 +2380,673 @@ EXCEPTION
 END;
 --FIN SP------------------------------------------------------------------------
 END P_Cargo;
+
+/
+--------------------------------------------------------
+--  DDL for Package Body P_CITA
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE PACKAGE BODY "HAPPYPAWS"."P_CITA" 
+AS
+
+--SP1----------------------------------------------------------------------------
+PROCEDURE getMascotasCliente(
+    p_IDCLIENTE IN MASCOTA.IDCLIENTE%TYPE,
+    P_IDMASCOTA out MASCOTA.IDMASCOTA%TYPE,
+    p_NOMBRE OUT MASCOTA.NOMBRE%TYPE,
+    p_DESCRIPCION OUT MASCOTA.DESCRIPCION%TYPE,
+    p_IMAGEN OUT MASCOTA.IMAGEN%TYPE,
+    p_IDTIPOMASCOTA OUT MASCOTA.IDTIPOMASCOTA%TYPE,
+    p_resultado OUT NUMBER
+)as
+begin
+SELECT IDMASCOTA,NOMBRE, DESCRIPCION,IMAGEN,IDTIPOMASCOTA
+INTO P_IDMASCOTA,p_NOMBRE, p_DESCRIPCION, p_IMAGEN, p_IDTIPOMASCOTA 
+FROM MASCOTA WHERE idCliente = p_IDCLIENTE;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP2----------------------------------------------------------------------------
+PROCEDURE getServicios(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) as
+BEGIN
+    OPEN p_cursor FOR
+        SELECT IDSERVICIO, SERVICIO, DESCRIPCION
+        FROM SERVICIOS;
+
+    p_resultado := 1; -- Encontrado
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontr�
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+END;
+--SP3----------------------------------------------------------------------------
+PROCEDURE getEstados(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT IDESTADO, ESTADO
+        FROM ESTADO;
+
+    p_resultado := 1; -- Encontrado
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontr�
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Error
+END;
+--SP4----------------------------------------------------------------------------
+PROCEDURE getMedicosPorServicio(
+    p_IDSERVICIO IN COLABORADORSERVICIO.IDSERVICIO%TYPE,
+    P_idColaborador OUT COLABORADOR.IDCOLABORADOR%TYPE,
+    p_NOMBRE OUT COLABORADOR.NOMBRE%TYPE,
+    p_apellido1 OUT COLABORADOR.APELLIDO1%TYPE,
+    p_apellido2 OUT COLABORADOR.APELLIDO2%TYPE,
+    p_resultado OUT NUMBER 
+)as
+begin
+SELECT c.idColaborador, c.nombre, c.apellido1, c.apellido2
+ INTO P_idColaborador, p_NOMBRE, p_apellido1, p_apellido2
+            FROM colaborador c
+            INNER JOIN colaboradorservicio cs ON c.idColaborador = cs.idColaborador
+            WHERE cs.idServicio = p_IDSERVICIO;  
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP5----------------------------------------------------------------------------
+PROCEDURE insertCita(
+ P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
+ P_IDMASCOTA IN CITAS.IDMASCOTA%TYPE,
+ P_IDSERVICIO IN CITAS.IDSERVICIO%TYPE,
+ P_FECHA IN CITAS.FECHA%TYPE,
+ P_IDHORARIO IN CITAS.IDHORARIO%TYPE,
+ P_IDESTADO IN CITAS.IDESTADO%TYPE,
+ P_RESULTADO OUT NUMBER
+)AS
+BEGIN
+ INSERT INTO CITAS (IDCLIENTE,IDMASCOTA,IDSERVICIO,FECHA,IDHORARIO,IDESTADO)
+ VALUES (P_IDCLIENTE,P_IDMASCOTA,P_IDSERVICIO,P_FECHA,P_IDHORARIO,P_IDESTADO);
+
+  p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- Exito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END ;
+--SP5----------------------------------------------------------------------------
+PROCEDURE updateCita(
+ P_IDCITA IN CITAS.IDCITA%TYPE,
+ P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
+ P_IDMASCOTA IN CITAS.IDMASCOTA%TYPE,
+ P_IDSERVICIO IN CITAS.IDSERVICIO%TYPE,
+ P_FECHA IN CITAS.FECHA%TYPE,
+ P_IDHORARIO IN CITAS.IDHORARIO%TYPE,
+ P_IDESTADO IN CITAS.IDESTADO%TYPE,
+ P_RESULTADO OUT NUMBER
+)AS
+BEGIN
+    UPDATE CITAS SET
+    IDCITA = P_IDCITA,
+    IDCLIENTE = P_IDCLIENTE,
+    IDMASCOTA = P_IDMASCOTA,
+    IDSERVICIO = P_IDSERVICIO,
+    FECHA = P_FECHA,
+    IDHORARIO = P_IDHORARIO,
+    IDESTADO = P_IDESTADO
+    WHERE IDCITA = P_IDCITA;
+
+ p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END ;
+--SP6----------------------------------------------------------------------------
+PROCEDURE updateEstadoCita(
+P_IDCITA IN CITAS.IDCITA%TYPE,
+P_IDESTADO IN CITAS.IDESTADO%TYPE,
+P_RESULTADO OUT NUMBER
+)AS
+BEGIN
+UPDATE CITAS SET IDESTADO = P_IDESTADO WHERE IDCITA = P_IDCITA;
+
+ p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+
+END;
+--SP7----------------------------------------------------------------------------
+PROCEDURE insertAsignacionCita(
+P_IDCITA IN ASIGNACIONCITAS.IDCITA%TYPE,
+P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
+P_RESULTADO OUT NUMBER
+)AS
+BEGIN
+INSERT INTO ASIGNACIONCITAS (IDCITA, IDCOLABORADOR) VALUES (P_IDCITA,P_IDCOLABORADOR);
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP8----------------------------------------------------------------------------
+PROCEDURE insertHistorialMedico(
+P_DETALLECITA IN HISTORIALMEDICO.DETALLECITA%TYPE,
+P_COSTE IN HISTORIALMEDICO.COSTE%TYPE,
+P_IDMASCOTA IN HISTORIALMEDICO.IDMASCOTA%TYPE,
+P_IDCOLABORADOR IN HISTORIALMEDICO.IDCOLABORADOR%TYPE,
+P_IDCITA IN HISTORIALMEDICO.IDCITA%TYPE,
+P_RESULTADO OUT NUMBER
+)AS
+BEGIN
+INSERT into historialmedico (detalleCita,coste,idMascota,idColaborador,idCita) 
+VALUES (P_DETALLECITA, P_COSTE, P_IDMASCOTA, P_IDCOLABORADOR, P_IDCITA);
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+--SP9----------------------------------------------------------------------------
+PROCEDURE updateAsignacionCita(
+P_IDASIGNACION IN ASIGNACIONCITAS.IDASIGNACIONCITA%TYPE,
+P_IDCOLABORADOR IN ASIGNACIONCITAS.IDCOLABORADOR%TYPE,
+P_RESULTADO OUT NUMBER
+)AS 
+BEGIN 
+UPDATE asignacioncitas SET idColaborador = P_IDCOLABORADOR WHERE idasignacionCita = P_IDASIGNACION;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+
+END;
+--SP10----------------------------------------------------------------------------
+PROCEDURE getDetalleCitaMedico (
+    P_IDCOLABORADOR IN NUMBER,
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CITAS FOR
+    SELECT 
+        ac.idcita,
+        ac.idColaborador,
+        m.idMascota,
+        col.nombre as nombreMedico,
+        m.nombre as nombreMascota,
+        m.descripcion,
+        cli.nombre, 
+        cli.apellido1,
+        cli.apellido2,
+        cli.correo,
+        cli.telefono,
+        s.servicio,
+        c.fecha,
+        c.idestado,
+        hc.horaInicio,
+        hc.horaFin,
+        e.estado  
+    FROM asignacioncitas ac 
+        JOIN citas c ON ac.idcita = c.idcita
+        JOIN colaborador col ON ac.idColaborador = col.idColaborador
+        JOIN mascota m ON c.idMascota = m.idmascota 
+        JOIN cliente cli ON c.idCliente = cli.idCliente
+        JOIN servicios s ON c.idServicio = s.idServicio
+        JOIN horariocitas hc ON c.idHorario = hc.idHorario
+        JOIN estado e ON c.idestado = e.idestado 
+    WHERE ac.idColaborador = P_IDCOLABORADOR
+    ORDER BY c.fecha DESC;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);   
+
+
+END getDetalleCitaMedico;
+--SP11----------------------------------------------------------------------------
+PROCEDURE getAllDetalleCitaMedico(
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CITAS FOR
+    SELECT 
+        ac.idcita,
+        ac.idColaborador,
+        m.idMascota,
+        col.nombre as nombreMedico,
+        m.nombre as nombreMascota,
+        m.descripcion,
+        cli.nombre, 
+        cli.apellido1,
+        cli.apellido2,
+        cli.correo,
+        cli.telefono,
+        s.servicio,
+        c.fecha,
+        c.idestado,
+        hc.horaInicio,
+        hc.horaFin,
+        e.estado  
+    FROM asignacioncitas ac 
+        JOIN citas c ON ac.idcita = c.idcita
+        JOIN colaborador col ON ac.idColaborador = col.idColaborador
+        JOIN mascota m ON c.idMascota = m.idmascota 
+        JOIN cliente cli ON c.idCliente = cli.idCliente
+        JOIN servicios s ON c.idServicio = s.idServicio
+        JOIN horariocitas hc ON c.idHorario = hc.idHorario
+        JOIN estado e ON c.idestado = e.idestado 
+    ORDER BY c.fecha DESC;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM); 
+END;
+--SP12----------------------------------------------------------------------------
+PROCEDURE getCitaMedica(
+    P_IDCITA IN NUMBER,
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CITAS FOR
+    SELECT 
+        ac.idcita,
+        ac.idColaborador,
+        m.idMascota,
+        col.nombre as nombreMedico,
+        m.nombre as nombreMascota,
+        m.descripcion,
+        cli.nombre, 
+        cli.apellido1,
+        cli.apellido2,
+        cli.correo,
+        cli.telefono,
+        s.servicio,
+        c.fecha,
+        c.idestado,
+        hc.horaInicio,
+        hc.horaFin,
+        e.estado  
+    FROM asignacioncitas ac 
+        JOIN citas c ON ac.idcita = c.idcita
+        JOIN colaborador col ON ac.idColaborador = col.idColaborador
+        JOIN mascota m ON c.idMascota = m.idmascota 
+        JOIN cliente cli ON c.idCliente = cli.idCliente
+        JOIN servicios s ON c.idServicio = s.idServicio
+        JOIN horariocitas hc ON c.idHorario = hc.idHorario
+        JOIN estado e ON c.idestado = e.idestado 
+    WHERE ac.idcita = P_IDCITA
+    ORDER BY c.fecha DESC;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);   
+END;
+--SP13----------------------------------------------------------------------------
+PROCEDURE getHistorialMedico(
+    P_IDCITA IN NUMBER,
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CITAS FOR
+    SELECT 
+    H.IDHMEDICO,
+    H.DETALLECITA,
+    H.COSTE,
+    H.IDMASCOTA,
+    H.IDCOLABORADOR,
+    H.IDCITA,
+    c.fecha, 
+    s.servicio,
+    m.nombre as nombreMascota,
+    c.idestado,
+    c.idCliente,
+    cli.nombre,
+    cli.apellido1,
+    cli.apellido2,
+    e.estado
+        from historialmedico h 
+        JOIN  mascota m on h.idMascota = m.idmascota 
+        join citas c on h.idCita = c.idcita
+        join cliente cli on c.idCliente = cli.idCliente
+        join estado e on c.idestado = e.idestado
+        join servicios s on c.idServicio = s.idServicio 
+        WHERE h.idcita  = P_IDCITA;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM); 
+
+END;
+--SP14----------------------------------------------------------------------------
+PROCEDURE getAllHistorialMedico(
+    P_RESULTADO OUT NUMBER,
+    P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN P_CITAS FOR
+    SELECT 
+    H.IDHMEDICO,
+    H.DETALLECITA,
+    H.COSTE,
+    H.IDMASCOTA,
+    H.IDCOLABORADOR,
+    H.IDCITA,
+    c.fecha, 
+    s.servicio,
+    m.nombre as nombreMascota,
+    c.idestado,
+    c.idCliente,
+    cli.nombre,
+    cli.apellido1,
+    cli.apellido2,
+    e.estado
+        from historialmedico h 
+        JOIN  mascota m on h.idMascota = m.idmascota 
+        join citas c on h.idCita = c.idcita
+        join cliente cli on c.idCliente = cli.idCliente
+        join estado e on c.idestado = e.idestado
+        join servicios s on c.idServicio = s.idServicio;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM); 
+END;
+--SP15----------------------------------------------------------------------------
+PROCEDURE getCitasCliente(
+P_IDCLIENTE IN CITAS.IDCLIENTE%TYPE,
+P_RESULTADO OUT NUMBER,
+P_CITASCLIENTE OUT SYS_REFCURSOR
+)
+AS
+BEGIN 
+OPEN P_CITASCLIENTE FOR
+SELECT 
+c.idCita,
+m.nombre AS nombreMascota,
+s.servicio AS nombreServicio,
+c.fecha,
+h.horaInicio,
+h.horaFin,
+co.nombre AS nombreMedico,
+e.estado AS nombreEstado,
+e.estado AS idEstado
+FROM citas c
+JOIN mascota m ON c.idMascota = m.idMascota
+JOIN servicios s ON c.idServicio = s.idServicio
+JOIN horariocitas h ON c.idHorario = h.idHorario
+JOIN asignacioncitas ac ON c.idCita = ac.idCita
+JOIN colaborador co ON ac.idColaborador = co.idColaborador
+JOIN estado e ON c.idestado = e.idestado
+WHERE c.idCliente = P_IDCLIENTE;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);   
+
+END getCitasCliente;
+--SP16----------------------------------------------------------------------------
+PROCEDURE getCitasPorEstado(
+P_IDESTADO IN CITAS.IDESTADO%TYPE,
+P_RESULTADO OUT NUMBER,
+P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN 
+OPEN P_CITAS FOR
+SELECT 
+c.idCita,
+m.nombre AS nombreMascota,
+s.servicio AS nombreServicio,
+c.fecha,
+h.horaInicio,
+h.horaFin,
+co.nombre AS nombreMedico,
+e.estado AS nombreEstado
+                    FROM citas c
+                    JOIN mascota m ON c.idMascota = m.idMascota
+                    JOIN servicios s ON c.idServicio = s.idServicio
+                    JOIN horariocitas h ON c.idHorario = h.idHorario
+                    JOIN asignacioncitas ac ON c.idCita = ac.idCita
+                    JOIN colaborador co ON ac.idColaborador = co.idColaborador
+                    JOIN estado e ON c.idestado = e.idestado
+                    WHERE c.idestado = P_IDESTADO;
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);                    
+
+END getCitasPorEstado;
+--SP17----------------------------------------------------------------------------
+PROCEDURE getCitasPorEstadoYColaborador(
+ P_IDESTADO IN CITAS.IDESTADO%TYPE,
+ P_IDCOLABORADOR IN COLABORADOR.IDCOLABORADOR%TYPE,
+ P_RESULTADO OUT NUMBER,
+ P_CITAS OUT SYS_REFCURSOR
+)
+AS
+BEGIN 
+OPEN P_CITAS FOR
+SELECT c.idCita,
+m.nombre AS nombreMascota,
+s.servicio AS nombreServicio,
+c.fecha,
+h.horaInicio,
+h.horaFin,
+e.estado AS nombreEstado
+            FROM citas c
+            JOIN mascota m ON c.idMascota = m.idMascota
+            JOIN servicios s ON c.idServicio = s.idServicio
+            JOIN horariocitas h ON c.idHorario = h.idHorario
+            JOIN asignacioncitas ac ON c.idCita = ac.idcita
+            JOIN colaborador co ON ac.idColaborador = co.idColaborador
+            JOIN estado e ON c.idestado = e.idestado
+            WHERE c.idestado = P_IDESTADO AND co.idColaborador = P_IDCOLABORADOR;
+
+p_resultado := SQLCODE; -- Establecer el resultado basado en SQLCODE
+
+    IF p_resultado = 0 THEN
+        p_resultado := 0; -- �xito
+    ELSE
+        p_resultado := SQLCODE; -- Otro estado
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);                  
+
+
+END;
+--SP18----------------------------------------------------------------------------
+PROCEDURE GetHorariosDisponibles(
+    p_fecha IN DATE,
+    p_medicoId IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT hc.idHorario, hc.horaInicio, hc.horaFin
+        FROM horariocitas hc
+        LEFT JOIN citas c ON hc.idHorario = c.idHorario AND c.fecha = p_fecha AND c.idestado != 2
+        LEFT JOIN asignacioncitas ac ON c.idCita = ac.idcita
+        WHERE c.idCita IS NULL OR (ac.idColaborador != p_medicoId OR ac.idColaborador IS NULL)
+        ORDER BY hc.horaInicio;
+
+    p_resultado := 0; -- Éxito
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 1; -- No se encontraron datos
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+END;
+--SP19----------------------------------------------------------------------------
+PROCEDURE GetHorariosCitas(
+    p_cursor OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT idHorario, horaInicio, horaFin
+        FROM horariocitas;
+
+    p_resultado := 0; -- Éxito
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 1; -- No se encontraron datos
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+END;
+--FIN SP----------------------------------------------------------------------------
+END P_CITA;
 
 /
 --------------------------------------------------------
@@ -3265,7 +3914,130 @@ BEGIN
         p_resultado := SQLCODE; -- Error
         DBMS_OUTPUT.PUT_LINE('Error en getColaboradorPorCorreo: ' || SQLERRM);
 END;
---FIN SP------------------------------------------------------------------------
+--SP15----------------------------------------------------------------------------
+PROCEDURE getColaboradoresEspecialidad(
+    p_colaboradores OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0;
+
+    OPEN p_colaboradores FOR
+        SELECT c.idColaborador,
+            c.nombre,
+            c.apellido1,
+            c.apellido2,
+            car.cargo as nombreCargo,
+            esp.especialidad as nombreEspecialidad,
+            c.imagen,
+            c.correo
+        FROM colaborador c
+        LEFT JOIN cargo car ON c.idCargo = car.idCargo
+        LEFT JOIN especialidad esp ON c.idEspecialidad = esp.idEspecialidad
+        WHERE c.idEspecialidad IN (1, 2, 3, 4);
+
+    p_resultado := 1; -- Éxito
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontraron datos
+        DBMS_OUTPUT.PUT_LINE('Error en getColaboradoresEspecialidad: ' || SQLERRM);
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+        DBMS_OUTPUT.PUT_LINE('Error en getColaboradoresEspecialidad: ' || SQLERRM);
+END;
+--SP16----------------------------------------------------------------------------
+PROCEDURE getServiciosPorColaborador(
+    p_idColaborador IN NUMBER,
+    p_servicios OUT SYS_REFCURSOR,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    p_resultado := 0;
+
+    OPEN p_servicios FOR
+        SELECT s.idServicio,
+            s.servicio,
+            s.descripcion
+        FROM colaboradorservicio cs
+        JOIN servicios s ON cs.idServicio = s.idServicio
+        WHERE cs.idColaborador = p_idColaborador;
+
+    p_resultado := 1; -- Éxito
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        p_resultado := 0; -- No se encontraron datos
+        DBMS_OUTPUT.PUT_LINE('Error en getServiciosPorColaborador: ' || SQLERRM);
+    WHEN OTHERS THEN
+        p_resultado := 9; -- Otro error
+        DBMS_OUTPUT.PUT_LINE('Error en getServiciosPorColaborador: ' || SQLERRM);
+END;
+--SP17------------------------------------------------------------------------
+PROCEDURE deleteColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    -- Eliminar la asociación del colaborador con el servicio
+    DELETE FROM colaboradorservicio
+    WHERE idServicio = p_idServicio AND idColaborador = p_idColaborador;
+
+    p_resultado := SQL%ROWCOUNT; -- Número de filas afectadas
+
+    IF p_resultado > 0 THEN
+        p_resultado := 0; -- Éxito
+    ELSE
+        p_resultado := SQLCODE; -- No se encontró la asociación
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE;
+        DBMS_OUTPUT.PUT_LINE('Error en deleteColaboradorServicio: ' || SQLERRM);
+END;
+--SP18------------------------------------------------------------------------
+PROCEDURE insertColaboradorServicio (
+    p_idServicio IN colaboradorservicio.idServicio%TYPE,
+    p_idColaborador IN colaboradorservicio.idColaborador%TYPE,
+    p_resultado OUT NUMBER
+) AS
+BEGIN
+    INSERT INTO colaboradorservicio (idServicio, idColaborador)
+    VALUES (p_idServicio, p_idColaborador);
+
+    p_resultado := SQLCODE; -- Éxito
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en insertColaboradorServicio: ' || SQLERRM);
+END;
+--SP19------------------------------------------------------------------------
+PROCEDURE getServiciosNoAsignados (
+    p_idColaborador IN NUMBER,
+    p_resultado OUT NUMBER,
+    p_servicios OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_servicios FOR
+    SELECT s.IDSERVICIO, s.SERVICIO
+    FROM servicios s
+    WHERE s.IDSERVICIO NOT IN (
+        SELECT cs.IDSERVICIO
+        FROM colaboradorservicio cs
+        WHERE cs.IDCOLABORADOR = p_idColaborador
+    );
+
+    p_resultado := 0; -- Éxito
+
+EXCEPTION
+    WHEN OTHERS THEN
+        p_resultado := SQLCODE; -- Error
+        DBMS_OUTPUT.PUT_LINE('Error en getServiciosNoAsignados: ' || SQLERRM);
+        p_servicios := NULL;
+END;
 END P_COLABORADOR;
 
 /
@@ -4393,18 +5165,104 @@ END P_tipoMascota;
 
 /
 --------------------------------------------------------
---  Constraints for Table ASIGNACIONCITAS
+--  DDL for Function CONTAR_CITAS_ASIGNADAS
 --------------------------------------------------------
 
-  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" MODIFY ("IDASIGNACIONCITA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" MODIFY ("IDCITA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" MODIFY ("IDCOLABORADOR" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" ADD CONSTRAINT "ASIGNACIONCITAS_PK" PRIMARY KEY ("IDASIGNACIONCITA")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
+  CREATE OR REPLACE NONEDITIONABLE FUNCTION "HAPPYPAWS"."CONTAR_CITAS_ASIGNADAS" RETURN NUMBER IS
+  total_citas NUMBER;
+BEGIN
+  -- Utiliza la función COUNT para contar las filas donde IDESTADO es igual a 1
+  SELECT COUNT(*) INTO total_citas
+  FROM CITAS
+  WHERE IDESTADO = 1;
+
+  -- Devuelve el resultado
+  RETURN total_citas;
+END contar_citas_asignadas;
+
+/
+--------------------------------------------------------
+--  DDL for Function CONTAR_CITAS_ASIGNADAS_COLABORADOR
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE FUNCTION "HAPPYPAWS"."CONTAR_CITAS_ASIGNADAS_COLABORADOR" (p_id_colaborador NUMBER) RETURN NUMBER IS
+  total_citas NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO total_citas
+  FROM ASIGNACIONCITAS ac
+  JOIN CITAS c ON ac.IDCITA = c.IDCITA
+  WHERE ac.IDCOLABORADOR = p_id_colaborador AND c.IDESTADO = 1;
+
+  RETURN total_citas;
+END contar_citas_asignadas_colaborador;
+
+/
+--------------------------------------------------------
+--  DDL for Function CONTAR_CITAS_ATENDIDAS
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE FUNCTION "HAPPYPAWS"."CONTAR_CITAS_ATENDIDAS" RETURN NUMBER IS
+  total_citas NUMBER;
+BEGIN
+  -- Utiliza la función COUNT para contar las filas donde IDESTADO es igual a 2
+  SELECT COUNT(*) INTO total_citas
+  FROM CITAS
+  WHERE IDESTADO = 2;
+
+  -- Devuelve el resultado
+  RETURN total_citas;
+END contar_citas_atendidas;
+
+/
+--------------------------------------------------------
+--  DDL for Function CONTAR_CITAS_ATENDIDAS_COLABORADOR
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE FUNCTION "HAPPYPAWS"."CONTAR_CITAS_ATENDIDAS_COLABORADOR" (p_id_colaborador NUMBER) RETURN NUMBER IS
+  total_citas NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO total_citas
+  FROM ASIGNACIONCITAS ac
+  JOIN CITAS c ON ac.IDCITA = c.IDCITA
+  WHERE ac.IDCOLABORADOR = p_id_colaborador AND c.IDESTADO = 2;
+
+  RETURN total_citas;
+END contar_citas_atendidas_colaborador;
+
+/
+--------------------------------------------------------
+--  DDL for Function CONTAR_CITAS_CANCELADAS
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE FUNCTION "HAPPYPAWS"."CONTAR_CITAS_CANCELADAS" RETURN NUMBER IS
+  total_citas NUMBER;
+BEGIN
+  -- Utiliza la función COUNT para contar las filas donde IDESTADO es igual a 3
+  SELECT COUNT(*) INTO total_citas
+  FROM CITAS    
+  WHERE IDESTADO = 3;
+
+  -- Devuelve el resultado
+  RETURN total_citas;
+END contar_citas_canceladas;
+
+/
+--------------------------------------------------------
+--  DDL for Function CONTAR_CITAS_CANCELADAS_COLABORADOR
+--------------------------------------------------------
+
+  CREATE OR REPLACE NONEDITIONABLE FUNCTION "HAPPYPAWS"."CONTAR_CITAS_CANCELADAS_COLABORADOR" (p_id_colaborador NUMBER) RETURN NUMBER IS
+  total_citas NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO total_citas
+  FROM ASIGNACIONCITAS ac
+  JOIN CITAS c ON ac.IDCITA = c.IDCITA
+  WHERE ac.IDCOLABORADOR = p_id_colaborador AND c.IDESTADO = 3;
+
+  RETURN total_citas;
+END contar_citas_canceladas_colaborador;
+
+/
 --------------------------------------------------------
 --  Constraints for Table AUDITORIACITAS
 --------------------------------------------------------
@@ -4414,101 +5272,6 @@ END P_tipoMascota;
   ALTER TABLE "HAPPYPAWS"."AUDITORIACITAS" MODIFY ("MODIFICADOR" NOT NULL ENABLE);
   ALTER TABLE "HAPPYPAWS"."AUDITORIACITAS" MODIFY ("NUEVOESTADO" NOT NULL ENABLE);
   ALTER TABLE "HAPPYPAWS"."AUDITORIACITAS" ADD CONSTRAINT "AUDITORIA_CITAS_PK" PRIMARY KEY ("IDAUDITORIA")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table CANTON
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."CANTON" MODIFY ("IDCANTON" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CANTON" MODIFY ("NOMBRE" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CANTON" MODIFY ("IDPROVINCIA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CANTON" ADD CONSTRAINT "CANTON_PK" PRIMARY KEY ("IDCANTON")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table CARGO
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."CARGO" MODIFY ("IDCARGO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CARGO" ADD CONSTRAINT "CARGO_PK" PRIMARY KEY ("IDCARGO")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table CITAS
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDCITA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDCLIENTE" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDMASCOTA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDSERVICIO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDHORARIO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDESTADO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CITAS" ADD CONSTRAINT "CITAS_PK" PRIMARY KEY ("IDCITA")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table CLIENTE
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("IDCLIENTE" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("IDROL" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("CORREO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("CONTRASENA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."CLIENTE" ADD CONSTRAINT "CLIENTE_PK" PRIMARY KEY ("IDCLIENTE")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table COLABORADOR
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDCOLABORADOR" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDCARGO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDESPECIALIDAD" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDROL" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("CORREO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("CONTRASENA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADOR" ADD CONSTRAINT "COLABORADOR_PK" PRIMARY KEY ("IDCOLABORADOR")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table COLABORADORSERVICIO
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."COLABORADORSERVICIO" MODIFY ("IDSERVICIO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADORSERVICIO" MODIFY ("IDCOLABORADOR" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."COLABORADORSERVICIO" ADD CONSTRAINT "COLABORADORSERVICIO_PK" PRIMARY KEY ("IDSERVICIO", "IDCOLABORADOR")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table DISTRITO
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."DISTRITO" MODIFY ("IDDISTRITO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."DISTRITO" MODIFY ("NOMBRE" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."DISTRITO" MODIFY ("IDCANTON" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."DISTRITO" ADD CONSTRAINT "DISTRITO_PK" PRIMARY KEY ("IDDISTRITO")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
@@ -4527,12 +5290,13 @@ END P_tipoMascota;
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "HAPPYPAWS"  ENABLE;
 --------------------------------------------------------
---  Constraints for Table ESTADO
+--  Constraints for Table ASIGNACIONCITAS
 --------------------------------------------------------
 
-  ALTER TABLE "HAPPYPAWS"."ESTADO" MODIFY ("IDESTADO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."ESTADO" MODIFY ("ESTADO" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."ESTADO" ADD CONSTRAINT "ESTADO_PK" PRIMARY KEY ("IDESTADO")
+  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" MODIFY ("IDASIGNACIONCITA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" MODIFY ("IDCITA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" MODIFY ("IDCOLABORADOR" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."ASIGNACIONCITAS" ADD CONSTRAINT "ASIGNACIONCITAS_PK" PRIMARY KEY ("IDASIGNACIONCITA")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
@@ -4570,6 +5334,112 @@ END P_tipoMascota;
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "HAPPYPAWS"  ENABLE;
 --------------------------------------------------------
+--  Constraints for Table PROVINCIA
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."PROVINCIA" MODIFY ("IDPROVINCIA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."PROVINCIA" MODIFY ("NOMBRE" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."PROVINCIA" ADD CONSTRAINT "PROVINCIA_PK" PRIMARY KEY ("IDPROVINCIA")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table COLABORADORSERVICIO
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."COLABORADORSERVICIO" MODIFY ("IDSERVICIO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADORSERVICIO" MODIFY ("IDCOLABORADOR" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADORSERVICIO" ADD CONSTRAINT "COLABORADORSERVICIO_PK" PRIMARY KEY ("IDSERVICIO", "IDCOLABORADOR")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table CLIENTE
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("IDCLIENTE" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("IDROL" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("CORREO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CLIENTE" MODIFY ("CONTRASENA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CLIENTE" ADD CONSTRAINT "CLIENTE_PK" PRIMARY KEY ("IDCLIENTE")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table CITAS
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDCITA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDCLIENTE" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDMASCOTA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDSERVICIO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDHORARIO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CITAS" MODIFY ("IDESTADO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CITAS" ADD CONSTRAINT "CITAS_PK" PRIMARY KEY ("IDCITA")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table DISTRITO
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."DISTRITO" MODIFY ("IDDISTRITO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."DISTRITO" MODIFY ("NOMBRE" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."DISTRITO" MODIFY ("IDCANTON" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."DISTRITO" ADD CONSTRAINT "DISTRITO_PK" PRIMARY KEY ("IDDISTRITO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table TIPOMASCOTA
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."TIPOMASCOTA" MODIFY ("IDTIPOMASCOTA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."TIPOMASCOTA" ADD CONSTRAINT "TIPOMASCOTA_PK" PRIMARY KEY ("IDTIPOMASCOTA")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table COLABORADOR
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDCOLABORADOR" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDCARGO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDESPECIALIDAD" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("IDROL" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("CORREO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" MODIFY ("CONTRASENA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."COLABORADOR" ADD CONSTRAINT "COLABORADOR_PK" PRIMARY KEY ("IDCOLABORADOR")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table ESTADO
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."ESTADO" MODIFY ("IDESTADO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."ESTADO" MODIFY ("ESTADO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."ESTADO" ADD CONSTRAINT "ESTADO_PK" PRIMARY KEY ("IDESTADO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
 --  Constraints for Table HORARIOCITAS
 --------------------------------------------------------
 
@@ -4598,12 +5468,24 @@ END P_tipoMascota;
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "HAPPYPAWS"  ENABLE;
 --------------------------------------------------------
---  Constraints for Table PROVINCIA
+--  Constraints for Table CANTON
 --------------------------------------------------------
 
-  ALTER TABLE "HAPPYPAWS"."PROVINCIA" MODIFY ("IDPROVINCIA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."PROVINCIA" MODIFY ("NOMBRE" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."PROVINCIA" ADD CONSTRAINT "PROVINCIA_PK" PRIMARY KEY ("IDPROVINCIA")
+  ALTER TABLE "HAPPYPAWS"."CANTON" MODIFY ("IDCANTON" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CANTON" MODIFY ("NOMBRE" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CANTON" MODIFY ("IDPROVINCIA" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CANTON" ADD CONSTRAINT "CANTON_PK" PRIMARY KEY ("IDCANTON")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "HAPPYPAWS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table CARGO
+--------------------------------------------------------
+
+  ALTER TABLE "HAPPYPAWS"."CARGO" MODIFY ("IDCARGO" NOT NULL ENABLE);
+  ALTER TABLE "HAPPYPAWS"."CARGO" ADD CONSTRAINT "CARGO_PK" PRIMARY KEY ("IDCARGO")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
@@ -4627,17 +5509,6 @@ END P_tipoMascota;
 
   ALTER TABLE "HAPPYPAWS"."SERVICIOS" MODIFY ("IDSERVICIO" NOT NULL ENABLE);
   ALTER TABLE "HAPPYPAWS"."SERVICIOS" ADD CONSTRAINT "SERVICIOS_PK" PRIMARY KEY ("IDSERVICIO")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
-  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "HAPPYPAWS"  ENABLE;
---------------------------------------------------------
---  Constraints for Table TIPOMASCOTA
---------------------------------------------------------
-
-  ALTER TABLE "HAPPYPAWS"."TIPOMASCOTA" MODIFY ("IDTIPOMASCOTA" NOT NULL ENABLE);
-  ALTER TABLE "HAPPYPAWS"."TIPOMASCOTA" ADD CONSTRAINT "TIPOMASCOTA_PK" PRIMARY KEY ("IDTIPOMASCOTA")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
