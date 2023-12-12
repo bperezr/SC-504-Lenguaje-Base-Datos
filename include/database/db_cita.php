@@ -147,6 +147,8 @@ class Cita
     {
         $stmt = oci_parse($this->db, "BEGIN P_CITA.insertCita(:p_idCliente, :p_idMascota, :p_idServicio, TO_DATE(:p_fecha, 'YYYY-MM-DD'), :p_idHorario, :p_idEstado, :p_resultado); END;");
 
+        $resultado = null;
+
         oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
         oci_bind_by_name($stmt, ":p_idMascota", $idMascota);
         oci_bind_by_name($stmt, ":p_idServicio", $idServicio);
@@ -187,6 +189,7 @@ class Cita
     {
         $stmt = oci_parse($this->db, "BEGIN P_CITA.updateEstadoCita(:p_idCita, :p_idEstado, :p_resultado); END;");
 
+        $p_resultado = null;
         oci_bind_by_name($stmt, ":p_idCita", $idCita);
         oci_bind_by_name($stmt, ":p_idEstado", $idEstado);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
@@ -262,6 +265,7 @@ class Cita
     $stmt = oci_parse($conn, "BEGIN P_CITA.getDetalleCitaMedico(:p_idColaborador, :p_resultado, :p_cursor); END;");
 
     // Vincular los parámetros
+    $p_resultado = null;
     oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);
     $p_cursor = oci_new_cursor($conn);
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
@@ -295,6 +299,7 @@ public function getAllDetalleCitaMedico()
     $stmt = oci_parse($conn, "BEGIN P_CITA.getAllDetalleCitaMedico(:p_resultado, :p_citas); END;");
 
     // Vincular los parámetros
+    $p_resultado = null;
     $p_citas = oci_new_cursor($conn);
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
     oci_bind_by_name($stmt, ":p_citas", $p_citas, -1, OCI_B_CURSOR);
@@ -328,6 +333,7 @@ public function getAllDetalleCitaMedico()
         $stmt = oci_parse($conn, "BEGIN P_CITA.getCitaMedica(:p_idCita, :p_resultado, :p_cursor); END;");
     
         // Vincular los parámetros
+        $p_resultado = null;
         oci_bind_by_name($stmt, ":p_idCita", $idCita);
         $p_cursor = oci_new_cursor($conn);
         oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
@@ -361,6 +367,7 @@ public function getAllDetalleCitaMedico()
     $stmt = oci_parse($conn, "BEGIN P_CITA.getHistorialMedico(:p_idCita, :p_resultado, :p_cursor); END;");
 
     // Vincular los parámetros
+    $p_resultado = null;
     oci_bind_by_name($stmt, ":p_idCita", $idCita);
     $p_cursor = oci_new_cursor($conn);
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
@@ -394,6 +401,7 @@ public function getAllHistorialMedico()
     $stmt = oci_parse($conn, "BEGIN P_CITA.getAllHistorialMedico(:p_resultado, :p_cursor); END;");
 
     // Vincular los parámetros
+    $p_resultado = null;
     $p_cursor = oci_new_cursor($conn);
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
     oci_bind_by_name($stmt, ":p_cursor", $p_cursor, -1, OCI_B_CURSOR);
@@ -425,6 +433,7 @@ public function getCitasCliente($idCliente)
     $stmt = oci_parse($conn, "BEGIN P_CITA.getCitasCliente(:p_idCliente, :p_resultado, :p_citasCliente); END;");
 
     // Vincular los parámetros
+    $p_resultado = null;
     $p_citasCliente = oci_new_cursor($conn);
     oci_bind_by_name($stmt, ":p_idCliente", $idCliente);
     oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
@@ -458,6 +467,7 @@ public function getCitasCliente($idCliente)
             $stmt = oci_parse($conn, "BEGIN P_CITA.getCitasPorEstado(:p_idEstado, :p_resultado, :p_cursor); END;");
         
             // Vincular los parámetros
+            $p_resultado = null;
             $p_cursor = oci_new_cursor($conn);
             oci_bind_by_name($stmt, ":p_idEstado", $idEstado);
             oci_bind_by_name($stmt, ":p_resultado", $p_resultado, -1, SQLT_INT);
@@ -492,6 +502,7 @@ public function getCitasCliente($idCliente)
     $stmt = oci_parse($conn, "BEGIN P_CITA.getCitasPorEstadoYColaborador(:p_idEstado, :p_idColaborador, :p_resultado, :p_cursor); END;");
 
     // Vincular los parámetros
+     $p_resultado = null;
     $p_cursor = oci_new_cursor($conn);
     oci_bind_by_name($stmt, ":p_idEstado", $idEstado);
     oci_bind_by_name($stmt, ":p_idColaborador", $idColaborador);

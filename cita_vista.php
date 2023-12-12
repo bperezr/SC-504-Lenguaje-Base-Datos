@@ -20,6 +20,10 @@ $cita = new Cita();
 $citasCliente = $cita->getCitasCliente($id);
 $citaData = $citasCliente['datos'];
 
+/* echo "<pre>";
+print_r($citasCliente);
+echo "</pre>";
+ */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idCita = $_POST['idCita'];
@@ -67,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php
                 foreach ($citaData as $citaCliente) {
-                    if ($citaCliente['IDESTADO'] != 'Cancelada') {
+                    if ($citaCliente['NOMBREESTADO'] != 'Cancelada') {
                         echo "<tr>";
 
                         echo "<td>" . $citaCliente['IDCITA'] . "</td>";

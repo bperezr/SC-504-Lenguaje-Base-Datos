@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo "<td>" . $cdetalle['NOMBREMASCOTA'] . "</td>";
                         echo "<td>" . $cdetalle['FECHA'] . "</td>";
                         //echo "<td>" . $cdetalle['DETALLECITA'] . "</td>";
-                        echo "<td>" . "₡" . $cdetalle['COSTO'] . "</td>";
+                        echo "<td>" . "₡" . $cdetalle['COSTE'] . "</td>";
                         echo "<td>";
                         echo "<a href='citas.php?id=" . $cdetalle['IDCITA'] . "'class='detalleCita'>Detalle Cita</a>";
                         echo "</td>";

@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Inserción exitosa
         $_SESSION['mensaje'] = "Cita creada.";
 
-        //header('Location: cita_vista.php');
-        //exit;
+        header('Location: cita_vista.php');
+        exit;
     } else {
         $_SESSION['mensaje'] = "Error al crear la cita.";
     }
